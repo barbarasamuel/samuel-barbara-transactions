@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Home</title>
+    <link href="css/home.css"
+          rel="stylesheet"
+    >
+    <link href="css/style.css"
+          rel="stylesheet"
+    >
+</head>
+<body>
+
+<div>
+    <section>
+    <div class="form-element">
+
+
+    <form
+            method="post"
+            role="form"
+            th:action="@{/home}"
+    >
+        <div><img src="img/paymybuddy.PNG" width="123" alt="Pay My Buddy" ></div>
+
+        <div>
+            <input
+                    type="email"
+                    id="username"
+                    name="username"
+                    size=40
+                    class="input-element"
+                    placeholder="Email"
+            />
+        </div>
+
+        <div>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    size=40
+                    class="input-element"
+                    background-image="img/password.PNG"
+                    placeholder="Password"
+            />
+        </div>
+
+        <div>
+            <input
+                    type="checkbox"
+                    id="rememberme"
+                    name="rememberme"
+                    checked>
+            <label for="rememberme">Remember me</label>
+        </div>
+
+        <div>
+            <button class="home-button" type="submit">Login</button>
+            <span> Not registered ?
+                <a href="register.html" th:href="@{/register}">Register here</a>
+            </span>
+        </div>
+    </form></div>
+        <div th:if="${param.error}">
+            <div class="alert-email-password">Invalid Email or Password</div>
+        </div>
+        <div th:if="${param.logout}">
+            <div class="alert-logout-success"> You have been logged out.</div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

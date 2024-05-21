@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Contact</title>
+    <link href="css/home.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link href="css/style.css"
+          rel="stylesheet"
+    >
+</head>
+<body>
+
+<header>
+    <nav>
+        <img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" >
+        <div>
+            <a href="transfer.html">Home</a>
+            <a href="transfer.html">Transfer</a>
+            <a href="profile.html">Profile</a>
+            <a href="contact.html">Contact</a>
+            <a href="logoff.html">Log off</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <section class="section-contact">
+        <div class="bandeau">
+            <p>Home / Contact</p>
+        </div>
+    </section>
+    <section>
+        <form method="get" action="" id="formulaire">
+            <label for="nom" class="labnom">Your name</label><label for="email" class="labemail">Your email</label>
+            <input type="text" name="nom" id="nom">
+            <input type="email" name="email" id="email">
+            <label for="message" class="labmessage">Your message</label><textarea name="message" id="message" rows="4"></textarea><br><br><br><br>
+            <input type="submit" value="send" class="envoyer"><br>
+        </form>
+    </section>
+</main>
+<footer>
+</footer>
+</body>
+</html>

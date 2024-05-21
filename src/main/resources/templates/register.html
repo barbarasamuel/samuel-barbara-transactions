@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Register</title>
+    <link href="css/style.css"
+          rel="stylesheet"
+    >
+</head>
+<body>
+<header>
+    <nav>
+        <div><img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" ></div>
+        <div>
+            <a href="home.html">Home</a>
+            <a href="transfer.html">Transfer</a>
+            <a href="profile.html">Profile</a>
+            <a href="contact.html">Contact</a>
+            <a href="logoff.html">Log off</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <section>
+        <div class="bandeau">
+            <p>Home / Registration</p>
+        </div>
+    </section>
+    <section>
+<div>
+    <div>
+            <div class="form-element">
+                <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
+
+                    <div>
+                        <input
+                               id="name"
+                               name="name"
+                               size=40
+                               class="input-element"
+                               placeholder="Enter your name"
+                               th:field="*{name}"
+                               type="text"
+                        />
+                        <p th:errors="*{name}" class="text-danger"
+                           th:if="${#fields.hasErrors('name')}">
+                        </p>
+                    </div>
+                    <div>
+                        <input
+                               id="email"
+                               name="email"
+                               size=40
+                               class="input-element"
+                               placeholder="Enter your email address"
+                               th:field="*{email}"
+                               type="email"
+                        />
+                        <p th:errors="*{email}" class="text-danger"
+                           th:if="${#fields.hasErrors('email')}">
+                        </p>
+                    </div>
+                    <div>
+                        <input
+                               id="password"
+                               name="password"
+                               size=40
+                               class="input-element"
+                               placeholder="Enter your password"
+                               th:field="*{password}"
+                               type="password"
+                        />
+                        <p th:errors="*{password}" class="text-danger"
+                           th:if="${#fields.hasErrors('password')}">
+                        </p>
+                    </div>
+                    <div>
+                        <input
+                               id="balance"
+                               name="balance"
+                               size=40
+                               class="input-element"
+                               placeholder="Enter your balance"
+                               th:field="*{balance}"
+                               type="number"
+                               min="50"
+                        />
+                        <p th:errors="*{balance}" class="text-danger"
+                           th:if="${#fields.hasErrors('balance')}">
+                        </p>
+                    </div>
+
+                    <div>
+                        <button class="register-button" type="submit">Register</button>
+                        <span>Already registered? <a href="home.html" th:href="@{/home}">Login
+                             here</a></span>
+                    </div>
+                </form>
+            </div>
+
+    </div>
+</div>
+        </section>
+</main>
+</body>
+</html>

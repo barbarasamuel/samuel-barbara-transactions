@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Transfer</title>
+    <link href="css/home.css"
+          rel="stylesheet"
+    >
+    <link href="css/style.css"
+          rel="stylesheet"
+    >
+    <link href="css/transfer.css"
+          rel="stylesheet"
+    >
+</head>
+<body>
+
+<header>
+    <nav>
+        <div><img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" ></div>
+        <div>
+            <a href="transfer.html">Home</a>
+            <a href="transfer.html">Transfer</a>
+            <a href="profile.html">Profile</a>
+            <a href="contact.html">Contact</a>
+            <a href="logoff.html">Log off</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <section>
+        <div class="bandeau">
+            <p>Home / Transfer</p>
+        </div>
+    </section>
+    <section>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <td><div>Send Money</div></td>
+                    <td><div><button type="submit" id="button_add">Add Connection</button></div></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><div>
+                        <select class="border" name="connections" id="connection-select" required>
+                            <option value="">Select A Connection</option>
+                            <option th:each="connection : ${connections}" th:value="${connection}" th:text="${connection.name}"></option>
+                        </select>
+
+                        <input
+                                type="number"
+                                id="amount"
+                                name="amount"
+                                class="border"
+                                placeholder="0€"
+                        />
+                        <button id="button_pay" type="submit">Pay</button>
+                    </div></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section>
+        <div>
+            <table class="border">
+
+                <thead>
+                <tr>
+                    <th>My Transactions</th>
+                </tr>
+                <tr>
+                    <th>Connections</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each = "transaction : ${transactions}">
+                    <td th:text = "${transaction.transactionDate}"></td>
+                    <td th:text = "${transaction.connection}"></td>
+                    <td th:text = "${transaction.description}"></td>
+                    <td th:text = "${transaction.amount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<footer>
+</footer>
+</body>
+</html>
