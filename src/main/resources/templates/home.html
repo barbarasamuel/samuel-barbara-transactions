@@ -5,10 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Pay my buddy Home</title>
-    <link href="css/home.css"
+    <link th:href="@{/css/home.css}"
           rel="stylesheet"
     >
-    <link href="css/style.css"
+    <link th:href="@{/css/style.css}"
           rel="stylesheet"
     >
 </head>
@@ -24,7 +24,7 @@
             role="form"
             th:action="@{/home}"
     >
-        <div><img src="img/paymybuddy.PNG" width="123" alt="Pay My Buddy" ></div>
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Pay My Buddy" ></div>
 
         <div>
             <input
@@ -61,7 +61,7 @@
         <div>
             <button class="home-button" type="submit">Login</button>
             <span> Not registered ?
-                <a href="register.html" th:href="@{/register}">Register here</a>
+                <a th:href="@{/register}">Register here</a>
             </span>
         </div>
     </form></div>

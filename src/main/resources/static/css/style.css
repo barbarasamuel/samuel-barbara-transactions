@@ -28,6 +28,17 @@ nav {
     border-color:#A9A9A9;
     border-radius:10px;
 }
+.input-balance{
+    margin-top:10px;
+    margin-bottom:10px;
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    border-width:1px;
+    border-style:solid;
+    border-color:#A9A9A9;
+    border-radius:10px;
+}
 .home-button,.register-button{
     margin-left:40%;
     margin-top:10px;
@@ -51,4 +62,12 @@ a:visited nav{
 a:hover nav{
   color:blue;
   text-decoration:none;
+}
+.bandeau{
+  background-color:#e0e0e0;
+  height:50px;
+}
+.bandeau_text{
+
+  vertical-align:sub;
 }

@@ -8,10 +8,11 @@ import lombok.Setter;
 import java.util.Date;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="Transactions")
-public class TransactionsEntity {
+public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idTransaction")
@@ -29,24 +30,16 @@ public class TransactionsEntity {
     @Column(name = "transactionDate")
     private Date transactionDate;
 
-    @Getter
-    @Setter
-    @ManyToMany
-    @JoinTable(
-            name="ConnectionsTransactions",
-            joinColumns=@JoinColumn(name="idfkTransaction"),
-            inverseJoinColumns = @JoinColumn(name="idConnectionDebit")
-    )
-    private Long idConnectionsEntityDebit;
+    @ManyToOne
+    @JoinColumn(name = "idCreditorAccount")
+    private BankAccountEntity creditorAccount;
 
-    @Getter
-    @Setter
-    @ManyToMany
-    @JoinTable(
-            name="ConnectionsTransactions",
-            joinColumns=@JoinColumn(name="idfkTransaction"),
-            inverseJoinColumns = @JoinColumn(name="idConnectionCredit")
-    )
-    private Long idConnectionsEntityCredit;
+    @ManyToOne
+    @JoinColumn(name = "idDebtorAccount")
+    private BankAccountEntity debtorAccount;
 
+    public TransactionEntity(String description,Double amount, Date transactionDate,BankAccountEntity creditorAccount,BankAccountEntity debtorAccount){
+        this.description=description;
+        //...
+    }
 }

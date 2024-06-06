@@ -12,16 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class ConnectionsController {
-    @Autowired
-    private ConnectionsService connectionsService;
-    @Autowired
-    ConnectionDTO connectionDTO;
+    /*@Autowired
+    private ConnectionsService connectionsService;*/
 
     @PostMapping("/connection")
     public String newConnection(Model model){
-
+/*
         model.addAttribute("connection",connectionDTO);
-        return connectionsService.saveNewConnection(connectionDTO);
+        return connectionsService.saveNewConnection(connectionDTO);*/
+        return "";
     }
 
 

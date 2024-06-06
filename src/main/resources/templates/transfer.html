@@ -5,21 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Pay my buddy Transfer</title>
-    <link href="css/home.css"
+    <link th:href="@{/css/home.css}"
           rel="stylesheet"
     >
-    <link href="css/style.css"
+    <link th:href="@{/css/style.css}"
           rel="stylesheet"
     >
-    <link href="css/transfer.css"
+    <link th:href="@{/css/transfer.css}"
           rel="stylesheet"
     >
 </head>
-<body>
 
+<body>
+<script>
+    function addConnectionPopup(){
+        var addInput = prompt("Write the new connection");
+        if(addInput!=null){
+            document.getElementById("hiddenAddInput").value = addInput;
+            document.getElementById("newTransaction").submit();
+        }
+    }
+    function payPopup(){
+        var descriptionInput = prompt("Write the transaction description");
+        if(descriptionInput!=null){
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("newTransaction").submit();
+        }
+    }
+</script>
 <header>
     <nav>
-        <div><img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" ></div>
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
         <div>
             <a href="transfer.html">Home</a>
             <a href="transfer.html">Transfer</a>
@@ -32,43 +48,56 @@
 <main>
     <section>
         <div class="bandeau">
-            <p>Home / Transfer</p>
+            <p class="bandeau_text">Home / Transfer</p>
+        </div>
+    </section>
+    <section>
+        <div class="wrapper_sendmoney">
+            <form id="newTransaction" method="post" th:action="@{/saveTransaction}" th:object="${transaction}">
+                <input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
+                <input id="addInput" name="addInput" type="hidden" value="" />
+                <input id="hiddenDescriptionInput" type="hidden" th:name="${transactionDescription}" th:value="${description}" />
+                <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
+                <table>
+                    <thead>
+                    <tr>
+                        <td><div class="w_one_sendmoney">Send Money</div></td>
+                        <td><div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <td><div class="wrapper_description" style="background-color:#e0e0e0;">
+                            <div class="w_one_description">
+                                <a th:object="${user}" th:href="@{/displayConnectionsList}">
+                            <select class="element_border" name="connections" id="connection-select" th:field="*{name}">
+                                <option value="">Select A Connection</option>
+                                <option th:each="connection : ${connectionsList}" th:value="${connectionsList.idConnection}" th:text="${connection.name}"></option>
+                            </select>
+                                </a>
+                            </div>
+                            <div class="w_two_description">
+                                <label for="amount"></label><input
+                                    type="number"
+                                    id="amount"
+                                    name="amount"
+                                    class="element_border"
+                                    placeholder="1€"
+                                    th:field="*{amount}"
+                            />
+                                </div>
+                            <div class="w_three_description">
+                            <button id="button_pay" onclick="payPopup()">Pay</button>
+                            </div>
+                        </div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </section>
     <section>
         <div>
-            <table>
-                <thead>
-                <tr>
-                    <td><div>Send Money</div></td>
-                    <td><div><button type="submit" id="button_add">Add Connection</button></div></td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><div>
-                        <select class="border" name="connections" id="connection-select" required>
-                            <option value="">Select A Connection</option>
-                            <option th:each="connection : ${connections}" th:value="${connection}" th:text="${connection.name}"></option>
-                        </select>
-
-                        <input
-                                type="number"
-                                id="amount"
-                                name="amount"
-                                class="border"
-                                placeholder="0€"
-                        />
-                        <button id="button_pay" type="submit">Pay</button>
-                    </div></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <section>
-        <div>
-            <table class="border">
+            <table class="element_border">
 
                 <thead>
                 <tr>

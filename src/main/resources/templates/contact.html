@@ -5,19 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Pay my buddy Contact</title>
-    <link href="css/home.css"
+    <link th:href="@{/css/home.css}"
           rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
-    <link href="css/style.css"
-          rel="stylesheet"
-    >
+          >
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
 
 <header>
     <nav>
-        <img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" >
+        <img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" >
         <div>
             <a href="transfer.html">Home</a>
             <a href="transfer.html">Transfer</a>

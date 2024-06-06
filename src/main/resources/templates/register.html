@@ -5,14 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Pay my buddy Register</title>
-    <link href="css/style.css"
-          rel="stylesheet"
-    >
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 <body>
 <header>
     <nav>
-        <div><img src="img/paymybuddy.PNG" width="123" alt="Logo Pay my buddy" ></div>
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
         <div>
             <a href="home.html">Home</a>
             <a href="transfer.html">Transfer</a>
@@ -32,10 +30,10 @@
 <div>
     <div>
             <div class="form-element">
-                <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
+                <form method="post" role="form" th:action="@{/register/save}" th:object="${registerForm}">
 
                     <div>
-                        <input
+                        <label for="name"></label><input
                                id="name"
                                name="name"
                                size=40
@@ -49,7 +47,7 @@
                         </p>
                     </div>
                     <div>
-                        <input
+                        <label for="email"></label><input
                                id="email"
                                name="email"
                                size=40
@@ -63,7 +61,7 @@
                         </p>
                     </div>
                     <div>
-                        <input
+                        <label for="password"></label><input
                                id="password"
                                name="password"
                                size=40
@@ -72,29 +70,27 @@
                                th:field="*{password}"
                                type="password"
                         />
-                        <p th:errors="*{password}" class="text-danger"
+
+                    </div>
+                    <div>
+                        <label for="confirmPassword"></label><input
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                size=40
+                                class="input-element"
+                                placeholder="Enter your password"
+                                th:field="*{confirmPassword}"
+                                type="password"
+                        />
+                        <p th:errors="*{confirmPassword}" class="text-danger"
                            th:if="${#fields.hasErrors('password')}">
                         </p>
                     </div>
-                    <div>
-                        <input
-                               id="balance"
-                               name="balance"
-                               size=40
-                               class="input-element"
-                               placeholder="Enter your balance"
-                               th:field="*{balance}"
-                               type="number"
-                               min="50"
-                        />
-                        <p th:errors="*{balance}" class="text-danger"
-                           th:if="${#fields.hasErrors('balance')}">
-                        </p>
-                    </div>
+
 
                     <div>
                         <button class="register-button" type="submit">Register</button>
-                        <span>Already registered? <a href="home.html" th:href="@{/home}">Login
+                        <span>Already registered? <a th:href="@{/home}">Login
                              here</a></span>
                     </div>
                 </form>
