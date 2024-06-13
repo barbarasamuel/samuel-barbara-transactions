@@ -14,4 +14,9 @@ public interface ConnectionsRepository extends CrudRepository<ConnectionsEntity,
     @Query(value="SELECT id_connection, name FROM connection WHERE id_connection<>:id", nativeQuery=true)
     public List<ConnectionsEntity> findAllNameByIdDifferentJPQL(@Param("id")Long idConnection);
 
+    @Query(value="SELECT id_connection, name FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
+    public List<ConnectionsEntity> findAllNameNotUsername(@Param("connections")String username);
+
+    /*@Query(value="SELECT id_connection, name FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
+    public List<ConnectionsEntity> findAllNameNotUsername(@Param("connections")Long idConnection);*/
 }

@@ -5,12 +5,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-/*@Setter
+/**/@Setter
 @Getter
 @Entity
-@Table(name="Relation")*/
+@Table(name="Relation")
 public class RelationEntity {
-/*
+/**/
     @Id
     private Long idRelationEntity;
 
@@ -20,5 +20,5 @@ public class RelationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idRelation", referencedColumnName = "idConnection")
-    private ConnectionsEntity relation;*/
+    private ConnectionsEntity relation;
 }

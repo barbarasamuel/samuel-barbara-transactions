@@ -1,8 +1,9 @@
 package org.paymybuddy.transfermoney.model;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
-
+@Builder
 @Data
 public class TransactionDTO {
     private String name;

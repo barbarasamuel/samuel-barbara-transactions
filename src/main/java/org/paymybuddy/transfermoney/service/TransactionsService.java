@@ -32,11 +32,19 @@ ConnectionMapper connectionMapper;
         return transactionMapper.convertToDTO(transaction);
     }
 
-    public List<ConnectionDTO> getConnections(ConnectionDTO connectionDTO){
-        ConnectionsEntity connectionsEntity = connectionMapper.convertToEntity(connectionDTO);
+    //A mettre dans ConnectionService
+    public List<ConnectionDTO> getConnections(String username){
+        //ConnectionsEntity connectionsEntity = connectionMapper.convertToEntity(connectionDTO);
         //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(connectionsEntity.getIdConnection());
-        List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(1L);
+
+        //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(1L);
+        List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameNotUsername(username);
         return connectionMapper.convertListToDTO(connectionsEntityList);
+    }
+
+    public List<TransactionDTO> listTransactions(String username){
+        List<TransactionEntity> transactionsEntityList= transactionsRepository.findAllByUsername(username);
+        return transactionMapper.convertListToDTO(transactionsEntityList);
     }
 
 }

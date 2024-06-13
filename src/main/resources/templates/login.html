@@ -18,11 +18,13 @@
     <section>
     <div class="form-element">
 
-
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
     <form
             method="post"
             role="form"
-            th:action="@{/home}"
+            th:action="@{/process-login}"
     >
         <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Pay My Buddy" ></div>
 
@@ -44,7 +46,6 @@
                     name="password"
                     size=40
                     class="input-element"
-                    background-image="img/password.PNG"
                     placeholder="Password"
             />
         </div>
