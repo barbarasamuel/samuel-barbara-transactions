@@ -26,7 +26,7 @@
         }
     }
     function payPopup(){
-        var descriptionInput = prompt("Write the transaction description");
+        var descriptionInput = prompt("Write the transactions description");
         if(descriptionInput!=null){
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("newTransaction").submit();
@@ -53,7 +53,7 @@
     </section>
     <section>
         <div class="wrapper_sendmoney">
-            <form id="newTransaction" method="post" th:action="@{/transaction/save}" th:object="${transactionForm}">
+            <form id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${transactionForm}">
                 <input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
                 <input id="addInput" name="addInput" type="hidden" value="" />
                 <input id="hiddenDescriptionInput" type="hidden" th:name="${transactionDescription}" th:value="${description}" />
@@ -110,11 +110,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each = "transaction : ${transactionsList}">
-                    <td th:text = "${transaction.transactionDate}"></td>
-                    <td th:text = "${transaction.connection}"></td>
-                    <td th:text = "${transaction.description}"></td>
-                    <td th:text = "${transaction.amount}"></td>
+                <tr th:each = "transactions : ${transactionsList}">
+                    <td th:text = "${transactions.transactionDate}"></td>
+                    <td th:text = "${transactions.connection}"></td>
+                    <td th:text = "${transactions.description}"></td>
+                    <td th:text = "${transactions.amount}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -1,10 +1,8 @@
 package org.paymybuddy.transfermoney.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,20 +13,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="Connection")
-public class ConnectionsEntity implements UserDetails {
+public class Connection implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idConnection")
+    @Column(nullable=false)
     private Long idConnection;
 
-    @Column(name="name")
+    @Column(nullable=false)
     private String name;
 
-    @Column(name="email")
+    @Column(nullable=false)
     private String email;
 
-    @Column(name="password")
+    @Column(nullable=false)
     private String password;
 
    /* @OneToMany(fetch = FetchType.LAZY)
@@ -37,12 +34,12 @@ public class ConnectionsEntity implements UserDetails {
     private List<ConnectionsEntity> relations = new ArrayList<>();*/
 
     @ManyToMany
-    @JoinTable(name="Relation", joinColumns=@JoinColumn(name="idUser"), inverseJoinColumns=@JoinColumn(name="idConnection"))
-    private List<ConnectionsEntity> relations = new ArrayList<>();
+    @JoinTable(name="Relation", joinColumns=@JoinColumn(name="idUser",nullable=false), inverseJoinColumns=@JoinColumn(name="idConnection"))
+    private List<Connection> relations = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name="idConnection", referencedColumnName="idBankAccount")
-    private BankAccountEntity bankAccount;
+    @JoinColumn(name="idConnection", referencedColumnName="idBankAccount",nullable=false)
+    private BankAccount bankAccount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

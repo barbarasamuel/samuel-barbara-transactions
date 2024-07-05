@@ -13,7 +13,7 @@ public class AuthenticationSuccessHandlerCustom extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException,
             ServletException{
-        this.setDefaultTargetUrl("/");
+        this.setDefaultTargetUrl("/transfer");
         super.onAuthenticationSuccess(request, response,authentication);
     }
 }

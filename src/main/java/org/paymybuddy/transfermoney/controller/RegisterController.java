@@ -1,7 +1,7 @@
 package org.paymybuddy.transfermoney.controller;
 
 import jakarta.validation.Valid;
-import org.paymybuddy.transfermoney.entity.ConnectionsEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Objects;
-
+@Slf4j
 @Controller
 public class RegisterController {
     @Autowired
@@ -26,11 +26,13 @@ public class RegisterController {
 
        if (bindingResult.hasErrors()) {
             model.addAttribute("registerForm", registerForm);
+            log.info("Error in registration");
             return "register";
         }
 
         if(Objects.equals(connectionsService.findByEmail(registerForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
+            log.info("Error in registration: email already exists");
             return "register";
         }
 
@@ -42,7 +44,8 @@ public class RegisterController {
                 .build();
 
         connectionsService.save(connectionDTO);
-        return "home";
+        log.info("New user created");
+        return "login";
     }
     @GetMapping("/register")
     public String registrationPage(Model model){

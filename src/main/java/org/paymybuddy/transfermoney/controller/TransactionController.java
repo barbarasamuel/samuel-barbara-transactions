@@ -1,25 +1,18 @@
 package org.paymybuddy.transfermoney.controller;
 
-import jakarta.validation.Valid;
-import org.paymybuddy.transfermoney.entity.ConnectionsEntity;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
 import org.paymybuddy.transfermoney.model.TransactionForm;
 import org.paymybuddy.transfermoney.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;

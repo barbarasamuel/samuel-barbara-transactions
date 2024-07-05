@@ -64,8 +64,10 @@
             <span> Not registered ?
                 <a th:href="@{/register}">Register here</a>
             </span>
-        </div>
-    </form></div>
+            </div>
+    </form>
+    </div>
+
         <div th:if="${param.error}">
             <div class="alert-email-password">Invalid Email or Password</div>
         </div>

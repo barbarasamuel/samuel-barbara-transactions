@@ -1,6 +1,6 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.paymybuddy.transfermoney.entity.ConnectionsEntity;
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +18,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ConnectionsEntity connectionsEntity = connectionsRepository.findByEmail(username);
-        connectionsEntity.setPassword(passwordEncoder.encode(connectionsEntity.getPassword()));
-        return connectionsEntity;
+        Connection connection = connectionsRepository.findByEmail(username);
+        connection.setPassword(passwordEncoder.encode(connection.getPassword()));
+        return connection;
     }
 }

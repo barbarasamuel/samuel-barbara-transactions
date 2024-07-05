@@ -14,15 +14,15 @@ alter table Transactions modify type_transaction varchar(6);
 commit;
 
 insert into Connection(name,email,password) values('Auguste','auguste@email.com','motdepa1');
-insert into Connection(name,email,password) values('Gérard','gerard@email.com','motdepa2');
+insert into Connection(name,email,password) values('Gerard','gerard@email.com','motdepa2');
 insert into Connection(name,email,password) values('Amandine','amandine@email.com','motdepa3');
 insert into Connection(name,email,password) values('Georgette','georgette@email.com','motdepa4');
 insert into Connection(name,email,password) values('Alceste','alceste@email.com','motdepa5');
 insert into Connection(name,email,password) values('Jimmy','jimmy@email.com','motdepa6');
 insert into Connection(name,email,password) values('Coralie','coralie@email.com','motdepa7');
-insert into Connection(name,email,password) values('Céline','celine@email.com','motdepa8');
-insert into Connection(name,email,password) values('André','andre@email.com','motdepa9');
-insert into Connection(name,email,password) values('Annie','annie@email.com','motdepa10');
+insert into Connection(name,email,password) values('Celine','celine@email.com','motdepa8');
+insert into Connection(name,email,password) values('Andre','andre@email.com','motdepa9');
+insert into Connection(name,email,password) values('Annie','annie@email.com','motdepa1');
 
 insert into bank_account(id_connection,balance) values(1,'15.00');
 insert into bank_account(id_connection,balance) values(2,'150.00');

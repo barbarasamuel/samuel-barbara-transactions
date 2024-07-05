@@ -1,7 +1,6 @@
 package org.paymybuddy.transfermoney.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,20 +8,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="BankAccount")
-public class BankAccountEntity {
+public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idBankAccount")
+    @Column(nullable=false)
     private Long idBankAccount;
 
     @OneToOne
-    @JoinColumn(name="idBankAccount", referencedColumnName="idConnection")
-    private ConnectionsEntity connection;
+    @JoinColumn(name="idBankAccount", referencedColumnName="idConnection",nullable=false)
+    private Connection connection;
 
-    @Column(name="balance")
+    @Column(nullable=false)
     private Double balance;
 
     @OneToMany(mappedBy = "creditorAccount")
-    private List<TransactionEntity> transactionsEntityList;
+    private List<Transactions> transactionsEntityList;
 }
