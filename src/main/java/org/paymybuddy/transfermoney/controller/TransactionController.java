@@ -73,14 +73,18 @@ public class TransactionController {
        }
 
     @GetMapping("/transfer")
-    public String transactionPage(Model model, Principal principal){
-        List<TransactionDTO> transactionDTOList = transactionService.listTransactions(principal.getName());
-        model.addAttribute("transactionsList",transactionDTOList);
+    public String transactionPage( Model model, Principal principal){
 
+
+        //List<TransactionDTO> transactionDTOList = transactionService.listTransactions();
+        //model.addAttribute("transactionsList",transactionDTOList);
+        long idUser = 1;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<ConnectionDTO> connectionsList = transactionService.getConnections(userDetails.getUsername());
+        List<TransactionDTO> transactionsList = transactionService.getTransactions(idUser);
         model.addAttribute("connectionsList", connectionsList);
+        model.addAttribute("transactionsList", transactionsList);
 
         model.addAttribute("transactionForm",new TransactionForm());
         return "transfer";

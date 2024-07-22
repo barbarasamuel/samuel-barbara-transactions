@@ -8,13 +8,15 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
-    public Connection findByEmail(String email);
-    @Query(value="SELECT id_connection, name FROM connection WHERE id_connection<>:id", nativeQuery=true)
-    public List<Connection> findAllNameByIdDifferentJPQL(@Param("id")Long idConnection);
+    Connection findByEmail(String email);
 
-    @Query(value="SELECT id_connection, name FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
-    public List<Connection> findAllNameNotUsername(@Param("connections")String username);
+
+    /*@Query(value="SELECT * FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
+    List<Connection> findAllNameNotUsername(@Param("connections")String username);*/
+
+    List<Connection> findAllByEmailNot(String email);
 
     /*@Query(value="SELECT id_connection, name FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
-    public List<ConnectionsEntity> findAllNameNotUsername(@Param("connections")Long idConnection);*/
+    public List<Connection> findAllNameNotIn(@Param("connections")Long idConnection);*/
+    //public List<Connection> findAllNameNotUsername(@Param("connections")Long idConnection);
 }

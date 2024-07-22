@@ -1,6 +1,7 @@
 package org.paymybuddy.transfermoney.entity;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,13 +30,28 @@ public class Transactions {
     private Date transactionDate;
 
     @ManyToOne
-    @JoinColumn(name = "idCreditorAccount",nullable=false)
+    @JoinColumn(name = "idCreditor",  nullable=false)
+    private Connection idCreditor;
+
+    @ManyToOne
+    @JoinColumn(name = "idDebtor",  nullable=false)
+    private Connection idDebtor;
+
+    /*
+    @ManyToOne
+    @JoinColumn(name = "idConnectionTransactions",  nullable=false)
+    //@JoinColumn(name = "idConnectionTransactions", referencedColumnName="idConnection", nullable=false)
+    private Connection idConnectionTransactions;
+*/
+    /*@ManyToOne
+    @JoinColumn(name = "idCreditorAccount",  nullable=false)
+    //@JoinColumn(name = "idCreditorAccount", referencedColumnName="idConnection", nullable=false)
     private BankAccount creditorAccount;
 
     @ManyToOne
-    //@JoinColumn()
     @JoinColumn(name = "idDebtorAccount",nullable=false)
-    private BankAccount debtorAccount;
+    //@JoinColumn(name = "idDebtorAccount", referencedColumnName="idConnection",nullable=false)
+    private BankAccount debtorAccount;*/
 
     public Transactions(String description, Double amount, Date transactionDate, BankAccount creditorAccount, BankAccount debtorAccount){
         this.description=description;

@@ -5,5 +5,5 @@ import org.paymybuddy.transfermoney.entity.Connection;
 import org.springframework.data.repository.CrudRepository;
 
 public interface BankAccountRepository extends CrudRepository<BankAccount,Long>{
-    public BankAccount findByConnection(Connection connection);
+    public BankAccount findByConnectionBankAccountIdConnection(Long connection);
 }

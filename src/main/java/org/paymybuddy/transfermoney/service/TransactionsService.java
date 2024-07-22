@@ -1,5 +1,6 @@
 package org.paymybuddy.transfermoney.service;
 
+import jakarta.transaction.Transactional;
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.Mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 public class TransactionsService {
 @Autowired
 TransactionsRepository transactionsRepository;
@@ -36,12 +38,12 @@ ConnectionMapper connectionMapper;
         //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(connectionsEntity.getIdConnection());
 
         //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(1L);
-        List<Connection> connectionList = connectionsRepository.findAllNameNotUsername(username);
+        List<Connection> connectionList = connectionsRepository.findAllByEmailNot(username);
         return connectionMapper.convertListToDTO(connectionList);
     }
 
-    public List<TransactionDTO> listTransactions(String username){
-        List<Transactions> transactionsEntityList= transactionsRepository.findAllByUsername(username);
+    public List<TransactionDTO> getTransactions(Long idCreditorAccount){
+        List<Transactions> transactionsEntityList= transactionsRepository.findAllByIdCreditorIdConnection(1L);//(idCreditorAccount);
         return transactionMapper.convertListToDTO(transactionsEntityList);
     }
 
