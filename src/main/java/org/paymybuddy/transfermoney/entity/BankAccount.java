@@ -12,7 +12,7 @@ public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
-    private Long idBankAccount;
+    private Long id;
 
     @Column(nullable=false)
     private Double balance;
@@ -20,12 +20,5 @@ public class BankAccount {
     @ManyToOne
     @JoinColumn(name = "idConnectionBank",  nullable=false)
     private Connection connectionBankAccount;
-    /*
-    @OneToOne
-    //@JoinColumn(name="idBankAccount", referencedColumnName="idConnection",nullable=false)
-    private Connection connection;*/
 
-
-    /*@OneToMany(mappedBy = "creditorAccount")
-    private List<Transactions> transactionsEntityList;*/
 }

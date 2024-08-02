@@ -17,7 +17,7 @@ public class Connection implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
-    private Long idConnection;
+    private Long id;
 
     @Column(nullable=false)
     private String name;
@@ -34,19 +34,19 @@ public class Connection implements UserDetails {
     private List<ConnectionsEntity> relations = new ArrayList<>();*/
 
     @OneToMany(mappedBy = "connectionFriend")
-    private List<Relation> relationAsFriend;
+    private List<Relation> relationAsFriend = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Relation> relationAsUser;
+    private List<Relation> relationAsUser = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idCreditor")
-    private List<Transactions> transactionsCreditor;
+    @OneToMany(mappedBy = "creditor")
+    private List<Transactions> transactionsCreditor = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idDebtor")
-    private List<Transactions> transactionsDebtor;
+    @OneToMany(mappedBy = "debtor")
+    private List<Transactions> transactionsDebtor = new ArrayList<>();
 
     @OneToMany(mappedBy = "connectionBankAccount")
-    private List<BankAccount> bankAccount;
+    private List<BankAccount> bankAccount = new ArrayList<>();
 
     /*
     @ManyToMany

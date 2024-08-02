@@ -81,16 +81,16 @@ public class TransactionController {
         long idUser = 1;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<ConnectionDTO> connectionsList = transactionService.getConnections(userDetails.getUsername());
+        //List<ConnectionDTO> connectionsList = connectionService.getConnections(userDetails.getUsername());
         List<TransactionDTO> transactionsList = transactionService.getTransactions(idUser);
-        model.addAttribute("connectionsList", connectionsList);
+        //model.addAttribute("connectionsList", connectionsList);
         model.addAttribute("transactionsList", transactionsList);
 
         model.addAttribute("transactionForm",new TransactionForm());
         return "transfer";
     }
 
-    /*@GetMapping("/displayConnectionsList")
+   /* @GetMapping("/displayConnectionsList")
     public String displayConnectionsList(Model model,@ModelAttribute("user") ConnectionDTO connectionDTO){
         List<ConnectionDTO> connectionsList = transactionService.getConnections(connectionDTO);
 

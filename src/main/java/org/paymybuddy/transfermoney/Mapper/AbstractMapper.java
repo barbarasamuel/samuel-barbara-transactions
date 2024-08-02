@@ -6,4 +6,5 @@ public interface AbstractMapper <E,D>{
     E convertToEntity(D dto);
     D convertToDTO(E entity);
     List<D> convertListToDTO(List<E> entity);
+    List<E> convertListToEntity(List<D> dto);
 }

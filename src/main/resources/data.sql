@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `bank_account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bank_account` (
-  `id_bank_account` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `balance` double NOT NULL,
   `id_connection_bank` bigint NOT NULL,
-  PRIMARY KEY (`id_bank_account`),
+  PRIMARY KEY (`id`),
   KEY `FKid_connection_bank` (`id_connection_bank`),
-  CONSTRAINT `FKid_connection_bank` FOREIGN KEY (`id_connection_bank`) REFERENCES `connection` (`id_connection`)
+  CONSTRAINT `FKid_connection_bank` FOREIGN KEY (`id_connection_bank`) REFERENCES `connection` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,11 +48,11 @@ DROP TABLE IF EXISTS `connection`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `connection` (
-  `id_connection` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `email` varchar(75) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `password` varchar(8) DEFAULT NULL,
-  PRIMARY KEY (`id_connection`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -74,14 +74,14 @@ DROP TABLE IF EXISTS `relation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `relation` (
-  `id_relation` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `id_connection_friend` bigint NOT NULL,
   `id_user` bigint NOT NULL,
-  PRIMARY KEY (`id_relation`),
+  PRIMARY KEY (`id`),
   KEY `FKid_connection_friend` (`id_connection_friend`),
   KEY `FKid_user` (`id_user`),
-  CONSTRAINT `FKid_connection_friend` FOREIGN KEY (`id_connection_friend`) REFERENCES `connection` (`id_connection`),
-  CONSTRAINT `FKid_user` FOREIGN KEY (`id_user`) REFERENCES `connection` (`id_connection`)
+  CONSTRAINT `FKid_connection_friend` FOREIGN KEY (`id_connection_friend`) REFERENCES `connection` (`id`),
+  CONSTRAINT `FKid_user` FOREIGN KEY (`id_user`) REFERENCES `connection` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -100,23 +100,21 @@ DROP TABLE IF EXISTS `transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transactions` (
-  `id_transaction` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `amount` double NOT NULL,
   `transaction_date` datetime(6) NOT NULL,
   `description` varchar(100) NOT NULL,
-  `type_transaction` varchar(6) DEFAULT NULL,
   `id_creditor` bigint NOT NULL,
   `id_debtor` bigint NOT NULL,
-  PRIMARY KEY (`id_transaction`),
+  PRIMARY KEY (`id`),
   KEY `FKid_creditor` (`id_creditor`),
   KEY `FKid_debtor` (`id_debtor`),
-  CONSTRAINT `FKid_creditor` FOREIGN KEY (`id_creditor`) REFERENCES `connection` (`id_connection`),
-  CONSTRAINT `FKid_debtor` FOREIGN KEY (`id_debtor`) REFERENCES `connection` (`id_connection`)
+  CONSTRAINT `FKid_creditor` FOREIGN KEY (`id_creditor`) REFERENCES `connection` (`id`),
+  CONSTRAINT `FKid_debtor` FOREIGN KEY (`id_debtor`) REFERENCES `connection` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,'15.00','2024-01-02 17:51:04.789463','Restaurant',NULL,1,2);
+INSERT INTO `transactions` VALUES (1,'15.00','2024-01-02 17:51:04.789463','Restaurant',1,2);
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
-

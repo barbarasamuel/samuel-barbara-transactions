@@ -1,30 +1,32 @@
 package org.paymybuddy.transfermoney.configuration;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.paymybuddy.transfermoney.service.UserDetailsServiceImpl;
+import org.paymybuddy.transfermoney.service.CustomLogoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import java.io.IOException;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration {
+    /**/
+
+    /*@Autowired
+    private CustomLogoutHandler logoutHandler;*/
+    private final CustomLogoutHandler logoutHandler;
+    public SecurityConfiguration(CustomLogoutHandler logoutHandler) {
+        this.logoutHandler = logoutHandler;
+    }
+
     /*@Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
@@ -32,6 +34,12 @@ public class SecurityConfiguration {
     private AuthenticationFailureHandler authenticationFailureHandler;*/
    /* @Autowired
     private UserDetailsServiceImpl customUserDetailsService;*/
+
+    /*@Bean
+    UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
+    }*/
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -69,7 +77,7 @@ public class SecurityConfiguration {
                     /*auth.requestMatchers("/").permitAll();*/
                     auth.requestMatchers("/error/**").permitAll();
                     auth.requestMatchers("/img/**","/css/**","/login","/register").permitAll();
-                    auth.requestMatchers("/transfer").authenticated();
+                    auth.requestMatchers("/transfer","/test","/").authenticated();
                     /*//auth.requestMatchers("/transfer").hasRole("ADMIN");
                     auth.anyRequest().authenticated();*/
                     auth.anyRequest().permitAll();
@@ -78,6 +86,11 @@ public class SecurityConfiguration {
                 .formLogin(formLogin-> formLogin.loginPage("/login").permitAll()
                         .successHandler(new AuthenticationSuccessHandlerCustom())
                         .failureHandler(new AuthenticationFailureHandlerCustom()))
+                .logout(httpSecurityLogoutConfigurer ->
+                        httpSecurityLogoutConfigurer.logoutUrl("/logout"))
+                /*http.authorizeRequests().and()
+                .rememberMe().tokenRepository(this.persistentTokenRepository())
+                .tokenValiditySeconds(365 * 24 * 60 * 60);*/
                 .build();
     }
 

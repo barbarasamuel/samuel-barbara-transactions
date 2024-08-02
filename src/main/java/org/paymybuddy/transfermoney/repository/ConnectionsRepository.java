@@ -10,7 +10,7 @@ import java.util.List;
 public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
     Connection findByEmail(String email);
 
-
+    Connection findByName(String name);
     /*@Query(value="SELECT * FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
     List<Connection> findAllNameNotUsername(@Param("connections")String username);*/
 
