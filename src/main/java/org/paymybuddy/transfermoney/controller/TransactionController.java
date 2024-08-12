@@ -3,6 +3,7 @@ package org.paymybuddy.transfermoney.controller;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
 import org.paymybuddy.transfermoney.model.TransactionForm;
+import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,9 @@ import java.util.List;
 public class TransactionController {
     @Autowired
     TransactionsService transactionService;
+
+    @Autowired
+    ConnectionsService connectionsService;
 
     /*@GetMapping("/transfer")
     public String saveConnection(Model model){
@@ -59,8 +63,9 @@ public class TransactionController {
                return "transfer";
            }*/
 
+           ConnectionDTO connectionDTO = connectionsService.getCreditor(transactionForm.getConnection());
            TransactionDTO transactionDTO = TransactionDTO.builder()
-                   .connection(transactionForm.getConnection())
+                   .creditor(connectionDTO)
                    .description(transactionForm.getDescription())
                    .amount(transactionForm.getAmount())
                    .build();

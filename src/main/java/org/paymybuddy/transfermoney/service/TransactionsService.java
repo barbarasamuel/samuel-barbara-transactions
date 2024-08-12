@@ -6,10 +6,12 @@ import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
+import org.paymybuddy.transfermoney.model.TransactionsConnection;
 import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,16 +30,37 @@ public class TransactionsService {
     }
 
     public List<TransactionDTO> getTransactions(Long idDebtorAccount){
-        List<Transactions> transactionsEntityList= transactionsRepository.findAllByDebtorId(idDebtorAccount);
+        List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
+        List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(idDebtorAccount);
+        List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
+        for(TransactionDTO transactionDTO:transactionsDTOList){
+            TransactionsConnection transactionsConnection = new TransactionsConnection(
+                    transactionDTO.getTransactionDate(),
+                    transactionDTO.getCreditor().getName(),
+                    transactionDTO.getDescription(),
+                    transactionDTO.getAmount()
+            );
+            transactionsConnectionList.add(transactionsConnection);
+        }
         return transactionMapper.convertListToDTO(transactionsEntityList);
     }
 
-    public List<TransactionDTO> getTransactionsFromUser(ConnectionDTO user){
+    public List<TransactionsConnection> getTransactionsFromUser(ConnectionDTO user){
 
-        Connection connection = connectionMapper.convertToEntity(user);
-        List<Transactions> transactionsList = transactionsRepository.findByDebtor(connection);
+        List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
+        List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(user.getId());
+        List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
+        for(TransactionDTO transactionDTO:transactionsDTOList){
+            TransactionsConnection transactionsConnection = new TransactionsConnection(
+                    transactionDTO.getTransactionDate(),
+                    transactionDTO.getCreditor().getName(),
+                    transactionDTO.getDescription(),
+                    transactionDTO.getAmount()
+            );
+            transactionsConnectionList.add(transactionsConnection);
+        }
+        return transactionsConnectionList;
 
-        return transactionMapper.convertListToDTO(transactionsList);
     }
 
 }

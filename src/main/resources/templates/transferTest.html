@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Transfer</title>
+    <link th:href="@{/css/home.css}"
+          rel="stylesheet"
+    >
+    <link th:href="@{/css/style.css}"
+          rel="stylesheet"
+    >
+    <link th:href="@{/css/transfer.css}"
+          rel="stylesheet"
+    >
+</head>
+
+<body>
+
+
+<header>
+    <nav>
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
+        <div>
+            <a th:href="@{/transfer}">Home</a>
+            <a th:href="@{/transfer}">Transfer</a>
+            <a th:href="@{/profile}">Profile</a>
+            <a th:href="@{/contact}">Contact</a>
+            <a th:href="@{/logout}">Log off</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <section>
+        <div class="bandeau">
+            <p class="bandeau_text">Home / Transfer</p>
+        </div>
+
+    </section>
+    <section class="centered_section">
+        <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
+        <div class="wrapper_sendmoney">
+            <form id="newConnection" method="post" th:action="@{/connection/save}" th:object="${connectionForm}">
+                <input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
+                <input id="addInput" name="addInput" type="hidden" value="" />
+                <div class="w_one_sendmoney">Send Money</div>
+                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div>
+            </form>
+            <form id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${transactionForm}">
+                <input id="hiddenDescriptionInput" type="hidden" th:name="${transactionDescription}" th:value="${description}" />
+                <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
+                <table>
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <td><div class="wrapper_description" style="background-color:#e0e0e0;">
+                        <!--<a th:href="@{/transaction/save}">-->
+                        <div class="w_one_description">
+
+                            <select id="connection-select" ><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                                <option>Select A Connection</option>
+                                <!--<option th:each="connection : ${connectionsList}" th:value="${connection.id}" th:text="${connection.connectionName}"></option>-->
+                                <option th:each="connection : ${connectionsList}" th:attr="value=${connection.id}" th:text="${connection.connectionName}"></option>
+                                <!--<option value="option1">Option 1</option>-->
+                            </select>
+
+                        </div>
+                        <div class="w_two_description">
+                            <label for="amount"></label><input
+                                type="number"
+                                id="amount"
+                                name="amount"
+                                class="element_border"
+                                placeholder="1€"
+                        />
+                            <!--<label for="amount"></label><input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            class="element_border"
+                            placeholder="1€"
+                           th:field="*{amount}"
+                           />-->
+
+                        </div>
+                        <div class="w_three_description">
+                            <button id="button_pay" onclick="payPopup()">Pay</button>
+                        </div>
+                        <!-- </a>-->
+                    </div></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </section>
+
+    <section class="centered_section">
+        <div>
+            <table id="myTransactionsList" class="element_border">
+
+                <thead>
+                <tr>
+                    <th>My Transactions</th>
+                </tr>
+                <tr class="title-element">
+                    <th>Date</th>
+                    <th>Connection</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody><!--onload="listPrinting()">-->
+
+                <tr th:each = "transactions, iter : ${transactionsList}"><!--  th:if="${iter.index % 3 == 0}">-->
+                    <td th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
+                    <td th:text = "${transactions.connectionName}"></td>
+                    <td th:text = "${transactions.description}"></td>
+                    <td th:text = "${transactions.amount}"></td>
+                </tr><!---->
+               </tbody>
+           </table>
+            <div>
+                <button class="pagination" onclick="goToPage(1)">&#171;</button>
+                <button class="pagination" onclick="goToPage(1)">1</button>
+                <button class="pagination" onclick="goToPage(2)">2</button>
+                <button class="pagination" onclick="goToPage(3)">3</button>
+                <button class="pagination" onclick="goToPage(4)">4</button>
+                <button class="pagination" onclick="goToPage(5)">5</button>
+                <button class="pagination" onclick="goToPage(totalPages)">&#187;</button>
+            </div>
+            <!--const tableBody = document.querySelector('tbody');-->
+            <script>
+
+
+
+            </script>
+            <!--window.onload = function() {
+                                    displayTablePage(currentPage);
+                                };<script>
+                let currentPage = 1;
+                const rowsPerPage = 3;
+                let totalPages;
+
+                function displayTablePage(page) {
+                    const table = document.getElementById('myTransactionsList').getElementsByTagName('tbody')[0];
+                    const rows = table.getElementsByTagName('tr');
+                    totalPages = Math.ceil(rows.length / rowsPerPage);
+
+                    for (let i = 0; i < rows.length; i++) {
+                        rows[i].classList.add('hidden');
+                    }
+
+                    const start = (page - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+
+                    for (let i = start; i < end && i < rows.length; i++) {
+                        rows[i].classList.remove('hidden');
+                    }
+
+                    currentPage = page;
+                    document.querySelector('.pagination button:nth-child(2)').disabled = page === 1;
+                    document.querySelector('.pagination button:nth-last-child(2)').disabled = page === totalPages;
+                }
+
+                function goToPage(page) {
+                    if (page >= 1 && page <= totalPages) {
+                        displayTablePage(page);
+                    }
+                }
+
+                window.onload = function() {
+                    displayTablePage(currentPage);
+                };
+            </script>-->
+       </div>
+   </section>
+</main>
+<footer>
+</footer>
+<script>
+    function addConnectionPopup(){
+        var addInput = prompt("Write the new connection");
+        if(addInput!=null){
+            document.getElementById("hiddenAddInput").value = addInput;
+            document.getElementById("newTransaction").submit();
+        }
+    }
+    function payPopup(){
+        var descriptionInput = prompt("Write the transactions description");
+        if(descriptionInput!=null){
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("newTransaction").submit();
+        }
+    function displayTablePage(page){
+    let transactionsList = "${transactionsList}";
+        for (let i = 0; i < transactionsList.length; i+=3){
+             const row = document.createElement('tr');
+
+             for (let j = i; j < i+3 && j < transactionsList.length; j++){
+
+                 const cell1 = document.createElement('td');
+                 cell1.innerText = transactionsList[0,0];//transactions.#dates.format(transactions.transactionDate,'dd/MM/yyyy');
+                 row.appendChild(cell1);
+
+                 const cell2 = document.createElement('td');
+                 cell2.innerText = transactions.connectionName;
+                 row.appendChild(cell2);
+
+                 const cell3 = document.createElement('td');
+                 cell3.innerText = transactions.description;
+                 row.appendChild(cell3);
+
+                 const cell4 = document.createElement('td');
+                 cell4.innerText = transactions.amount;
+                 row.appendChild(cell4);
+                 console.log("dans boucle");
+             }
+
+             tableBody.appendChild(row);
+         }
+
+     }
+     function goToPage(page){
+         console.log("dans goToPage");
+         if (page >= 1 && page <= totalPages) {
+              displayTablePage(page);
+          }/**/
+     }
+     function listPrinting(){
+        console.log("dans listPrinting");
+        displayTablePage(currentPage);
+        }
+    }
+</script>
+</body>
+</html>

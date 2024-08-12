@@ -36,7 +36,7 @@ public class RegisterController {
             return "register";
         }
 
-        if(Objects.equals(connectionsService.findByEmail(registerForm.getEmail()), "There is already an account registered with that email")) {
+        if(Objects.equals(connectionsService.getIdentifiant(registerForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
             log.info("Error in registration: email already exists");
             return "register";

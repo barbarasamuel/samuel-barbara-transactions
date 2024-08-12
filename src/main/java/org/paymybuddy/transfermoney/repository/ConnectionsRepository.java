@@ -14,6 +14,7 @@ public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
     /*@Query(value="SELECT * FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
     List<Connection> findAllNameNotUsername(@Param("connections")String username);*/
 
+    //Connection findById(Long id);
     List<Connection> findAllByEmailNot(String email);
 
     /*@Query(value="SELECT id_connection, name FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)

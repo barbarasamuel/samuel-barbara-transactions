@@ -38,7 +38,7 @@ public class TransactionsRepositoryTests {
 
     @Test
     public void testGetTransactions(){
-        List<Transactions> transactions = transactionsRepository.findAllByDebtorId(1L);
+        List<Transactions> transactions = transactionsRepository.findByDebtorId(1L);
 
         assertNotNull(transactions,"The object transactions shouldn't be null.");
     }

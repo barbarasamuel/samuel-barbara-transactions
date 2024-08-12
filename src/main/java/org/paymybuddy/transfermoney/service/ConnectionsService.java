@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConnectionsService {
@@ -15,31 +16,22 @@ public class ConnectionsService {
     ConnectionsRepository connectionsRepository;
     @Autowired
     ConnectionMapper connectionMapper;
-    public ConnectionDTO newConnection(ConnectionDTO connectionDTO) {
+    public void newConnection(ConnectionDTO connectionDTO) {
 
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
-        connection = connectionsRepository.save(connection);
-        return connectionMapper.convertToDTO(connection);
-    }
+        connectionsRepository.save(connection);
 
+    }
+//TODO: A supprimer cette methode? Mettre à jour l'appel
     public ConnectionDTO getIdentifiant(String email){
         Connection connection = connectionsRepository.findByEmail(email);
         return connectionMapper.convertToDTO(connection);
     }
 
-    public List<ConnectionDTO> getConnections(String username){
-        //ConnectionsEntity connectionsEntity = connectionMapper.convertToEntity(connectionDTO);
-        //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(connectionsEntity.getIdConnection());
-
-        //List<ConnectionsEntity> connectionsEntityList = connectionsRepository.findAllNameByIdDifferentJPQL(1L);
-        List<Connection> connectionList = connectionsRepository.findAllByEmailNot(username);
-        return connectionMapper.convertListToDTO(connectionList);
-    }
-
-    public ConnectionDTO findByEmail(String email){
-        Connection connection = connectionsRepository.findByEmail(email);
+    public ConnectionDTO getConnection(String name){
+        Connection connection = connectionsRepository.findByName(name);
         return connectionMapper.convertToDTO(connection);
-    }/**/
+    }
 
     public ConnectionDTO save(ConnectionDTO newConnectionDTO){
 
@@ -48,4 +40,14 @@ public class ConnectionsService {
         connection = connectionsRepository.save(connection);
         return connectionMapper.convertToDTO(connection);
     }
+
+    public ConnectionDTO getCreditor(Long id){
+        Optional<Connection> connection = connectionsRepository.findById(id);
+        return connectionMapper.convertToDTO(connection.get());
+    }
+
+    /*public List<ConnectionDTO> getConnectionsList() {
+        List<Connection> connections = connectionsRepository.findAll();
+        return connectionMapper.convertListToDTO(connections);
+    }*/
 }

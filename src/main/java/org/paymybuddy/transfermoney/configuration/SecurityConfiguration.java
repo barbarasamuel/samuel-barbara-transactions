@@ -77,7 +77,7 @@ public class SecurityConfiguration {
                     /*auth.requestMatchers("/").permitAll();*/
                     auth.requestMatchers("/error/**").permitAll();
                     auth.requestMatchers("/img/**","/css/**","/login","/register").permitAll();
-                    auth.requestMatchers("/transfer","/test","/").authenticated();
+                    auth.requestMatchers("/transfer","/transferTest","/test","/").authenticated();
                     /*//auth.requestMatchers("/transfer").hasRole("ADMIN");
                     auth.anyRequest().authenticated();*/
                     auth.anyRequest().permitAll();

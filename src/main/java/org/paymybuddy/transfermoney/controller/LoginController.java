@@ -2,9 +2,7 @@ package org.paymybuddy.transfermoney.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.RelationDTO;
-import org.paymybuddy.transfermoney.model.TransactionDTO;
+import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.RelationService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
@@ -50,18 +48,19 @@ public class LoginController {
     }
     @GetMapping("/")
     public String home(Model model, Principal principal){
-/*
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        List<RelationDTO> connectionsList = relationService.getRelations(connectionDTO);
-        List<TransactionDTO> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
 
         model.addAttribute("connectionsList", connectionsList);
-        model.addAttribute("transactionsList", transactionsList);*/
+        model.addAttribute("transactionsList", transactionsList);/**/
+        model.addAttribute("username", connectionDTO.getName());
 
-        //return "transfer";
-        return "test";
+        return "transferTest";
+        //return "test";
     }
 
     @GetMapping("/logout")

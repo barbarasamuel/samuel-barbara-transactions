@@ -1,5 +1,8 @@
 .title-element{
-    background-color:#7AA95C;
+    background-color:#5cb85c;
+    color:white;
+    text-size:12;
+    border:none;
 }
 input[type=checkbox]{
     display: flex;
