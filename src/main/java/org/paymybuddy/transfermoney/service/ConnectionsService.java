@@ -16,13 +16,14 @@ public class ConnectionsService {
     ConnectionsRepository connectionsRepository;
     @Autowired
     ConnectionMapper connectionMapper;
-    public void newConnection(ConnectionDTO connectionDTO) {
+    public ConnectionDTO newConnection(ConnectionDTO connectionDTO) {
 
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
-        connectionsRepository.save(connection);
+        connection = connectionsRepository.save(connection);
+        return connectionMapper.convertToDTO(connection);
 
     }
-//TODO: A supprimer cette methode? Mettre à jour l'appel
+
     public ConnectionDTO getIdentifiant(String email){
         Connection connection = connectionsRepository.findByEmail(email);
         return connectionMapper.convertToDTO(connection);

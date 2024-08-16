@@ -34,7 +34,7 @@ public class ConnectionsController {
                                 BindingResult bindingResult, Model model){*/
     /*public String newConnection(@Valid @ModelAttribute("connectionForm") ConnectionForm connectionForm,
                 BindingResult bindingResult, Model model){*/
-    public String newConnection( @RequestParam("friendName") String friendName, Model model){
+    public String newConnection( @RequestParam("friendName") String friendName, Model model, Error error){
 
         ConnectionDTO connectionDTO = ConnectionDTO.builder()
                 .email("@")
@@ -42,22 +42,22 @@ public class ConnectionsController {
                 .password("00000000")
                 .build();
 
-        connectionDTO = connectionsService.getConnection(connectionDTO.getName());
-/*
-        if (connectionDTO != null) {
-
-            bindingResult.rejectValue("name", null, "There is already a connection "+friendName +" with that email");
+        ConnectionDTO foundConnectionDTO = connectionsService.getConnection(connectionDTO.getName());
+/**/
+        if (foundConnectionDTO != null) {
+            //error
+            //error..rejectValue("name", null, "There is already a connection "+friendName +" with that email");
             log.error("There is already a connection "+friendName +" with that email");
 
-        }else{*/
+        }else{
 
             /*connectionDTO = ConnectionDTO.builder()
                     .email("@")
                     .name(connectionForm.getFriendName())
                     .password("00000000")
                     .build();*/
-/*
-            connectionsService.newConnection(connectionDTO);
+/**/
+            ConnectionDTO newConnectionDTO = connectionsService.newConnection(connectionDTO);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -65,7 +65,7 @@ public class ConnectionsController {
 
             RelationDTO relationDTO = RelationDTO.builder()
                     .user(userDTO)
-                    .connectionFriend(connectionDTO)
+                    .connectionFriend(newConnectionDTO)
                     .build();
 
             relationService.newRelation(relationDTO);
@@ -74,11 +74,11 @@ public class ConnectionsController {
 
             model.addAttribute("connectionsList",relationsListDTO);
 
-        }*/
+        }
         /*
         model.addAttribute("connection",connectionDTO);
         return connectionsService.saveNewConnection(connectionDTO);*/
-        return "transferTest";
+        return "redirect:/";
     }
 
 }
