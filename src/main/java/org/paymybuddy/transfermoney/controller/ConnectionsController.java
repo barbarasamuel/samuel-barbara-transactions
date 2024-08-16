@@ -1,6 +1,7 @@
 package org.paymybuddy.transfermoney.controller;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.model.*;
@@ -13,11 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+
 import java.util.List;
 
 @Slf4j
@@ -29,37 +28,57 @@ public class ConnectionsController {
     private RelationService relationService;/**/
 
     @PostMapping("/connection/save")
-    public String newConnection(@Valid @ModelAttribute("connectionForm") ConnectionForm connectionForm,
-                                BindingResult bindingResult, Model model){
-        ConnectionDTO connectionDTO = connectionsService.getConnection(connectionForm.getName());
+   // @ResponseBody
+    @Transactional
+    /*public String newConnection(@RequestParam("hiddenAddInput") ConnectionForm connectionForm,
+                                BindingResult bindingResult, Model model){*/
+    /*public String newConnection(@Valid @ModelAttribute("connectionForm") ConnectionForm connectionForm,
+                BindingResult bindingResult, Model model){*/
+    public String newConnection( @RequestParam("friendName") String friendName, Model model){
+
+        ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                .email("@")
+                .name(friendName)
+                .password("00000000")
+                .build();
+
+        connectionDTO = connectionsService.getConnection(connectionDTO.getName());
+/*
         if (connectionDTO != null) {
 
-            bindingResult.rejectValue("name", null, "There is already a connection "+connectionForm.getName() +" with that email");
-            log.error("There is already a connection "+connectionForm.getName() +" with that email");
+            bindingResult.rejectValue("name", null, "There is already a connection "+friendName +" with that email");
+            log.error("There is already a connection "+friendName +" with that email");
 
-        }else{
+        }else{*/
 
-            connectionDTO = ConnectionDTO.builder()
+            /*connectionDTO = ConnectionDTO.builder()
                     .email("@")
-                    .name(connectionForm.getName())
+                    .name(connectionForm.getFriendName())
                     .password("00000000")
-                    .build();
-
+                    .build();*/
+/*
             connectionsService.newConnection(connectionDTO);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             ConnectionDTO userDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+
+            RelationDTO relationDTO = RelationDTO.builder()
+                    .user(userDTO)
+                    .connectionFriend(connectionDTO)
+                    .build();
+
+            relationService.newRelation(relationDTO);
+
             List<RelationsConnection> relationsListDTO = relationService.getRelations(userDTO);
 
             model.addAttribute("connectionsList",relationsListDTO);
 
-        }
+        }*/
         /*
         model.addAttribute("connection",connectionDTO);
         return connectionsService.saveNewConnection(connectionDTO);*/
         return "transferTest";
     }
-
 
 }

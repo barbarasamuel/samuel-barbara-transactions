@@ -43,4 +43,9 @@ public class RelationService {
         List<Relation> relationsList = relationRepository.findByUser(connection);
         return relationMapper.convertListToDTO(relationsList);*/
     }
+
+    public void newRelation(RelationDTO relationDTO){
+        Relation relation = relationMapper.convertToEntity(relationDTO);
+        relationRepository.save(relation);
+    }
 }

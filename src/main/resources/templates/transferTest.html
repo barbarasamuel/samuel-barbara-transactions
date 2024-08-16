@@ -41,11 +41,28 @@
     <section class="centered_section">
         <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
         <div class="wrapper_sendmoney">
-            <form id="newConnection" method="post" th:action="@{/connection/save}" th:object="${connectionForm}">
-                <input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
+            <form action="#" id="newConnection" method="post" th:action="@{/connection/save}"><!---->
+                <input id="friendName" type="hidden" th:name="friendName" />
+                <!----><input id="addInput" name="addInput" type="hidden" value="" />
+                <div class="w_one_sendmoney">Send Money</div>
+                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
+
+                <!--fonctionne<input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
                 <input id="addInput" name="addInput" type="hidden" value="" />
                 <div class="w_one_sendmoney">Send Money</div>
                 <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div>
+                --><!--<input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
+                <input id="addInput" name="addInput" type="hidden" value="" />-->
+                <!--<input id="hiddenAddInput" type="hidden" th:field="*{friendName}" />--><!--th:value="${connectionForm.friendName}"-->
+
+                <!--<input th:name="hiddenAddInput" type="hidden" th:value="${friendName}" />-->
+                    <!--<input id="addInput" name="addInput" type="hidden" value="" />-->
+                <!--<input th:name="hiddenAddInput" th:field="*{friendName}" th:value="${connectionForm.friendName} type="hidden" />--><!--oninput="document.getElementById('hiddenAddInput').value = this.value" />-->
+                    <!--<input th:field="*{friendName}" type="hidden" />-->
+            <!--<input id="addInput" name="addInput" type="hidden" value="" />-->
+                <!--<div class="w_one_sendmoney">Send Money</div>
+                <div class="w_two_sendmoney"><input type="submit" th:value="${connectionForm.friendName}" value="Add Connection"></div>
+                --><!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div>-->
             </form>
             <form id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${transactionForm}">
                 <input id="hiddenDescriptionInput" type="hidden" th:name="${transactionDescription}" th:value="${description}" />
@@ -97,7 +114,7 @@
     </section>
 
     <section class="centered_section">
-        <div>
+        <form>
             <table id="myTransactionsList" class="element_border">
 
                 <thead>
@@ -113,7 +130,7 @@
                 </thead>
                 <tbody><!--onload="listPrinting()">-->
 
-                <tr th:each = "transactions, iter : ${transactionsList}"><!--  th:if="${iter.index % 3 == 0}">-->
+                <tr th:each = "transactions, iter : ${transactionsList}" ><!--  th:if="${iter.index % 3 == 0}">-->
                     <td th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
                     <td th:text = "${transactions.connectionName}"></td>
                     <td th:text = "${transactions.description}"></td>
@@ -174,7 +191,7 @@
                     displayTablePage(currentPage);
                 };
             </script>-->
-       </div>
+       </form>
    </section>
 </main>
 <footer>
@@ -183,8 +200,10 @@
     function addConnectionPopup(){
         var addInput = prompt("Write the new connection");
         if(addInput!=null){
-            document.getElementById("hiddenAddInput").value = addInput;
-            document.getElementById("newTransaction").submit();
+            /*var value = document.getElementById("addInput").value;
+            document.getElementById("friendName").value = value;*/
+            document.getElementById("friendName").value = addInput;
+            document.getElementById("newConnection").getElementById("friendName").value.submit();
         }
     }
     function payPopup(){
