@@ -113,7 +113,7 @@ public class TransactionController {
         model.addAttribute("transactionsList", transactionsList);
 
         model.addAttribute("transactionForm",new TransactionForm());
-        return "transfer";
+        return "transferTest";
     }
 
    /* @GetMapping("/displayConnectionsList")
