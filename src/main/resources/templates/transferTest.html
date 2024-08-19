@@ -47,25 +47,9 @@
                 <div class="w_one_sendmoney">Send Money</div>
                 <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
 
-                <!--fonctionne<input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
-                <input id="addInput" name="addInput" type="hidden" value="" />
-                <div class="w_one_sendmoney">Send Money</div>
-                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div>
-                --><!--<input id="hiddenAddInput" type="hidden" th:name="${connectionName}" th:value="${newConnection}" />
-                <input id="addInput" name="addInput" type="hidden" value="" />-->
-                <!--<input id="hiddenAddInput" type="hidden" th:field="*{friendName}" />--><!--th:value="${connectionForm.friendName}"-->
-
-                <!--<input th:name="hiddenAddInput" type="hidden" th:value="${friendName}" />-->
-                    <!--<input id="addInput" name="addInput" type="hidden" value="" />-->
-                <!--<input th:name="hiddenAddInput" th:field="*{friendName}" th:value="${connectionForm.friendName} type="hidden" />--><!--oninput="document.getElementById('hiddenAddInput').value = this.value" />-->
-                    <!--<input th:field="*{friendName}" type="hidden" />-->
-            <!--<input id="addInput" name="addInput" type="hidden" value="" />-->
-                <!--<div class="w_one_sendmoney">Send Money</div>
-                <div class="w_two_sendmoney"><input type="submit" th:value="${connectionForm.friendName}" value="Add Connection"></div>
-                --><!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" id="button_add">Add Connection</button></div>-->
             </form>
-            <form id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${transactionForm}">
-                <input id="hiddenDescriptionInput" type="hidden" th:name="${transactionDescription}" th:value="${description}" />
+            <form action="#" id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${newTransaction}">
+                <input id="hiddenDescriptionInput" type="hidden" th:name="description" /><!--th:name="${transactionDescription}" th:value="${description}"-->
                 <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
                 <table>
                     <thead>
@@ -75,8 +59,8 @@
                         <!--<a th:href="@{/transaction/save}">-->
                         <div class="w_one_description">
 
-                            <select id="connection-select" ><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
-                                <option>Select A Connection</option>
+                            <select id="connection-select" th:name="name" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                                <option value="" disabled selected>Select a connection</option>
                                 <!--<option th:each="connection : ${connectionsList}" th:value="${connection.id}" th:text="${connection.connectionName}"></option>-->
                                 <option th:each="connection : ${connectionsList}" th:attr="value=${connection.id}" th:text="${connection.connectionName}"></option>
                                 <!--<option value="option1">Option 1</option>-->
@@ -84,13 +68,7 @@
 
                         </div>
                         <div class="w_two_description">
-                            <label for="amount"></label><input
-                                type="number"
-                                id="amount"
-                                name="amount"
-                                class="element_border"
-                                placeholder="1€"
-                        />
+                            <input type="number" id="amount" class="element_border" placeholder="1€" th:name="amount" required/>
                             <!--<label for="amount"></label><input
                             type="number"
                             id="amount"
@@ -102,7 +80,7 @@
 
                         </div>
                         <div class="w_three_description">
-                            <button id="button_pay" onclick="payPopup()">Pay</button>
+                            <button type="button" id="button_pay" onclick="payPopup()">Pay</button>
                         </div>
                         <!-- </a>-->
                     </div></td>

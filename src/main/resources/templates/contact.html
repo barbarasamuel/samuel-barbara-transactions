@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Pay my buddy Contact</title>
-    <link th:href="@{/css/home.css}"
+    <!--<link th:href="@{/css/home.css}"
           rel="stylesheet"
-          >
+          >-->
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
 
 <header>
     <nav>
-        <img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" >
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
         <div>
             <a th:href="@{/transfer}">Home</a>
             <a th:href="@{/transfer}">Transfer</a>
@@ -31,13 +31,17 @@
         </div>
     </section>
     <section>
-        <form method="get" action="" id="formulaire">
-            <label for="nom" class="labnom">Your name</label><label for="email" class="labemail">Your email</label>
-            <input type="text" name="nom" id="nom">
-            <input type="email" name="email" id="email">
-            <label for="message" class="labmessage">Your message</label><textarea name="message" id="message" rows="4"></textarea><br><br><br><br>
-            <input type="submit" value="send" class="envoyer"><br>
-        </form>
+        <div class="form-element">
+            <form method="post" th:action="@{/contact/save}" id="formulaire">
+                <br>
+            <div>
+                <textarea name="message" placeholder="Enter your message" class="input-element" id="message" cols="40" rows="4"></textarea><br><br>
+            </div>
+            <div>
+                <input type="submit" value="Send" class="contact-button"><br>
+            </div>
+            </form>
+        </div>
     </section>
 </main>
 <footer>

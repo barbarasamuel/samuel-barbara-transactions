@@ -42,10 +42,10 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
-    public ConnectionDTO getCreditor(Long id){
+    /*public ConnectionDTO getCreditor(String name){
         Optional<Connection> connection = connectionsRepository.findById(id);
         return connectionMapper.convertToDTO(connection.get());
-    }
+    }*/
 
     /*public List<ConnectionDTO> getConnectionsList() {
         List<Connection> connections = connectionsRepository.findAll();

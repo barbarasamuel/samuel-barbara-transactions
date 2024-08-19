@@ -1,5 +1,6 @@
 package org.paymybuddy.transfermoney.controller;
 
+import jakarta.transaction.Transactional;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
 import org.paymybuddy.transfermoney.model.TransactionForm;
@@ -14,9 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TransactionController {
@@ -51,9 +54,20 @@ public class TransactionController {
         transactionService.saveTransaction(transaction);
         return new ModelAndView("redirect:/");
     }*/
+    /*@GetMapping("/")
+    public String printTransaction(Model model){
+        model.addAttribute("transactionForm", new TransactionForm());
+        return "transferTest";
+    }*/
+
        @PostMapping("/transaction/save")
-       public String saveTransaction(@ModelAttribute("transaction") TransactionForm transactionForm,
+       @Transactional
+       public String saveTransaction(@RequestParam("newTransaction") Map<String,String> newTransaction,
                                      Model model){
+       /*public String saveTransaction(@RequestParam("newTransaction") TransactionForm transactionForm,
+                                     Model model){
+       public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
+                                     Model model){*/
         /*User existing = userService.findByEmail(user.getEmail());
         if (existing != null) {
             result.rejectValue("email", null, "There is already an account registered with that email");
@@ -63,18 +77,25 @@ public class TransactionController {
                return "transfer";
            }*/
 
-           ConnectionDTO connectionDTO = connectionsService.getCreditor(transactionForm.getConnection());
+           ConnectionDTO creditorDTO = connectionsService.getConnection(newTransaction.get("name"));
+
+           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+           UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+           ConnectionDTO debtorDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+
            TransactionDTO transactionDTO = TransactionDTO.builder()
-                   .creditor(connectionDTO)
-                   .description(transactionForm.getDescription())
-                   .amount(transactionForm.getAmount())
+                   .creditor(creditorDTO)
+                   .debtor(debtorDTO)
+                   .description(newTransaction.get("description"))
+                   .amount(Double.valueOf(newTransaction.get("amount")))
                    .build();
 
            transactionService.saveTransaction(transactionDTO);
 
-           TransactionForm newTransactionForm = new TransactionForm();
-           model.addAttribute("transaction", newTransactionForm);
-           return "transfer";
+           List <TransactionDTO> transactionsList =  transactionService.getTransactions(debtorDTO.getId());
+
+           model.addAttribute("transactionsList", transactionsList);
+           return  "redirect:/";
        }
 
     @GetMapping("/transfer")
