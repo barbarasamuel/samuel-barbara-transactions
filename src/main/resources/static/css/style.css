@@ -39,7 +39,7 @@ nav {
     border-color:#A9A9A9;
     border-radius:10px;
 }
-.home-button,.register-button,.contact-button{
+.home-button,.register-button,.contact-button,.password-button,.email-button{
     margin-left:40%;
     margin-top:10px;
     margin-bottom:10px;

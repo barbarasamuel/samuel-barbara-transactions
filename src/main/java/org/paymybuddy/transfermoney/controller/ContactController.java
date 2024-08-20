@@ -1,9 +1,8 @@
 package org.paymybuddy.transfermoney.controller;
 
-import jakarta.validation.Valid;
+
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ContactDTO;
-import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,14 +22,7 @@ public class ContactController {
 
     @Autowired
     ContactService contactService;
-    /*@PostMapping("/contact/save")
-    @Transactional
-    public String newContact(@Valid @ModelAttribute("contactForm") ContactForm contactForm,
-                               BindingResult bindingResult,
-                               Model model){
 
-        return "contact";
-    }*/
     @PostMapping("/contact/save")
     @Transactional
     public String newContact(@RequestParam("message") String message, Error error) {

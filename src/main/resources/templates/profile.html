@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pay my buddy Profile</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <nav>
+        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
+        <div>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/}">Transfer</a>
+            <a th:href="@{/profile}">Profile</a>
+            <a th:href="@{/contact}">Contact</a>
+            <a th:href="@{/logout}">Log off</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <section>
+        <div class="bandeau">
+            <p>Home / Profile</p>
+        </div>
+    </section>
+    <section>
+        <div>
+            <form action="#" class="form-element" method="post" role="form" th:action="@{/profile/updateEmail}" >
+
+                <div>
+                    <label for="email"></label><input
+                        id="email"
+                        th:name="email"
+                        size=40
+                        class="input-element"
+                        placeholder="Enter your new email address"
+                        th:value ="${profileCurse.email}"
+                /><!--
+                         value="*{email}"-->
+                    <!--<p th:errors="*{email}" class="text-danger"
+                       th:if="${#fields.hasErrors('email')}">
+                    </p>-->
+
+                    <button class="email-button" type="submit">Modify</button>
+                </div>
+            </form>
+            <form action="#" class="form-element" method="post" role="form" th:action="@{/profile/updatePassword}" ><!--th:object="${profileCurse}-->
+
+            <div>
+                    <label for="oldPassword"></label><input
+                        id="oldPassword"
+                        th:name="oldPassword"
+                        size=40
+                        class="input-element"
+                        placeholder="Enter your old password"
+                        th:value ="${profileCurse.password}"
+                        type="password"
+                /><!--
+                         th:field="*{password}"-->
+
+                    <label for="newPassword"></label><input
+                        id="newPassword"
+                        th:name="newPassword"
+                        size=40
+                        class="input-element"
+                        placeholder="Enter your new password"
+
+                        type="password"
+                />
+
+
+                    <label for="confirmPassword"></label><input
+                        id="confirmPassword"
+                        th:name="confirmPassword"
+                        size=40
+                        class="input-element"
+                        placeholder="Confirm your new password"
+
+                        type="password"
+                />
+                    <!--<p th:errors="*{confirmPassword}" class="text-danger"
+                       th:if="${#fields.hasErrors('password')}">
+                    </p>-->
+
+                    <button class="password-button" type="submit">Modify</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

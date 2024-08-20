@@ -42,6 +42,10 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
+    public void updatedConnection(ConnectionDTO connectionDTO){
+        Connection connection = connectionMapper.convertToEntity(connectionDTO);
+        connectionsRepository.save(connection);
+    }
     /*public ConnectionDTO getCreditor(String name){
         Optional<Connection> connection = connectionsRepository.findById(id);
         return connectionMapper.convertToDTO(connection.get());
