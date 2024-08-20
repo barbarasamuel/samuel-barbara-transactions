@@ -3,7 +3,6 @@ package org.paymybuddy.transfermoney.controller;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.model.BankAccountDTO;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
@@ -42,15 +41,6 @@ public class RegisterController {
             return "register";
         }
 
-        /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                .balance(50.00)
-                .email(registerForm.getEmail())
-                .name(registerForm.getName())
-                .password((registerForm.getPassword()))
-                .build();
-
-        connectionsService.save(connectionDTO);*/
-
         ConnectionDTO connectionDTO = ConnectionDTO.builder()
                 .email(registerForm.getEmail())
                 .name(registerForm.getName())
@@ -59,12 +49,7 @@ public class RegisterController {
 
         ConnectionDTO newConnectionDTO = registrationService.saveConnection(connectionDTO);
 
-/*
-        BankAccountDTO bankAccountDTO = BankAccountDTO.builder()
-                .(connectionDTO)
-                        .balance(50.00)
-                        .build();
-*/
+
         registrationService.saveBankAccount(newConnectionDTO);
 
         log.info("New user created");
@@ -76,8 +61,3 @@ public class RegisterController {
         return "register";
     }
 }
-   /* @PostMapping("/register/save")
-    public ModelAndView saveConnection((@ModelAttribute ConnectionDTO connection) {
-        connectionsService.newConnection(connection);
-        return new ModelAndView("home");
-    }*/

@@ -42,17 +42,9 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
-    public void updatedConnection(ConnectionDTO connectionDTO){
+    public void updatedConnection(ConnectionDTO connectionDTO) {
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
         connectionsRepository.save(connection);
     }
-    /*public ConnectionDTO getCreditor(String name){
-        Optional<Connection> connection = connectionsRepository.findById(id);
-        return connectionMapper.convertToDTO(connection.get());
-    }*/
 
-    /*public List<ConnectionDTO> getConnectionsList() {
-        List<Connection> connections = connectionsRepository.findAll();
-        return connectionMapper.convertListToDTO(connections);
-    }*/
 }
