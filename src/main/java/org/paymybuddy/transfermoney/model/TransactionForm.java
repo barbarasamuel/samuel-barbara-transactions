@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TransactionForm {
     @NotEmpty(message = "Thanks to select a name.")
-    private String name;
+    private Long id;//String name;
 
     @NotEmpty(message = "Thanks to fill a amount.")
     private Double amount;

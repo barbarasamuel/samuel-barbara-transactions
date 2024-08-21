@@ -59,7 +59,7 @@
                         <!--<a th:href="@{/transaction/save}">-->
                         <div class="w_one_description">
 
-                            <select id="connection-select" th:name="name" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                            <select id="connection-select" th:name="id" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
                                 <option value="" disabled selected>Select a connection</option>
                                 <!--<option th:each="connection : ${connectionsList}" th:value="${connection.id}" th:text="${connection.connectionName}"></option>-->
                                 <option th:each="connection : ${connectionsList}" th:attr="value=${connection.id}" th:text="${connection.connectionName}"></option>

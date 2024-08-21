@@ -34,6 +34,11 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
+    public ConnectionDTO getCreditor(Long id){
+        Optional<Connection> connection = connectionsRepository.findById(id);
+        return connectionMapper.convertToDTO(connection.get());
+    }
+
     public ConnectionDTO save(ConnectionDTO newConnectionDTO){
 
 

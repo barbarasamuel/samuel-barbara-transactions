@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,14 +61,14 @@ public class TransactionController {
         return "transferTest";
     }*/
 
-       @PostMapping("/transaction/save")
+       @PostMapping("/transactions/save")
        @Transactional
-       public String saveTransaction(@RequestParam("newTransaction") Map<String,String> newTransaction,
+       /*public String saveTransaction(@RequestParam("newTransaction") Map<String,String> newTransaction,
                                      Model model){
-       /*public String saveTransaction(@RequestParam("newTransaction") TransactionForm transactionForm,
-                                     Model model){
-       public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
+       public String saveTransaction(@RequestParam("newTransaction") TransactionForm transactionForm,
                                      Model model){*/
+       public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
+                                     Model model){
         /*User existing = userService.findByEmail(user.getEmail());
         if (existing != null) {
             result.rejectValue("email", null, "There is already an account registered with that email");
@@ -77,17 +78,26 @@ public class TransactionController {
                return "transfer";
            }*/
 
-           ConnectionDTO creditorDTO = connectionsService.getConnection(newTransaction.get("name"));
+           //ConnectionDTO creditorDTO = connectionsService.getConnection(newTransaction.get("name"));
+           ConnectionDTO creditorDTO = connectionsService.getCreditor(transactionForm.getId());
 
            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
            ConnectionDTO debtorDTO = connectionsService.getIdentifiant(userDetails.getUsername());
 
-           TransactionDTO transactionDTO = TransactionDTO.builder()
+           /*TransactionDTO transactionDTO = TransactionDTO.builder()
                    .creditor(creditorDTO)
                    .debtor(debtorDTO)
                    .description(newTransaction.get("description"))
                    .amount(Double.valueOf(newTransaction.get("amount")))
+                   .build();*/
+
+           TransactionDTO transactionDTO = TransactionDTO.builder()
+                   .creditor(creditorDTO)
+                   .debtor(debtorDTO)
+                   .description(transactionForm.getDescription())
+                   .amount(transactionForm.getAmount())
+                   .transactionDate(new Date())
                    .build();
 
            transactionService.saveTransaction(transactionDTO);

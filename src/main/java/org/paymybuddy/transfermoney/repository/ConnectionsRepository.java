@@ -1,11 +1,10 @@
 package org.paymybuddy.transfermoney.repository;
 
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
     Connection findByEmail(String email);
@@ -13,7 +12,7 @@ public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
     Connection findByName(String name);
     /*@Query(value="SELECT * FROM connection WHERE id_connection not in (:connections)", nativeQuery=true)
     List<Connection> findAllNameNotUsername(@Param("connections")String username);*/
-
+    Optional<Connection> findById(Long id);
     //Connection findById(Long id);
     List<Connection> findAllByEmailNot(String email);
 
