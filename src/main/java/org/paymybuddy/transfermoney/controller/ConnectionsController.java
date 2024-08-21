@@ -27,6 +27,11 @@ public class ConnectionsController {
     @Autowired
     private RelationService relationService;/**/
 
+    /**
+     *
+     * To create a new friend connection
+     *
+     */
     @PostMapping("/connection/save")
    // @ResponseBody
     @Transactional

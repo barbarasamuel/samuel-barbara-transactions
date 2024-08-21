@@ -1,15 +1,16 @@
 package org.paymybuddy.transfermoney.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
-import org.paymybuddy.transfermoney.entity.Connection;
+
 
 import java.util.Date;
 
+/**
+ *
+ * DTO design pattern to collect the information about TransactionDTO
+ *
+ */
 @Builder
 @Data
 public class TransactionDTO {

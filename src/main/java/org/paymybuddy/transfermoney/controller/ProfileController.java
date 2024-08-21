@@ -27,6 +27,12 @@ public class ProfileController {
     private HttpSession session;
     @Autowired
     ConnectionsService connectionsService;
+
+    /**
+     *
+     * To update the email
+     *
+     */
     @PostMapping("/profile/updateEmail")
     public String updateProfile(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
@@ -54,6 +60,11 @@ public class ProfileController {
         return "redirect:/login";
     }
 
+    /**
+     *
+     * To update the password
+     *
+     */
     @PostMapping("/profile/updatePassword")
     public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
@@ -81,6 +92,11 @@ public class ProfileController {
         return "redirect:/login";
     }
 
+    /**
+     *
+     * To access to the profile.html page and load it
+     *
+     */
     @GetMapping("/profile")
     public String profile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

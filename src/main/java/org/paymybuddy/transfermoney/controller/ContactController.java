@@ -23,6 +23,11 @@ public class ContactController {
     @Autowired
     ContactService contactService;
 
+    /**
+     *
+     * To create a new message to contact the administrator
+     *
+     */
     @PostMapping("/contact/save")
     @Transactional
     public String newContact(@RequestParam("message") String message, Error error) {
@@ -41,6 +46,11 @@ public class ContactController {
         return "redirect:/";
     }
 
+    /**
+     *
+     * To access to the contact.html page
+     *
+     */
     @GetMapping("/contact")
     public String contact(){
         return "contact";

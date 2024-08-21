@@ -5,6 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+
+/**
+ *
+ * To get the data about bank accounts
+ *
+ */
 @Getter
 @Setter
 @Entity

@@ -26,6 +26,11 @@ public class LoginController {
     @Autowired
     ConnectionsService connectionsService;
 
+    /**
+     *
+     * To access to the login.html page
+     *
+     */
     @GetMapping("/login")
     public String login(Model model){
 
@@ -33,7 +38,11 @@ public class LoginController {
         return "login";
     }
 
-
+    /**
+     *
+     * To access to the private web pages
+     *
+     */
     @PostMapping("/process-login")
     /*public String handleLogin(){
 
@@ -46,6 +55,12 @@ public class LoginController {
             return "login";
         }
     }
+
+    /**
+     *
+     * To load the home page
+     *
+     */
     @GetMapping("/")
     public String home(Model model, Principal principal){
 
@@ -63,6 +78,11 @@ public class LoginController {
         //return "test";
     }
 
+    /**
+     *
+     * To log out
+     *
+     */
     @GetMapping("/logout")
     public String logout(){
         return "redirect:/login?logout";

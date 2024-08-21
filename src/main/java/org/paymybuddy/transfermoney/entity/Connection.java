@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ *
+ * To get the data about connections
+ *
+ */
 @Getter
 @Setter
 @Entity

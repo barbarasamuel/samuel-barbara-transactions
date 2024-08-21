@@ -23,6 +23,12 @@ public class RegisterController {
     ConnectionsService connectionsService;/**/
     @Autowired
     RegistrationService registrationService;
+
+    /**
+     *
+     * To create a new user
+     *
+     */
     @PostMapping("/register/save")
     @Transactional
     public String registration(@Valid @ModelAttribute("registerForm") RegisterForm registerForm,
@@ -55,6 +61,12 @@ public class RegisterController {
         log.info("New user created");
         return "login";
     }
+
+    /**
+     *
+     * To access to the register.html page
+     *
+     */
     @GetMapping("/register")
     public String registrationPage(Model model){
         model.addAttribute("registerForm",new RegisterForm());

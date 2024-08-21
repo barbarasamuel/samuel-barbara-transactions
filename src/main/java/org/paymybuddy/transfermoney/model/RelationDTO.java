@@ -1,10 +1,14 @@
 package org.paymybuddy.transfermoney.model;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 import lombok.Builder;
 import lombok.Data;
-import org.paymybuddy.transfermoney.entity.Connection;
+
+/**
+ *
+ * DTO design pattern to collect the information about RelationDTO
+ *
+ */
 @Builder
 @Data
 public class RelationDTO {

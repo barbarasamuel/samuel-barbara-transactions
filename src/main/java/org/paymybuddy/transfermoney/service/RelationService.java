@@ -24,6 +24,12 @@ public class RelationService {
 
     @Autowired
     ConnectionsRepository connectionsRepository;
+
+    /**
+     *
+     * To get the list of friends
+     *
+     */
     public List<RelationsConnection> getRelations(ConnectionDTO user){
 
         List<RelationsConnection> relationsConnectionList = new ArrayList<>();
@@ -44,6 +50,11 @@ public class RelationService {
         return relationMapper.convertListToDTO(relationsList);*/
     }
 
+    /**
+     *
+     * To create a new relation
+     *
+     */
     public void newRelation(RelationDTO relationDTO){
         Relation relation = relationMapper.convertToEntity(relationDTO);
         relationRepository.save(relation);

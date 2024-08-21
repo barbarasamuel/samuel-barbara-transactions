@@ -16,6 +16,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private ConnectionsRepository connectionsRepository;
 
+    /**
+     *
+     * To load the information user
+     *
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Connection connection = connectionsRepository.findByEmail(username);

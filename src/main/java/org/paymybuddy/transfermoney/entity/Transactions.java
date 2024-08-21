@@ -8,7 +8,11 @@ import lombok.Setter;
 
 import java.util.Date;
 
-
+/**
+ *
+ * To get the data about transactions
+ *
+ */
 @Getter
 @Setter
 @Entity

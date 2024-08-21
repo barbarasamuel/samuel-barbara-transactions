@@ -23,12 +23,22 @@ public class TransactionsService {
     @Autowired
     ConnectionMapper connectionMapper;
 
+    /**
+     *
+     * To save a new transaction
+     *
+     */
     public TransactionDTO saveTransaction(TransactionDTO transactionDTO) {
         Transactions transactions = transactionMapper.convertToEntity(transactionDTO);
         transactions = transactionsRepository.save(transactions);
         return transactionMapper.convertToDTO(transactions);
     }
 
+    /**
+     *
+     * To get the list of transactions from the user
+     *
+     */
     public List<TransactionDTO> getTransactions(Long idDebtorAccount){
         List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
         List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(idDebtorAccount);

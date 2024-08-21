@@ -16,6 +16,12 @@ public class ConnectionsService {
     ConnectionsRepository connectionsRepository;
     @Autowired
     ConnectionMapper connectionMapper;
+
+    /**
+     *
+     * To save a new connection
+     *
+     */
     public ConnectionDTO newConnection(ConnectionDTO connectionDTO) {
 
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
@@ -24,16 +30,31 @@ public class ConnectionsService {
 
     }
 
+    /**
+     *
+     * To get a connection thanks to his/her email
+     *
+     */
     public ConnectionDTO getIdentifiant(String email){
         Connection connection = connectionsRepository.findByEmail(email);
         return connectionMapper.convertToDTO(connection);
     }
 
+    /**
+     *
+     * To get a connection thanks to his/her name
+     *
+     */
     public ConnectionDTO getConnection(String name){
         Connection connection = connectionsRepository.findByName(name);
         return connectionMapper.convertToDTO(connection);
     }
 
+    /**
+     *
+     * To get a connection thanks to his/her id
+     *
+     */
     public ConnectionDTO getCreditor(Long id){
         Optional<Connection> connection = connectionsRepository.findById(id);
         return connectionMapper.convertToDTO(connection.get());
@@ -47,6 +68,11 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
+    /**
+     *
+     * To update a connection
+     *
+     */
     public void updatedConnection(ConnectionDTO connectionDTO) {
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
         connectionsRepository.save(connection);

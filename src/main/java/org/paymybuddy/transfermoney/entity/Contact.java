@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * To get the data about contacts
+ *
+ */
 @Setter
 @Getter
 @Entity

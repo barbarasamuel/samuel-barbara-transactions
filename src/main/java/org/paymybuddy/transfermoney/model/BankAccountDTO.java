@@ -2,8 +2,12 @@ package org.paymybuddy.transfermoney.model;
 
 import lombok.Builder;
 import lombok.Data;
-import org.paymybuddy.transfermoney.entity.Connection;
 
+/**
+ *
+ * DTO design pattern to collect the information about BankAccountDTO
+ *
+ */
 @Builder
 @Data
 public class BankAccountDTO {

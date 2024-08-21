@@ -5,6 +5,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * To collect the information about the user register from the client website to the server
+ *
+ */
 @Data
 public class RegisterForm {
     @NotEmpty(message = "Thanks to fill your name.")

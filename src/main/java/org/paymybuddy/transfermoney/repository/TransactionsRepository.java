@@ -8,6 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ *
+ * To get the information from the database linked to the transactions table
+ *
+ */
 public interface TransactionsRepository extends CrudRepository<Transactions,Long> {
 
     /*@Query(value="SELECT description, amount FROM transactions inner join relation on  transactions.id_creditor_account = relation.id_user inner join connection on relation.id_connection = connection.id_connection WHERE name<>:username", nativeQuery=true)

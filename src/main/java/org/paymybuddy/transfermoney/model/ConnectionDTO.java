@@ -1,9 +1,15 @@
 package org.paymybuddy.transfermoney.model;
 
-import jakarta.persistence.Column;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
+
+/**
+ *
+ * DTO design pattern to collect the information about ConnectionDTO
+ *
+ */
 @Builder
 @Data
 public class ConnectionDTO {

@@ -6,6 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ *
+ * To get the information from the database linked to the relation table
+ *
+ */
 public interface RelationRepository extends CrudRepository<Relation,Long> {
     List<Relation> findByUser(Connection user);
     List<Relation> findByConnectionFriendId(Long user);

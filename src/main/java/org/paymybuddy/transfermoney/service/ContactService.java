@@ -16,6 +16,11 @@ public class ContactService {
     @Autowired
     ContactRepository contactRepository;
 
+    /**
+     *
+     * To save a new message
+     *
+     */
     public void addedMessage(ContactDTO newContactDTO){
 
         Contact contact = contactMapper.convertToEntity(newContactDTO);

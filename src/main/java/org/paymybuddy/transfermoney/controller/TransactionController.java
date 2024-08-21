@@ -61,6 +61,11 @@ public class TransactionController {
         return "transferTest";
     }*/
 
+    /**
+     *
+     * To add a transaction
+     *
+     */
        @PostMapping("/transactions/save")
        @Transactional
        /*public String saveTransaction(@RequestParam("newTransaction") Map<String,String> newTransaction,
