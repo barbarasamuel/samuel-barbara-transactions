@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class BankAccountDTO {
 
-    //private Long id;
+    private Long id;
     private ConnectionDTO connectionBankAccount;
     private Double balance;
 

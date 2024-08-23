@@ -31,6 +31,7 @@ public class TransactionsService {
     public TransactionDTO saveTransaction(TransactionDTO transactionDTO) {
         Transactions transactions = transactionMapper.convertToEntity(transactionDTO);
         transactions = transactionsRepository.save(transactions);
+
         return transactionMapper.convertToDTO(transactions);
     }
 

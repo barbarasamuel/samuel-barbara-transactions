@@ -1,9 +1,11 @@
 package org.paymybuddy.transfermoney.controller;
 
 import jakarta.transaction.Transactional;
+import org.paymybuddy.transfermoney.model.BankAccountDTO;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
 import org.paymybuddy.transfermoney.model.TransactionForm;
+import org.paymybuddy.transfermoney.service.BankAccountService;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class TransactionController {
 
     @Autowired
     ConnectionsService connectionsService;
+
+    @Autowired
+    BankAccountService bankAccountService;
 
     /*@GetMapping("/transfer")
     public String saveConnection(Model model){
@@ -105,7 +110,21 @@ public class TransactionController {
                    .transactionDate(new Date())
                    .build();
 
-           transactionService.saveTransaction(transactionDTO);
+           TransactionDTO newTransactionDTO = transactionService.saveTransaction(transactionDTO);
+
+           BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(debtorDTO);
+           Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
+
+           debtorAccountDTO.setConnectionBankAccount(debtorDTO);
+           debtorAccountDTO.setBalance(updatedDebtorBalance);
+           bankAccountService.updateBankAccount(debtorAccountDTO);
+
+           BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(creditorDTO);
+           Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
+
+           creditorAccountDTO.setConnectionBankAccount(creditorDTO);
+           creditorAccountDTO.setBalance(updatedCreditorBalance);
+           bankAccountService.updateBankAccount(creditorAccountDTO);
 
            List <TransactionDTO> transactionsList =  transactionService.getTransactions(debtorDTO.getId());
 

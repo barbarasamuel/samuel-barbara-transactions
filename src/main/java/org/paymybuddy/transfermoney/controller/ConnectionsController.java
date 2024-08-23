@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.model.*;
+import org.paymybuddy.transfermoney.service.BankAccountService;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ public class ConnectionsController {
     @Autowired
     private ConnectionsService connectionsService;
     @Autowired
-    private RelationService relationService;/**/
+    private RelationService relationService;
+    @Autowired
+    private BankAccountService bankAccountService;
 
     /**
      *
@@ -61,8 +64,15 @@ public class ConnectionsController {
                     .name(connectionForm.getFriendName())
                     .password("00000000")
                     .build();*/
-/**/
+
             ConnectionDTO newConnectionDTO = connectionsService.newConnection(connectionDTO);
+
+            BankAccountDTO bankAccountDTO = BankAccountDTO.builder()
+                    .connectionBankAccount(newConnectionDTO)
+                    .balance(0.00)
+                    .build();
+
+            bankAccountService.saveBankAccount(bankAccountDTO);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
