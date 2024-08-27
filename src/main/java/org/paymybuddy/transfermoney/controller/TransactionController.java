@@ -117,14 +117,14 @@ public class TransactionController {
 
            debtorAccountDTO.setConnectionBankAccount(debtorDTO);
            debtorAccountDTO.setBalance(updatedDebtorBalance);
-           bankAccountService.updateBankAccount(debtorAccountDTO);
+           bankAccountService.saveBankAccount(debtorAccountDTO);
 
            BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(creditorDTO);
            Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
 
            creditorAccountDTO.setConnectionBankAccount(creditorDTO);
            creditorAccountDTO.setBalance(updatedCreditorBalance);
-           bankAccountService.updateBankAccount(creditorAccountDTO);
+           bankAccountService.saveBankAccount(creditorAccountDTO);
 
            List <TransactionDTO> transactionsList =  transactionService.getTransactions(debtorDTO.getId());
 

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class ProfileController {
      */
     @PostMapping("/profile/updateEmail")
     public String updateProfile(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
+
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("profileForm", profileForm);
@@ -66,9 +68,14 @@ public class ProfileController {
      *
      */
     @PostMapping("/profile/updatePassword")
-    public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
+    //public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
+    public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, Errors errors, Model model){
+        if (errors.hasErrors()) {
+            //model.addAttribute("message", "Error in the new profile");
+            return "profile";
+        }
 
-        if (bindingResult.hasErrors()) {
+        /*if (bindingResult.hasErrors()) {
             model.addAttribute("profileForm", profileForm);
             log.info("Error in profile");
             return "profile";
@@ -78,7 +85,7 @@ public class ProfileController {
             bindingResult.rejectValue("confirmPassword", null, "You already have an account registered with that password");
             log.info("Error in profile: the password is not modified");
             return "profile";
-        }
+        }*/
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

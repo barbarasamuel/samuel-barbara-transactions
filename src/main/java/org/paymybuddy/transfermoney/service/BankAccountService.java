@@ -74,9 +74,9 @@ public class BankAccountService {
      * To update the new balance
      *
      */
-    public void updateBankAccount(BankAccountDTO bankAccountDTO){
+    /*public void updateBankAccount(BankAccountDTO bankAccountDTO){
 
         BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
         bankAccountRepository.save(bankAccount);
-    }
+    }*/
 }

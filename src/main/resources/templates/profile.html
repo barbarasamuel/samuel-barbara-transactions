@@ -35,11 +35,15 @@
                     <label for="email"></label><input
                         id="email"
                         th:name="email"
+                        th:field="*{email}"
                         size=40
                         class="input-element"
                         placeholder="Enter your new email address"
                         th:value ="${profileCurse.email}"
-                /><!--
+                />
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></p>
+
+                    <!--
                          value="*{email}"-->
                     <!--<p th:errors="*{email}" class="text-danger"
                        th:if="${#fields.hasErrors('email')}">
@@ -71,7 +75,7 @@
 
                         type="password"
                 />
-
+                <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="alert alert-danger"></p>
 
                     <label for="confirmPassword"></label><input
                         id="confirmPassword"
