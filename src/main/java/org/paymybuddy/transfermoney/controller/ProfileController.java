@@ -105,13 +105,20 @@ public class ProfileController {
      *
      */
     @GetMapping("/profile")
-    public String profile(Model model){
+    public String profile(ProfileForm profileForm, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
 
-        model.addAttribute("profileCurse",connectionDTO);
+        profileForm.setEmail(connectionDTO.getEmail());
+        profileForm.setOldPassword(connectionDTO.getPassword());
+        //profileForm.setNewPassword("");
+
+        //model.addAttribute("profileCurse",connectionDTO);
+        model.addAttribute("profileCurse",profileForm);
+        //model.addAttribute("oldPasswordCurse",profileForm.getOldPassword());
+
         return "profile";
     }
 }
