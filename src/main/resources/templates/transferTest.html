@@ -14,6 +14,7 @@
     <link th:href="@{/css/transfer.css}"
           rel="stylesheet"
     >
+
 </head>
 
 <body>
@@ -41,9 +42,9 @@
     <section class="centered_section">
         <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
         <div class="wrapper_sendmoney">
-            <form action="#" id="newConnection" method="post" th:action="@{/connection/save}"><!---->
+            <form action="#" id="newConnection" method="post" th:action="@{/connection/save}">
                 <input id="friendName" type="hidden" th:name="friendName" />
-                <!----><input id="addInput" name="addInput" type="hidden" value="" />
+                <input id="addInput" name="addInput" type="hidden" value="" />
                 <div class="w_one_sendmoney">Send Money</div>
                 <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
 
@@ -116,7 +117,7 @@
                 </tr><!---->
                </tbody>
            </table>
-            <div>
+            <!--<div>
                 <button class="pagination" onclick="goToPage(1)">&#171;</button>
                 <button class="pagination" onclick="goToPage(1)">1</button>
                 <button class="pagination" onclick="goToPage(2)">2</button>
@@ -124,51 +125,66 @@
                 <button class="pagination" onclick="goToPage(4)">4</button>
                 <button class="pagination" onclick="goToPage(5)">5</button>
                 <button class="pagination" onclick="goToPage(totalPages)">&#187;</button>
-            </div>
-            <!--const tableBody = document.querySelector('tbody');-->
+            </div>-->
             <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const table = document.getElementById('myTransactionsList');
+        const rowsPerPage = 3;
+        const rows = table.querySelectorAll('tbody tr');
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        let currentPage = 1;
 
+        function displayPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            rows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }
 
+        function createPagination() {
+            const pagination = document.createElement('div');
+            pagination.id = 'pagination';
 
+            // Bouton "Début"
+            const startButton = document.createElement('button');
+            startButton.textContent = 'Début';
+            startButton.classList.add('pagination');
+            startButton.addEventListener('click', function() {
+                currentPage = 1;
+                displayPage(currentPage);
+            });
+            pagination.appendChild(startButton);
+
+            // Boutons de pages numérotées
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.classList.add('pagination');
+                pageButton.addEventListener('click', function() {
+                    currentPage = i;
+                    displayPage(currentPage);
+                });
+                pagination.appendChild(pageButton);
+            }
+
+            // Bouton "Fin"
+            const endButton = document.createElement('button');
+            endButton.textContent = 'Fin';
+            endButton.classList.add('pagination');
+            endButton.addEventListener('click', function() {
+                currentPage = totalPages;
+                displayPage(currentPage);
+            });
+            pagination.appendChild(endButton);
+
+            table.parentNode.insertBefore(pagination, table.nextSibling);
+        }
+
+        displayPage(currentPage);
+        createPagination();
+    });
             </script>
-            <!--window.onload = function() {
-                                    displayTablePage(currentPage);
-                                };<script>
-                let currentPage = 1;
-                const rowsPerPage = 3;
-                let totalPages;
-
-                function displayTablePage(page) {
-                    const table = document.getElementById('myTransactionsList').getElementsByTagName('tbody')[0];
-                    const rows = table.getElementsByTagName('tr');
-                    totalPages = Math.ceil(rows.length / rowsPerPage);
-
-                    for (let i = 0; i < rows.length; i++) {
-                        rows[i].classList.add('hidden');
-                    }
-
-                    const start = (page - 1) * rowsPerPage;
-                    const end = start + rowsPerPage;
-
-                    for (let i = start; i < end && i < rows.length; i++) {
-                        rows[i].classList.remove('hidden');
-                    }
-
-                    currentPage = page;
-                    document.querySelector('.pagination button:nth-child(2)').disabled = page === 1;
-                    document.querySelector('.pagination button:nth-last-child(2)').disabled = page === totalPages;
-                }
-
-                function goToPage(page) {
-                    if (page >= 1 && page <= totalPages) {
-                        displayTablePage(page);
-                    }
-                }
-
-                window.onload = function() {
-                    displayTablePage(currentPage);
-                };
-            </script>-->
        </form>
    </section>
 </main>
@@ -190,7 +206,7 @@
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("newTransaction").submit();
         }
-    function displayTablePage(page){
+</script><!--<script>function displayTablePage(page){
     let transactionsList = "${transactionsList}";
         for (let i = 0; i < transactionsList.length; i+=3){
              const row = document.createElement('tr');
@@ -230,6 +246,6 @@
         displayTablePage(currentPage);
         }
     }
-</script>
+</script>-->
 </body>
 </html>
