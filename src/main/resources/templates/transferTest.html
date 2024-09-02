@@ -50,6 +50,18 @@
 
             </form>
             <form action="#" id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${newTransaction}">
+                <!--<form action="#" id="debtorAccount" method="post" th:object="${debtorAccountList}">
+                    <select id="hiddenDebtorAccount-select" type="hidden" th:name="idDebtorAccount" required>
+                        <option value="" disabled selected>Select a debtor account</option>
+                        <option th:each="debtorAccount : ${debtorAccountList}" th:attr="value=${debtorAccount.id}" th:text="${debtorAccount.id}"></option>
+                    </select>
+                </form>
+                <form action="#" id="creditorAccount" method="post" th:object="${creditorAccountList}">
+                    <select id="hiddenCreditorAccount-select" type="hidden" th:name="idCreditorAccount" required>
+                        <option value="" disabled selected>Select a creditor account</option>
+                        <option th:each="creditorAccount : ${creditorAccountList}" th:attr="value=${creditorAccount.id}" th:text="${creditorAccount.id}"></option>
+                    </select>
+                </form>-->
                 <input id="hiddenDescriptionInput" type="hidden" th:name="description" /><!--th:name="${transactionDescription}" th:value="${description}"-->
                 <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
                 <table>
@@ -59,6 +71,12 @@
                     <td><div class="wrapper_description" style="background-color:#e0e0e0;">
                         <!--<a th:href="@{/transaction/save}">-->
                         <div class="w_one_description">
+                            <select id="debtorAccount-select" th:name="idDebtorAccount" required>
+                                <option value="" disabled selected>Select a debtor account</option>
+                                <option th:each="debtorAccount : ${debtorAccountList}" th:attr="value=${debtorAccount.id}" th:text="${debtorAccount.id}"></option>
+                            </select>
+                        </div>
+                        <div class="w_two_description">
 
                             <select id="connection-select" th:name="id" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
                                 <option value="" disabled selected>Select a connection</option>
@@ -68,7 +86,13 @@
                             </select>
 
                         </div>
-                        <div class="w_two_description">
+                        <div class="w_three_description">
+                            <select id="creditorAccount-select" th:name="idCreditorAccount" required>
+                                <option value="" disabled selected>Select a creditor account</option>
+                                <option th:each="creditorAccount : ${creditorAccountList}" th:attr="value=${creditorAccount.id}" th:text="${creditorAccount.id}"></option>
+                            </select>
+                        </div>
+                        <div class="w_four_description">
                             <input type="number" id="amount" class="element_border" placeholder="1€" th:name="amount" required/>
                             <!--<label for="amount"></label><input
                             type="number"
@@ -80,7 +104,7 @@
                            />-->
 
                         </div>
-                        <div class="w_three_description">
+                        <div class="w_five_description">
                             <button type="button" id="button_pay" onclick="payPopup()">Pay</button>
                         </div>
                         <!-- </a>-->
@@ -109,7 +133,7 @@
                 </thead>
                 <tbody><!--onload="listPrinting()">-->
 
-                <tr th:each = "transactions, iter : ${transactionsList}" ><!--  th:if="${iter.index % 3 == 0}">-->
+                <tr th:each = "transactions, iter : ${transactionsList}" >
                     <td th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
                     <td th:text = "${transactions.connectionName}"></td>
                     <td th:text = "${transactions.description}"></td>
@@ -126,33 +150,93 @@
                 <button class="pagination" onclick="goToPage(5)">5</button>
                 <button class="pagination" onclick="goToPage(totalPages)">&#187;</button>
             </div>-->
+            <!--<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const table = document.getElementById('myTransactionsList');
+                    const rowsPerPage = 3;
+                    const rows = table.querySelectorAll('tbody tr');
+                    const totalPages = Math.ceil(rows.length / rowsPerPage);
+                    let currentPage = 1;
+
+                    function displayPage(page) {
+                        const start = (page - 1) * rowsPerPage;
+                        const end = start + rowsPerPage;
+                        rows.forEach((row, index) => {
+                            row.style.display = (index >= start && index < end) ? '' : 'none';
+                        });
+                    }
+
+                    function createPagination() {
+                        const pagination = document.createElement('div');
+                        pagination.id = 'pagination';
+
+                        // Bouton "Début"
+                        const startButton = document.createElement('button');
+                        startButton.textContent = '<<';
+                        startButton.classList.add('pagination');
+                        startButton.addEventListener('click', function() {
+                            let currentPage = 1;
+                            displayPage(currentPage);
+                        });
+                        pagination.appendChild(startButton);
+
+                        // Boutons de pages numérotées
+                        for (let i = 1; i <= totalPages; i++) {
+                            const pageButton = document.createElement('button');
+                            pageButton.textContent = i;
+                            pageButton.classList.add('pagination');
+                            pageButton.addEventListener('click', function() {
+                                let currentPage = i;
+                                displayPage(currentPage);
+                            });
+                            pagination.appendChild(pageButton);
+                        }
+
+                        // Bouton "Fin"
+                        const endButton = document.createElement('button');
+                        endButton.textContent = '>>';
+                        endButton.classList.add('pagination');
+                        endButton.addEventListener('click', function() {
+                            let currentPage = totalPages;
+                            displayPage(currentPage);
+                        });
+                        pagination.appendChild(endButton);
+
+                        table.parentNode.insertBefore(pagination, table.nextSibling);
+                    }
+
+                    displayPage(currentPage);
+                    createPagination();
+                });
+            </script>-->
             <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const table = document.getElementById('myTransactionsList');
+                const table = document.getElementById('myTransactionsList');
         const rowsPerPage = 3;
         const rows = table.querySelectorAll('tbody tr');
         const totalPages = Math.ceil(rows.length / rowsPerPage);
-        let currentPage = 1;
+        var currentPage = 1;
 
-        function displayPage(page) {
+function displayPage(page) {
             const start = (page - 1) * rowsPerPage;
             const end = start + rowsPerPage;
             rows.forEach((row, index) => {
                 row.style.display = (index >= start && index < end) ? '' : 'none';
             });
-        }
 
-        function createPagination() {
+        }
+function createPagination() {
             const pagination = document.createElement('div');
             pagination.id = 'pagination';
 
             // Bouton "Début"
             const startButton = document.createElement('button');
-            startButton.textContent = 'Début';
+            startButton.textContent = '<<';
             startButton.classList.add('pagination');
             startButton.addEventListener('click', function() {
                 currentPage = 1;
                 displayPage(currentPage);
+                alert(currentPage);
+                //displayPage(1);
             });
             pagination.appendChild(startButton);
 
@@ -164,26 +248,54 @@
                 pageButton.addEventListener('click', function() {
                     currentPage = i;
                     displayPage(currentPage);
+                    alert(currentPage);
+                    //displayPage(i);
                 });
                 pagination.appendChild(pageButton);
             }
 
             // Bouton "Fin"
             const endButton = document.createElement('button');
-            endButton.textContent = 'Fin';
+            endButton.textContent = '>>';
             endButton.classList.add('pagination');
             endButton.addEventListener('click', function() {
                 currentPage = totalPages;
                 displayPage(currentPage);
+                alert(currentPage);
+                //displayPage(totalPages);
             });
             pagination.appendChild(endButton);
 
             table.parentNode.insertBefore(pagination, table.nextSibling);
+            return currentPage;
         }
 
-        displayPage(currentPage);
         createPagination();
-    });
+        alert(currentPage);
+
+window.onload = function() {
+            alert(currentPage);
+            displayPage(currentPage);
+        };
+       // document.addEventListener('DOMContentLoaded', function() {
+        //const table = document.getElementById('myTransactionsList');
+        //const rowsPerPage = 3;
+        //const rows = table.querySelectorAll('tbody tr');
+        //const totalPages = Math.ceil(rows.length / rowsPerPage);
+        //let currentPage = 1;
+
+        /*function displayPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            rows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }*/
+//alert(currentPage);
+  //      displayPage(currentPage);
+        //createPagination();
+    //});
+
             </script>
        </form>
    </section>
@@ -203,6 +315,8 @@
     function payPopup(){
         var descriptionInput = prompt("Write the transactions description");
         if(descriptionInput!=null){
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("newTransaction").submit();
         }

@@ -71,12 +71,13 @@ public class BankAccountService {
 
     /**
      *
-     * To update the new balance
+     * To get the user accounts list
      *
      */
-    /*public void updateBankAccount(BankAccountDTO bankAccountDTO){
+    public List<BankAccountDTO> getUserAccountsList(ConnectionDTO connectionDTO){
 
-        BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
-        bankAccountRepository.save(bankAccount);
-    }*/
+        List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connectionDTO.getId());
+        return bankAccountMapper.convertListToDTO(bankAccountList);
+
+    }
 }

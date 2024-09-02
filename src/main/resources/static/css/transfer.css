@@ -19,42 +19,50 @@ tbody tr:nth-child(odd) {
     color:white;
     width:150px;
    }
-   .pagination{
+.pagination{
    color:#0275d8;
-   }
- .element_border{
+}
+.element_border{
   border:1px solid black;
   border-collapse:collapse;
- }
- .wrapper_sendmoney {
+}
+.wrapper_sendmoney {
    display: grid;
    grid-template-columns: repeat(5, 1fr);
    grid-gap: 10px;
- }
- .w_one_sendmoney {
+}
+.w_one_sendmoney {
    grid-column: 1;
    grid-row: 1;
- }
- .w_two_sendmoney {
+}
+.w_two_sendmoney {
    grid-column: 4;
    grid-row: 1;
- }
-  .wrapper_description {
+}
+.wrapper_description {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;
     grid-width: 400px;
     grid-height:50px;
-  }
-  .w_one_description {
-    grid-column: 3;
-    grid-row: 1;
-  }
-  .w_two_description {
-    grid-column: 4;
-    grid-row: 1;
-  }
-  .w_three_description {
-      grid-column: 5;
+}
+.w_one_description {
+      grid-column: 3;
       grid-row: 1;
-    }
+}
+.w_two_description {
+  grid-column: 6;
+  grid-row: 1;
+}
+.w_three_description {
+    grid-column: 9;
+    grid-row: 1;
+ }
+.w_four_description {
+      grid-column: 10;
+      grid-row: 1;
+ }
+ .w_five_description {
+      grid-column: 11;
+      grid-row: 1;
+ }
