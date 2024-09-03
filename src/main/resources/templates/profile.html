@@ -42,15 +42,9 @@
                         size=40
                         class="input-element"
                         placeholder="Enter your new email address"
-                        th:value ="${emailCurse.email}"
+                        th:value ="${emailForm.email}"
                 />
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></p>
-
-                    <!--th:value ="${profileCurse.email}"
-                         value="*{email}"-->
-                    <!--<p th:errors="*{email}" class="text-danger"
-                       th:if="${#fields.hasErrors('email')}">
-                    </p>-->
 
                     <button class="email-button" type="submit">Modify</button>
                 </div>
@@ -58,7 +52,7 @@
             <form action="#" class="form-element" method="post" role="form" th:object="${passwordForm}" th:action="@{/profile/updatePassword}" ><!--th:object="${profileCurse}-->
 
             <div>
-                    <label for="oldPassword"></label><input
+              <!--      <label for="oldPassword"></label><input
                         id="oldPassword"
                         type="password"
                         th:name="oldPassword"
@@ -66,37 +60,35 @@
                         size=40
                         class="input-element"
                         placeholder="Enter your old password"
-                        th:value ="${passwordCurse.oldPassword}"
-                /><!--
+                        th:value ="${passwordForm.oldPassword}"
+                />--><!--
 th:value ="${profileCurse.oldPassword}"
                 th:value ="${oldPasswordCurse}"
                          th:value ="${profileCurse.password}"-->
 
-                    <label for="newPassword"></label><input
-                        id="newPassword"
-                        th:name="newPassword"
-                        size=40
-                        class="input-element"
-                        placeholder="Enter your new password"
-                        th:field="*{newPassword}"
-                        type="password"
-                />
-                <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="alert alert-danger"></p>
+                <!--   <label for="newPassword"></label><input
+                       id="newPassword"
+                       th:name="newPassword"
+                       size=40
+                       class="input-element"
+                       placeholder="Enter your new password"
+                       th:field="*{newPassword}"
+                       type="password"
+               />
+               <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="alert alert-danger"></p>
 
-                    <label for="confirmPassword"></label><input
-                        id="confirmPassword"
-                        th:name="confirmPassword"
-                        size=40
-                        class="input-element"
-                        placeholder="Confirm your new password"
+                   <label for="confirmPassword"></label><input
+                       id="confirmPassword"
+                       th:name="confirmPassword"
+                       size=40
+                       class="input-element"
+                       placeholder="Confirm your new password"
+                       th:field="*{confirmPassword}"
+                       type="password"
+               />
 
-                        type="password"
-                />
-                <!--<p th:errors="*{confirmPassword}" class="text-danger"
-                   th:if="${#fields.hasErrors('password')}">
-                </p>-->
-
-                    <button class="password-button" type="submit">Modify</button>
+                   <button class="password-button" type="submit">Modify</button>
+               -->
                 </div>
             </form>
         </div>
