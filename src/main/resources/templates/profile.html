@@ -18,9 +18,6 @@
             <a th:href="@{/profile}">Profile</a>
             <a th:href="@{/contact}">Contact</a>
             <a th:href="@{/logout}">Log off</a>
-            <!--
-            <a th:href="@{/profileEmail}"></a>
-            <a th:href="@{/profilePassword}"></a>-->
         </div>
     </nav>
 </header>
@@ -61,12 +58,11 @@
                         class="input-element"
                         placeholder="Enter your old password"
                         th:value ="${profileForm.oldPassword}"
-                /><!--
-th:value ="${profileCurse.oldPassword}"
-                th:value ="${oldPasswordCurse}"
-                         th:value ="${profileCurse.password}"-->
+                />
+                <p th:if="${#fields.hasErrors('oldPassword')}" th:errors="*{oldPassword}"></p>
 
-                <!---->   <label for="newPassword"></label><input
+
+                <label for="newPassword"></label><input
                        id="newPassword"
                        th:name="newPassword"
                        size=40
@@ -75,7 +71,7 @@ th:value ="${profileCurse.oldPassword}"
                        th:field="*{newPassword}"
                        type="password"
                />
-               <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="alert alert-danger"></p>
+               <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></p>
 
                    <label for="confirmPassword"></label><input
                        id="confirmPassword"
@@ -86,6 +82,7 @@ th:value ="${profileCurse.oldPassword}"
                        th:field="*{confirmPassword}"
                        type="password"
                />
+                <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
 
                    <button class="password-button" type="submit">Modify</button>
 

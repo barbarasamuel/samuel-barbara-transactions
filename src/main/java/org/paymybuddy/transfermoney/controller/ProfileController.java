@@ -91,34 +91,17 @@ public class ProfileController {
                     return "profile";
                 }
             }else {
-                bindingResult.rejectValue("confirmPassword", null, "The confirm password is different from the new password.");
+                bindingResult.rejectValue("confirmPassword", "error.profileForm", "The confirm password is different from the new password.");
                 model.addAttribute("profileForm", profileForm);
                 log.info("Error in new password");
                 return "profile";
             }
         }else {
-            bindingResult.rejectValue("oldPassword", null, "Error in the old password.");
+            bindingResult.rejectValue("oldPassword", "error.profileForm", "Error in the old password.");
             model.addAttribute("profileForm", profileForm);
             log.info("Error in the old password");
             return "profile";
         }
-        /*if (bindingResult.hasErrors()) {
-            //model.addAttribute("message", "Error in the new profile");
-            return "profile";
-        }*/
-
-        /*if (bindingResult.hasErrors()) {
-            model.addAttribute("profileForm", profileForm);
-            log.info("Error in profile");
-            return "profile";
-        }
-
-        if(Objects.equals(connectionsService.getIdentifiant(profileForm.getConfirmPassword()), "There is already an account registered with that email")) {
-            bindingResult.rejectValue("confirmPassword", null, "You already have an account registered with that password");
-            log.info("Error in profile: the password is not modified");
-            return "profile";
-        }*/
-
 
         connectionDTO.setPassword(profileForm.getConfirmPassword());
 
@@ -134,52 +117,6 @@ public class ProfileController {
      *
      */
 
-   /* @GetMapping("/profileEmail")*/
-    @GetMapping("/profile/updateEmail")
-    public String loadProfileEmail(EmailForm emailForm, PasswordForm passwordForm,Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        emailForm.setEmail(connectionDTO.getEmail());
-        model.addAttribute("emailForm",emailForm);
-
-        //////////////////////////
-        passwordForm.setOldPassword(connectionDTO.getPassword());
-        model.addAttribute("passwordForm",passwordForm);
-        return "profile";
-    }
-
-    //@GetMapping("/profilePassword")
-    @GetMapping("/profile/updatePassword")
-    public String loadProfilePassword(PasswordForm passwordForm, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        passwordForm.setOldPassword(connectionDTO.getPassword());
-        model.addAttribute("passwordForm",passwordForm);
-
-        return "profile";
-    }
-
-/*
-    @GetMapping("/profile")
-    public String profile(PasswordForm passwordForm, EmailForm emailForm, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-
-        emailForm.setEmail(connectionDTO.getEmail());
-        //model.addAttribute("emailCurse",emailForm);
-        model.addAttribute("emailForm",emailForm);
-        passwordForm.setOldPassword(connectionDTO.getPassword());
-        //model.addAttribute("passwordCurse",passwordForm);
-        model.addAttribute("passwordForm",passwordForm);
-
-        return "profile";
-    }*/
     @GetMapping("/profile")
     public String profile(ProfileForm profileForm, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
