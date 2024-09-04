@@ -38,18 +38,19 @@ public class ProfileController {
      *
      */
     @PostMapping("/profile/updateEmail")
-    public String updateProfile(@Valid @ModelAttribute("emailForm") EmailForm emailForm, BindingResult bindingResult, Model model){
+    //public String updateProfile(@Valid @ModelAttribute("emailForm") EmailForm emailForm, BindingResult bindingResult, Model model){
+    public String updateProfile(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
 
         if (bindingResult.hasErrors()) {
-            
-            model.addAttribute("emailForm", emailForm);
+
+            //model.addAttribute("emailForm", emailForm);
+            model.addAttribute("profileForm", profileForm);
             log.info("Error in profile");
             return "profile";
-            //return "profile";
         }
 
-        if(Objects.equals(connectionsService.getIdentifiant(emailForm.getEmail()), "There is already an account registered with that email")) {
+        if(Objects.equals(connectionsService.getIdentifiant(profileForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
             log.info("Error in profile: email already exists");
             return "profile";
@@ -59,7 +60,7 @@ public class ProfileController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        connectionDTO.setEmail(emailForm.getEmail());
+        connectionDTO.setEmail(profileForm.getEmail());
 
         connectionsService.updatedConnection(connectionDTO);
 
@@ -74,14 +75,32 @@ public class ProfileController {
      */
     @PostMapping("/profile/updatePassword")
     //public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
-    public String updatePassword(@Valid @ModelAttribute("passwordForm") PasswordForm passwordForm, BindingResult bindingResult, Model model){
+    public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        if (bindingResult.hasErrors()) {
-            //emailForm = emailForm
-            model.addAttribute("passwordForm", passwordForm);
-            log.info("Error in profile");
+        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        profileForm.setEmail(connectionDTO.getEmail());
+
+        if (Objects.equals(connectionDTO.getPassword(), profileForm.getOldPassword())){
+            if (Objects.equals(profileForm.getNewPassword(), profileForm.getConfirmPassword())) {
+                if (bindingResult.hasErrors()) {
+
+                    model.addAttribute("profileForm", profileForm);
+                    log.info("Error in profile");
+                    return "profile";
+                }
+            }else {
+                bindingResult.rejectValue("confirmPassword", null, "The confirm password is different from the new password.");
+                model.addAttribute("profileForm", profileForm);
+                log.info("Error in new password");
+                return "profile";
+            }
+        }else {
+            bindingResult.rejectValue("oldPassword", null, "Error in the old password.");
+            model.addAttribute("profileForm", profileForm);
+            log.info("Error in the old password");
             return "profile";
-            //return "profile";
         }
         /*if (bindingResult.hasErrors()) {
             //model.addAttribute("message", "Error in the new profile");
@@ -100,11 +119,8 @@ public class ProfileController {
             return "profile";
         }*/
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        connectionDTO.setPassword(passwordForm.getConfirmPassword());
+        connectionDTO.setPassword(profileForm.getConfirmPassword());
 
         connectionsService.updatedConnection(connectionDTO);
 
@@ -147,7 +163,7 @@ public class ProfileController {
         return "profile";
     }
 
-
+/*
     @GetMapping("/profile")
     public String profile(PasswordForm passwordForm, EmailForm emailForm, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -163,8 +179,8 @@ public class ProfileController {
         model.addAttribute("passwordForm",passwordForm);
 
         return "profile";
-    }
-   /* @GetMapping("/profile")
+    }*/
+    @GetMapping("/profile")
     public String profile(ProfileForm profileForm, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -176,10 +192,10 @@ public class ProfileController {
         //profileForm.setNewPassword("");
 
         //model.addAttribute("profileCurse",connectionDTO);
-        model.addAttribute("profileCurse",profileForm);
+        model.addAttribute("profileForm",profileForm);
         //model.addAttribute("oldPasswordCurse",profileForm.getOldPassword());
 
         return "profile";
-    }*/
+    }
 
 }

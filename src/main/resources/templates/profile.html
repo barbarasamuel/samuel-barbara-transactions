@@ -32,7 +32,7 @@
     </section>
     <section>
         <div>
-            <form action="#" class="form-element" method="post" role="form" th:object="${emailForm}" th:action="@{/profile/updateEmail}" >
+            <form action="#" class="form-element" method="post" role="form" th:object="${profileForm}" th:action="@{/profile/updateEmail}" >
 
                 <div>
                     <label for="email"></label><input
@@ -42,17 +42,17 @@
                         size=40
                         class="input-element"
                         placeholder="Enter your new email address"
-                        th:value ="${emailForm.email}"
+                        th:value ="${profileForm.email}"
                 />
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></p>
 
                     <button class="email-button" type="submit">Modify</button>
                 </div>
             </form>
-            <form action="#" class="form-element" method="post" role="form" th:object="${passwordForm}" th:action="@{/profile/updatePassword}" ><!--th:object="${profileCurse}-->
+            <form action="#" class="form-element" method="post" role="form" th:object="${profileForm}" th:action="@{/profile/updatePassword}" ><!--th:object="${profileCurse}-->
 
             <div>
-              <!--      <label for="oldPassword"></label><input
+              <!---->      <label for="oldPassword"></label><input
                         id="oldPassword"
                         type="password"
                         th:name="oldPassword"
@@ -60,13 +60,13 @@
                         size=40
                         class="input-element"
                         placeholder="Enter your old password"
-                        th:value ="${passwordForm.oldPassword}"
-                />--><!--
+                        th:value ="${profileForm.oldPassword}"
+                /><!--
 th:value ="${profileCurse.oldPassword}"
                 th:value ="${oldPasswordCurse}"
                          th:value ="${profileCurse.password}"-->
 
-                <!--   <label for="newPassword"></label><input
+                <!---->   <label for="newPassword"></label><input
                        id="newPassword"
                        th:name="newPassword"
                        size=40
@@ -88,7 +88,7 @@ th:value ="${profileCurse.oldPassword}"
                />
 
                    <button class="password-button" type="submit">Modify</button>
-               -->
+
                 </div>
             </form>
         </div>
