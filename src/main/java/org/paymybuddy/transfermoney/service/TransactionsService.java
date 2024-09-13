@@ -26,8 +26,7 @@ public class TransactionsService {
     TransactionMapper transactionMapper;
     @Autowired
     ConnectionMapper connectionMapper;
-    @Autowired
-    TransactionUtils transactionUtils;
+
 
     //private final List<Book> transactions = TransactionUtils.buildTransactions();
 

@@ -50,7 +50,7 @@
                 <div class="w_one_sendmoney">Send Money</div>
                 <!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
                 <div class="w_two_sendmoney"><button id="openPopup" type="submit">Add Connection</button></div>-->
-                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button>
+                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
             </form>
             <div class="popup" id="popup">
             <!--<div id="popup" style="display:none;">-->
@@ -160,199 +160,32 @@
                     <div>
                         <div class="pagination">
                             Total Rows: [[${totalItems}]]
-                        </div>
-                        <div class="pagination">
-                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-      <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
-      <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-                    </span>
-                        </div>
-                        <div class="col-sm-1">
-                            <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
-                            <span th:unless="${currentPage < totalPages}">Next</span>
-                        </div>
+                    </div>
+                    <div>
+                        <a th:href="@{'/page/' + ${1}}">
+                            <button class="pagination" type="button">&#171;</button>
+                        </a>
 
-                        <div class="col-sm-1">
-                            <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${totalPages}}">&#187;</a>
-                            <span th:unless="${currentPage < totalPages}">Last</span>
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                          <a th:href="@{'/page/' + ${i}}">
+                             <button class="pagination" type="button">[[${i}]]</button>
+                        </a>
+                    </span>
+                        <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}}">
+                            <button class="pagination" type="button">Next</button>
+                        </a>
+
+                        <a class="pagination" th:href="@{'/page/' + ${totalPages}}">
+                            <button class="pagination" type="button">&#187;</button>
+                        </a>
+                        </div>
+                        <div>
+
                         </div>
                     </div>
                 </div>
 
             </div>
-           <!--A revoir
-           <div  th:if="${transactionsPage.totalPages > 0}" class="pagination"
-                  th:each="pageNumber : ${pageNumbers}>
-                <a th:if="${transactionsPage.hasPrevious()}" th:href="@{/transactionsList(page=${transactionsPage.number - 1},
-                 size=${transactionsPage.size})}">&#171;</a>-->
-                <!--<span th:text="${transactionsPage.number + 1}">1</span>-->
-            <!--A revoir  <a th:href="@{/listBooks(size=${transactionsPage.size}, page=${pageNumber})}"
-                th:text=${pageNumber} th:class="${pageNumber==bookPage.number + 1} ? active"></a>
-             <a th:if="${transactionsPage.hasNext()}" th:href="@{/transactionsList(page=${transactionsPage.number + 1},
-              size=${transactionsPage.size})}">&#187;</a>
-         </div>-->
-            <!--<div th:if="${transactionsPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/listBooks(size=${bookPage.size}, page=${pageNumber})}"
-                   th:text=${pageNumber}
-                   th:class="${pageNumber==transactionsPage.number + 1} ? active"></a>
-            </div>-->
-            <!--<div>
-                <button class="pagination" onclick="goToPage(1)">&#171;</button>
-                <button class="pagination" onclick="goToPage(1)">1</button>
-                <button class="pagination" onclick="goToPage(2)">2</button>
-                <button class="pagination" onclick="goToPage(3)">3</button>
-                <button class="pagination" onclick="goToPage(4)">4</button>
-                <button class="pagination" onclick="goToPage(5)">5</button>
-                <button class="pagination" onclick="goToPage(totalPages)">&#187;</button>
-            </div>-->
-            <!--<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const table = document.getElementById('myTransactionsList');
-                    const rowsPerPage = 3;
-                    const rows = table.querySelectorAll('tbody tr');
-                    const totalPages = Math.ceil(rows.length / rowsPerPage);
-                    let currentPage = 1;
-
-                    function displayPage(page) {
-                        const start = (page - 1) * rowsPerPage;
-                        const end = start + rowsPerPage;
-                        rows.forEach((row, index) => {
-                            row.style.display = (index >= start && index < end) ? '' : 'none';
-                        });
-                    }
-
-                    function createPagination() {
-                        const pagination = document.createElement('div');
-                        pagination.id = 'pagination';
-
-                        // Bouton "Début"
-                        const startButton = document.createElement('button');
-                        startButton.textContent = '<<';
-                        startButton.classList.add('pagination');
-                        startButton.addEventListener('click', function() {
-                            let currentPage = 1;
-                            displayPage(currentPage);
-                        });
-                        pagination.appendChild(startButton);
-
-                        // Boutons de pages numérotées
-                        for (let i = 1; i <= totalPages; i++) {
-                            const pageButton = document.createElement('button');
-                            pageButton.textContent = i;
-                            pageButton.classList.add('pagination');
-                            pageButton.addEventListener('click', function() {
-                                let currentPage = i;
-                                displayPage(currentPage);
-                            });
-                            pagination.appendChild(pageButton);
-                        }
-
-                        // Bouton "Fin"
-                        const endButton = document.createElement('button');
-                        endButton.textContent = '>>';
-                        endButton.classList.add('pagination');
-                        endButton.addEventListener('click', function() {
-                            let currentPage = totalPages;
-                            displayPage(currentPage);
-                        });
-                        pagination.appendChild(endButton);
-
-                        table.parentNode.insertBefore(pagination, table.nextSibling);
-                    }
-
-                    displayPage(currentPage);
-                    createPagination();
-                });
-            </script>-->
-            <!--<script>
-                const table = document.getElementById('myTransactionsList');
-        const rowsPerPage = 3;
-        const rows = table.querySelectorAll('tbody tr');
-        const totalPages = Math.ceil(rows.length / rowsPerPage);
-        var currentPage = 1;
-
-function displayPage(page) {
-            const start = (page - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
-            rows.forEach((row, index) => {
-                row.style.display = (index >= start && index < end) ? '' : 'none';
-            });
-
-        }
-function createPagination() {
-            const pagination = document.createElement('div');
-            pagination.id = 'pagination';
-
-            // Bouton "Début"
-            const startButton = document.createElement('button');
-            startButton.textContent = '<<';
-            startButton.classList.add('pagination');
-            startButton.addEventListener('click', function() {
-                currentPage = 1;
-                displayPage(currentPage);
-                alert(currentPage);
-                //displayPage(1);
-            });
-            pagination.appendChild(startButton);
-
-            // Boutons de pages numérotées
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.classList.add('pagination');
-                pageButton.addEventListener('click', function() {
-                    currentPage = i;
-                    displayPage(currentPage);
-                    alert(currentPage);
-                    //displayPage(i);
-                });
-                pagination.appendChild(pageButton);
-            }
-
-            // Bouton "Fin"
-            const endButton = document.createElement('button');
-            endButton.textContent = '>>';
-            endButton.classList.add('pagination');
-            endButton.addEventListener('click', function() {
-                currentPage = totalPages;
-                displayPage(currentPage);
-                alert(currentPage);
-                //displayPage(totalPages);
-            });
-            pagination.appendChild(endButton);
-
-            table.parentNode.insertBefore(pagination, table.nextSibling);
-            return currentPage;
-        }
-
-        createPagination();
-        alert(currentPage);
-
-window.onload = function() {
-            alert(currentPage);
-            displayPage(currentPage);
-        };
-       // document.addEventListener('DOMContentLoaded', function() {
-        //const table = document.getElementById('myTransactionsList');
-        //const rowsPerPage = 3;
-        //const rows = table.querySelectorAll('tbody tr');
-        //const totalPages = Math.ceil(rows.length / rowsPerPage);
-        //let currentPage = 1;
-
-        /*function displayPage(page) {
-            const start = (page - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
-            rows.forEach((row, index) => {
-                row.style.display = (index >= start && index < end) ? '' : 'none';
-            });
-        }*/
-//alert(currentPage);
-  //      displayPage(currentPage);
-        //createPagination();
-    //});
-
-            </script>-->
        </form>
    </section>
 </main>
@@ -380,6 +213,16 @@ window.onload = function() {
             alert("Select an option.");
         }
     });*/
+
+    function payPopup(){
+        var descriptionInput = prompt("Write the transactions description");
+        if(descriptionInput!=null){
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+            document.getElementById("newTransaction").submit();
+        }
+    }
 </script>
 <!--<script>
     function addConnectionPopup(){
@@ -406,46 +249,6 @@ window.onload = function() {
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("newTransaction").submit();
-        }
-    }
-</script>--><!--<script>function displayTablePage(page){
-    let transactionsList = "${transactionsList}";
-        for (let i = 0; i < transactionsList.length; i+=3){
-             const row = document.createElement('tr');
-
-             for (let j = i; j < i+3 && j < transactionsList.length; j++){
-
-                 const cell1 = document.createElement('td');
-                 cell1.innerText = transactionsList[0,0];//transactions.#dates.format(transactions.transactionDate,'dd/MM/yyyy');
-                 row.appendChild(cell1);
-
-                 const cell2 = document.createElement('td');
-                 cell2.innerText = transactions.connectionName;
-                 row.appendChild(cell2);
-
-                 const cell3 = document.createElement('td');
-                 cell3.innerText = transactions.description;
-                 row.appendChild(cell3);
-
-                 const cell4 = document.createElement('td');
-                 cell4.innerText = transactions.amount;
-                 row.appendChild(cell4);
-                 console.log("dans boucle");
-             }
-
-             tableBody.appendChild(row);
-         }
-
-     }
-     function goToPage(page){
-         console.log("dans goToPage");
-         if (page >= 1 && page <= totalPages) {
-              displayTablePage(page);
-          }/**/
-     }
-     function listPrinting(){
-        console.log("dans listPrinting");
-        displayTablePage(currentPage);
         }
     }
 </script>-->
