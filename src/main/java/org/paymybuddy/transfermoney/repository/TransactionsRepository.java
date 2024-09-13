@@ -2,6 +2,9 @@ package org.paymybuddy.transfermoney.repository;
 
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
+import org.paymybuddy.transfermoney.model.TransactionsConnection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +23,5 @@ public interface TransactionsRepository extends CrudRepository<Transactions,Long
     List<Transactions> findByDebtorId(Long idDebtorAccount);
 
     List<Transactions> findByDebtor(Connection debtor);
+    Page<Transactions> findAll(Pageable pageable);
 }

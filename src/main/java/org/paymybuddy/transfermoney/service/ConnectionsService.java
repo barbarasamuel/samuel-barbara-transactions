@@ -17,6 +17,17 @@ public class ConnectionsService {
     @Autowired
     ConnectionMapper connectionMapper;
 
+
+    /**
+     *
+     * To get all the connections
+     *
+     */
+    public List<ConnectionDTO> getAllConnections(){
+        List<Connection> connectionList = connectionsRepository.findAll();
+        return connectionMapper.convertListToDTO(connectionList);
+    }
+
     /**
      *
      * To save a new connection

@@ -96,4 +96,15 @@ public class ConnectionsController {
         return "redirect:/";
     }
 
+
+    @PostMapping("/connection/list")
+    public String addnewConnection( @RequestParam("friendName") String friendName, Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        model.addAttribute("connectionsList",connectionsList);
+        return "redirect:/";
+    }
 }

@@ -66,3 +66,17 @@ tbody tr:nth-child(odd) {
       grid-column: 11;
       grid-row: 1;
  }
+ .popup {
+       display: none;
+       position: fixed;
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);
+       border: 1px solid #ccc;
+       background-color: white;
+       z-index:1000;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }/*
+  .popup.active{
+    display: block;
+  }*/

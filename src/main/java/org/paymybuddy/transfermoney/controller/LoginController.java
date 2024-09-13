@@ -8,6 +8,9 @@ import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.RelationService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.awt.print.Book;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class LoginController {
@@ -64,7 +70,7 @@ public class LoginController {
      * To load the home page
      *
      */
-    @GetMapping("/")
+   /* @GetMapping("/")
     public String home(Model model, Principal principal){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,13 +81,33 @@ public class LoginController {
         List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
 
         model.addAttribute("connectionsList", connectionsList);
-        model.addAttribute("transactionsList", transactionsList);/**/
+        model.addAttribute("transactionsList", transactionsList);
         model.addAttribute("username", connectionDTO.getName());
         model.addAttribute("debtorAccountList",bankAccountDTOList);
 
         return "transferTest";
-        //return "test";
-    }
+
+    }*/
+     /*@GetMapping("/")
+    //public String home(Model model, @RequestParam("page") Optional<Integer> page,@RequestParam("size") Optional<Integer> size){
+        public String viewHomePage (Model model){
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+
+        model.addAttribute("connectionsList", connectionsList);
+        model.addAttribute("transactionsList", transactionsList);
+        model.addAttribute("username", connectionDTO.getName());
+        model.addAttribute("debtorAccountList",bankAccountDTOList);
+
+        //return "transferTest";
+        return findPaginated(1, model);
+    }*/
 
     /**
      *

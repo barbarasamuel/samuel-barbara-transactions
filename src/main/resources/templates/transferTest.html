@@ -42,13 +42,28 @@
     <section class="centered_section">
         <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
         <div class="wrapper_sendmoney">
-            <form action="#" id="newConnection" method="post" th:action="@{/connection/save}">
-                <input id="friendName" type="hidden" th:name="friendName" />
-                <input id="addInput" name="addInput" type="hidden" value="" />
-                <div class="w_one_sendmoney">Send Money</div>
-                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
+            <form action="#" id="newConnection" method="post" th:action="@{/connection/list}">
+                <!--<input id="friendName" type="hidden" th:name="friendName" />
+                <input id="addInput" name="addInput" type="hidden" value="" />-->
+                <input id="friendName" name="friendName" type="hidden" value="" />
 
+                <div class="w_one_sendmoney">Send Money</div>
+                <!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
+                <div class="w_two_sendmoney"><button id="openPopup" type="submit">Add Connection</button></div>-->
+                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button>
             </form>
+            <div class="popup" id="popup">
+            <!--<div id="popup" style="display:none;">-->
+                <form id="popupForm">
+                    <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                        <option value="" disabled selected>Select a connection</option>
+                        <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
+                        <!---->
+                    </select>
+                    <!--<button type="submit">Valid</button>-->
+                    <button type="submit">Valid</button>
+                </form>
+            </div>
             <form action="#" id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${newTransaction}">
                 <!--<form action="#" id="debtorAccount" method="post" th:object="${debtorAccountList}">
                     <select id="hiddenDebtorAccount-select" type="hidden" th:name="idDebtorAccount" required>
@@ -117,7 +132,8 @@
     </section>
 
     <section class="centered_section">
-        <form>
+        <form action="#" id="transactionsList" method="post" th:action="@{/transactions/list}">
+            <div>
             <table id="myTransactionsList" class="element_border">
 
                 <thead>
@@ -131,16 +147,56 @@
                     <th>Amount</th>
                 </tr>
                 </thead>
-                <tbody><!--onload="listPrinting()">-->
-
-                <tr th:each = "transactions, iter : ${transactionsList}" >
-                    <td th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
-                    <td th:text = "${transactions.connectionName}"></td>
-                    <td th:text = "${transactions.description}"></td>
-                    <td th:text = "${transactions.amount}"></td>
-                </tr><!---->
+                <tbody>
+                    <tr th:each = "transactions : ${transactionsList}" >
+                        <td th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
+                        <td th:text = "${transactions.creditor.name}"></td>
+                        <td th:text = "${transactions.description}"></td>
+                        <td th:text = "${transactions.amount}"></td>
+                    </tr>
                </tbody>
            </table>
+                <div th:if="${totalPages > 1}">
+                    <div>
+                        <div class="pagination">
+                            Total Rows: [[${totalItems}]]
+                        </div>
+                        <div class="pagination">
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+      <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+      <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                    </span>
+                        </div>
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
+                            <span th:unless="${currentPage < totalPages}">Next</span>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${totalPages}}">&#187;</a>
+                            <span th:unless="${currentPage < totalPages}">Last</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+           <!--A revoir
+           <div  th:if="${transactionsPage.totalPages > 0}" class="pagination"
+                  th:each="pageNumber : ${pageNumbers}>
+                <a th:if="${transactionsPage.hasPrevious()}" th:href="@{/transactionsList(page=${transactionsPage.number - 1},
+                 size=${transactionsPage.size})}">&#171;</a>-->
+                <!--<span th:text="${transactionsPage.number + 1}">1</span>-->
+            <!--A revoir  <a th:href="@{/listBooks(size=${transactionsPage.size}, page=${pageNumber})}"
+                th:text=${pageNumber} th:class="${pageNumber==bookPage.number + 1} ? active"></a>
+             <a th:if="${transactionsPage.hasNext()}" th:href="@{/transactionsList(page=${transactionsPage.number + 1},
+              size=${transactionsPage.size})}">&#187;</a>
+         </div>-->
+            <!--<div th:if="${transactionsPage.totalPages > 0}" class="pagination"
+                 th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/listBooks(size=${bookPage.size}, page=${pageNumber})}"
+                   th:text=${pageNumber}
+                   th:class="${pageNumber==transactionsPage.number + 1} ? active"></a>
+            </div>-->
             <!--<div>
                 <button class="pagination" onclick="goToPage(1)">&#171;</button>
                 <button class="pagination" onclick="goToPage(1)">1</button>
@@ -209,7 +265,7 @@
                     createPagination();
                 });
             </script>-->
-            <script>
+            <!--<script>
                 const table = document.getElementById('myTransactionsList');
         const rowsPerPage = 3;
         const rows = table.querySelectorAll('tbody tr');
@@ -296,7 +352,7 @@ window.onload = function() {
         //createPagination();
     //});
 
-            </script>
+            </script>-->
        </form>
    </section>
 </main>
@@ -304,12 +360,43 @@ window.onload = function() {
 </footer>
 <script>
     function addConnectionPopup(){
-        var addInput = prompt("Write the new connection");
+    console.log("test");
+        document.getElementById('popup').style.display = 'block';
+        //document.getElementById('popup').classList.add('active');
+    }
+    /*document.getElementById('openPopup').addEventListener('click', function(){
+        console.log("test");
+        document.getElementById('popup').classList.add('active');
+    });
+
+    document.getElementById('popupForm').addEventListener('submit', function(event){
+        event.preventDefault();
+        const selectedOption = document.getElementById('addConnection-select').value;
+        if(selectedOption){
+            document.getElementById('friendName').value = selectedOption;
+            document.getElementById('popup').classList.remove('active');
+            document.getElementById('newConnection').submit;
+        }else{
+            alert("Select an option.");
+        }
+    });*/
+</script>
+<!--<script>
+    function addConnectionPopup(){
+        /*var addInput = prompt("Write the new connection");
+        console.log("test");
         if(addInput!=null){
-            /*var value = document.getElementById("addInput").value;
-            document.getElementById("friendName").value = value;*/
             document.getElementById("friendName").value = addInput;
             document.getElementById("newConnection").getElementById("friendName").value.submit();
+        }*/
+        var selectedOption = prompt("Write the new connection");
+        selectedOption = document.getElementById("addconnection-select").value;
+        console.log("test");
+        if(selectedOption){
+            document.getElementById("selectedOption").value = selectedOption;
+            document.getElementById("newConnection").getElementById("selectedOption").value.submit();
+        }else{
+            alert'"Select an option.");
         }
     }
     function payPopup(){
@@ -320,7 +407,8 @@ window.onload = function() {
             document.getElementById("hiddenDescriptionInput").value = descriptionInput;
             document.getElementById("newTransaction").submit();
         }
-</script><!--<script>function displayTablePage(page){
+    }
+</script>--><!--<script>function displayTablePage(page){
     let transactionsList = "${transactionsList}";
         for (let i = 0; i < transactionsList.length; i+=3){
              const row = document.createElement('tr');

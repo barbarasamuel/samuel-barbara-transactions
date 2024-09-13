@@ -1,40 +1,45 @@
 package org.paymybuddy.transfermoney.controller;
 
 import jakarta.transaction.Transactional;
-import org.paymybuddy.transfermoney.model.BankAccountDTO;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.TransactionDTO;
-import org.paymybuddy.transfermoney.model.TransactionForm;
-import org.paymybuddy.transfermoney.service.BankAccountService;
-import org.paymybuddy.transfermoney.service.ConnectionsService;
-import org.paymybuddy.transfermoney.service.TransactionsService;
+import org.hibernate.Transaction;
+//import org.hibernate.query.Page;
+import org.paymybuddy.transfermoney.entity.Transactions;
+import org.paymybuddy.transfermoney.model.*;
+import org.paymybuddy.transfermoney.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class TransactionController {
-    @Autowired
-    TransactionsService transactionService;
+   /**/ @Autowired
+    TransactionsService transactionsServiceImpl;
 
     @Autowired
     ConnectionsService connectionsService;
 
     @Autowired
     BankAccountService bankAccountService;
+    @Autowired
+    RelationService relationService;
 
+    //TransactionsService transactionsServiceImpl = (TransactionsService) new TransactionsServiceImpl();
     /*@GetMapping("/transfer")
     public String saveConnection(Model model){
         model.addAttribute("connection",new ConnectionsEntity());
@@ -110,7 +115,7 @@ public class TransactionController {
                    .transactionDate(new Date())
                    .build();
 
-           TransactionDTO newTransactionDTO = transactionService.saveTransaction(transactionDTO);
+           TransactionDTO newTransactionDTO = transactionsServiceImpl.saveTransaction(transactionDTO);
 
            BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(debtorDTO);
            Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
@@ -126,7 +131,7 @@ public class TransactionController {
            creditorAccountDTO.setBalance(updatedCreditorBalance);
            bankAccountService.saveBankAccount(creditorAccountDTO);
 
-           List <TransactionDTO> transactionsList =  transactionService.getTransactions(debtorDTO.getId());
+           List <TransactionDTO> transactionsList =  transactionsServiceImpl.getTransactions(debtorDTO.getId());
 
            model.addAttribute("transactionsList", transactionsList);
            return  "redirect:/";
@@ -142,13 +147,36 @@ public class TransactionController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         //List<ConnectionDTO> connectionsList = connectionService.getConnections(userDetails.getUsername());
-        List<TransactionDTO> transactionsList = transactionService.getTransactions(idUser);
+        List<TransactionDTO> transactionsList = transactionsServiceImpl.getTransactions(idUser);
         //model.addAttribute("connectionsList", connectionsList);
         model.addAttribute("transactionsList", transactionsList);
 
         model.addAttribute("transactionForm",new TransactionForm());
         return "transferTest";
     }
+
+    /*@PostMapping("/transactions/list")
+    public String postlistTransactions(
+            Model model,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+
+        PageImpl transactionsPage = transactionsService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("transactionsPage", transactionsPage);
+
+        int totalPages = transactionsPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return "transferTest";
+    }*/
 
    /* @GetMapping("/displayConnectionsList")
     public String displayConnectionsList(Model model,@ModelAttribute("user") ConnectionDTO connectionDTO){
@@ -158,4 +186,56 @@ public class TransactionController {
 
         return "transfer";
     }*/
+   @GetMapping("/page/{pageNo}")
+   public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
+       int pageSize = 3;
+
+       Page<Transactions> page = transactionsServiceImpl.findPaginated(pageNo, pageSize);
+       List < Transactions > transactionsList = page.getContent();
+
+       model.addAttribute("currentPage", pageNo);
+       model.addAttribute("totalPages", page.getTotalPages());
+       model.addAttribute("totalItems", page.getTotalElements());
+       model.addAttribute("transactionsList", transactionsList);
+       return "transferTest";
+   }
+
+    @GetMapping("/")
+    /*public String home(Model model,
+                       @RequestParam("page") Optional<Integer> page,
+                       @RequestParam("size") Optional<Integer> size){*/
+    public String home (Model model){
+        /*int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+
+        Page<Book> transactionsPage = transactionsService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("transactionsPage", transactionsPage);
+
+        int totalPages = transactionsPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }*/
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        List<TransactionsConnection> transactionsList = transactionsServiceImpl.getTransactionsFromUser(connectionDTO);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+
+        model.addAttribute("allConnectionsList", allConnectionsList);
+        model.addAttribute("connectionsList", connectionsList);
+        model.addAttribute("transactionsList", transactionsList);/**/
+        model.addAttribute("username", connectionDTO.getName());
+        model.addAttribute("debtorAccountList",bankAccountDTOList);
+
+        //return "transferTest";
+        return findPaginated(1, model);
+    }
+
 }
