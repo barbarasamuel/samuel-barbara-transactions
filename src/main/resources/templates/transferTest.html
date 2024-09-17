@@ -192,6 +192,37 @@
 <footer>
 </footer>
 <script>
+    document.addEventListener('DOMContentLoaded', function(){
+    console.log("test1");
+        document.getElementById('connection-select').addEventListener('change', function(){
+        var selectedValue = this.value;
+        updateCreditorAccountSelect(selectedValue);
+        });
+    });
+
+    function updateCreditorAccountSelect(selectedValue){
+        fetch('/dropdown?selectedValue='+selectedValue)
+        .then(response => response.json())
+        .then(data =>{
+            var dropdownContent = document. getElementById('creditorAccount-select');
+            dropdownContent.innerHTML = '';
+            data.forEach(value => {
+                console.log("test2");
+                var option = document.createElement('option');
+                option.value = value.id;
+                option.textContent = value.id;
+                dropdownContent.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error: ', error));
+
+        /*const userAction = async () => {
+        const response = await fetch('/dropdown');
+        const myJson = await response.json();*/ //extract JSON from the http response
+        // do something with myJson
+        //}
+    }
+
     function addConnectionPopup(){
     console.log("test");
         document.getElementById('popup').style.display = 'block';
@@ -224,33 +255,6 @@
         }
     }
 </script>
-<!--<script>
-    function addConnectionPopup(){
-        /*var addInput = prompt("Write the new connection");
-        console.log("test");
-        if(addInput!=null){
-            document.getElementById("friendName").value = addInput;
-            document.getElementById("newConnection").getElementById("friendName").value.submit();
-        }*/
-        var selectedOption = prompt("Write the new connection");
-        selectedOption = document.getElementById("addconnection-select").value;
-        console.log("test");
-        if(selectedOption){
-            document.getElementById("selectedOption").value = selectedOption;
-            document.getElementById("newConnection").getElementById("selectedOption").value.submit();
-        }else{
-            alert'"Select an option.");
-        }
-    }
-    function payPopup(){
-        var descriptionInput = prompt("Write the transactions description");
-        if(descriptionInput!=null){
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("newTransaction").submit();
-        }
-    }
-</script>-->
+
 </body>
 </html>

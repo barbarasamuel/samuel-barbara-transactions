@@ -3,6 +3,7 @@ package org.paymybuddy.transfermoney.controller;
 import jakarta.transaction.Transactional;
 import org.hibernate.Transaction;
 //import org.hibernate.query.Page;
+import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.service.*;
@@ -237,5 +238,6 @@ public class TransactionController {
         //return "transferTest";
         return findPaginated(1, model);
     }
+
 
 }
