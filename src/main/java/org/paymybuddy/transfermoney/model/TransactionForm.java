@@ -18,4 +18,8 @@ public class TransactionForm {
 
     @NotEmpty(message = "Thanks to fill a description.")
     private String description;
+
+    ///////////////////////
+    private Long idDebtorAccount;
+    private Long idCreditorAccount;
 }

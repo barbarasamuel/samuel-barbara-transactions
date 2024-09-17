@@ -118,16 +118,24 @@ public class TransactionController {
 
            TransactionDTO newTransactionDTO = transactionsServiceImpl.saveTransaction(transactionDTO);
 
-           BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(debtorDTO);
+           /////BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(debtorDTO);
+           BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
            Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
 
+           /////
+           debtorAccountDTO.setId(transactionForm.getIdDebtorAccount());
+           /////
            debtorAccountDTO.setConnectionBankAccount(debtorDTO);
            debtorAccountDTO.setBalance(updatedDebtorBalance);
            bankAccountService.saveBankAccount(debtorAccountDTO);
 
-           BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(creditorDTO);
+           /////BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(creditorDTO);
+           BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
            Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
 
+           /////
+           creditorAccountDTO.setId(transactionForm.getIdCreditorAccount());
+           /////
            creditorAccountDTO.setConnectionBankAccount(creditorDTO);
            creditorAccountDTO.setBalance(updatedCreditorBalance);
            bankAccountService.saveBankAccount(creditorAccountDTO);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
@@ -24,9 +25,11 @@ public class BankAccountService {
      * To get the connection bank account
      *
      */
-    public BankAccountDTO getConnectionAccount(ConnectionDTO connectionDTO){
-
-        BankAccount bankAccount = bankAccountRepository.findByConnectionBankAccountId(connectionDTO.getId());
+    /////public BankAccountDTO getConnectionAccount(ConnectionDTO connectionDTO){
+    public BankAccountDTO getConnectionAccount(Long id){
+        /////BankAccount bankAccount = bankAccountRepository.findByConnectionBankAccountId(connectionDTO.getId());
+        Optional bankAccountOptional = bankAccountRepository.findById(id);
+        BankAccount bankAccount = (BankAccount) bankAccountOptional.get();
         return bankAccountMapper.convertToDTO(bankAccount);
 
     }
