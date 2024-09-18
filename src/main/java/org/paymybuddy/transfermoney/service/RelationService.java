@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class RelationService {
     @Autowired
@@ -58,5 +60,10 @@ public class RelationService {
     public void newRelation(RelationDTO relationDTO){
         Relation relation = relationMapper.convertToEntity(relationDTO);
         relationRepository.save(relation);
+    }
+
+    public RelationDTO getRelation(Long id){
+        Optional<Relation> relation = relationRepository.findById(id);
+        return relationMapper.convertToDTO(relation.get());
     }
 }

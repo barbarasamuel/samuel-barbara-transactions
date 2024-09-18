@@ -89,4 +89,13 @@ public class ConnectionsService {
         connectionsRepository.save(connection);
     }
 
+    /**
+     *
+     * To get a new relation
+     *
+     */
+    /*public ConnectionDTO getNewConnection(String friendName){
+
+        return connectionMapper.convertToDTO(connection);
+    }*/
 }

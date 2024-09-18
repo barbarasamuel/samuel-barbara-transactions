@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
 @Controller
 public class TransactionController {
    /**/ @Autowired
-    TransactionsService transactionsServiceImpl;
+    TransactionsService transactionsService;
 
     @Autowired
     ConnectionsService connectionsService;
@@ -116,31 +116,25 @@ public class TransactionController {
                    .transactionDate(new Date())
                    .build();
 
-           TransactionDTO newTransactionDTO = transactionsServiceImpl.saveTransaction(transactionDTO);
+           TransactionDTO newTransactionDTO = transactionsService.saveTransaction(transactionDTO);
 
-           /////BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(debtorDTO);
            BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
            Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
 
-           /////
            debtorAccountDTO.setId(transactionForm.getIdDebtorAccount());
-           /////
            debtorAccountDTO.setConnectionBankAccount(debtorDTO);
            debtorAccountDTO.setBalance(updatedDebtorBalance);
            bankAccountService.saveBankAccount(debtorAccountDTO);
 
-           /////BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(creditorDTO);
            BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
            Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
 
-           /////
            creditorAccountDTO.setId(transactionForm.getIdCreditorAccount());
-           /////
            creditorAccountDTO.setConnectionBankAccount(creditorDTO);
            creditorAccountDTO.setBalance(updatedCreditorBalance);
            bankAccountService.saveBankAccount(creditorAccountDTO);
 
-           List <TransactionDTO> transactionsList =  transactionsServiceImpl.getTransactions(debtorDTO.getId());
+           List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
 
            model.addAttribute("transactionsList", transactionsList);
            return  "redirect:/";
@@ -149,7 +143,7 @@ public class TransactionController {
     @GetMapping("/transfer")
     public String transactionPage( Model model, Principal principal){
 
-
+/*
         //List<TransactionDTO> transactionDTOList = transactionService.listTransactions();
         //model.addAttribute("transactionsList",transactionDTOList);
         long idUser = 1;
@@ -160,7 +154,7 @@ public class TransactionController {
         //model.addAttribute("connectionsList", connectionsList);
         model.addAttribute("transactionsList", transactionsList);
 
-        model.addAttribute("transactionForm",new TransactionForm());
+        model.addAttribute("transactionForm",new TransactionForm());*/
         return "transferTest";
     }
 
@@ -199,14 +193,26 @@ public class TransactionController {
    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
        int pageSize = 3;
 
-       Page<Transactions> page = transactionsServiceImpl.findPaginated(pageNo, pageSize);
+       Page<Transactions> page = transactionsService.findPaginated(pageNo, pageSize);
        List < Transactions > transactionsList = page.getContent();
 
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+       ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+       List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
+       List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+       List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+
+       model.addAttribute("allConnectionsList", allConnectionsList);
+       model.addAttribute("connectionsList", connectionsList);
+       model.addAttribute("username", connectionDTO.getName());
+       model.addAttribute("debtorAccountList",bankAccountDTOList);
        model.addAttribute("currentPage", pageNo);
        model.addAttribute("totalPages", page.getTotalPages());
        model.addAttribute("totalItems", page.getTotalElements());
        model.addAttribute("transactionsList", transactionsList);
-       return "transferTest";
+
+       return  "transferTest";
    }
 
     @GetMapping("/")
@@ -234,7 +240,7 @@ public class TransactionController {
         ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
         List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
         List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-        List<TransactionsConnection> transactionsList = transactionsServiceImpl.getTransactionsFromUser(connectionDTO);
+        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
         List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
 
         model.addAttribute("allConnectionsList", allConnectionsList);

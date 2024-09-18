@@ -44,26 +44,20 @@ public class ConnectionsController {
                 BindingResult bindingResult, Model model){*/
     public String newConnection( @RequestParam("friendName") String friendName, Model model, Error error){
 
-        ConnectionDTO connectionDTO = ConnectionDTO.builder()
+        /*///////////ConnectionDTO connectionDTO = ConnectionDTO.builder()
                 .email("@")
                 .name(friendName)
                 .password("00000000")
                 .build();
 
         ConnectionDTO foundConnectionDTO = connectionsService.getConnection(connectionDTO.getName());
-/**/
+
         if (foundConnectionDTO != null) {
             //error
             //error..rejectValue("name", null, "There is already a connection "+friendName +" with that email");
             log.error("There is already a connection "+friendName +" with that email");
 
         }else{
-
-            /*connectionDTO = ConnectionDTO.builder()
-                    .email("@")
-                    .name(connectionForm.getFriendName())
-                    .password("00000000")
-                    .build();*/
 
             ConnectionDTO newConnectionDTO = connectionsService.newConnection(connectionDTO);
 
@@ -89,7 +83,7 @@ public class ConnectionsController {
 
             model.addAttribute("connectionsList",relationsListDTO);
 
-        }
+        }*/
         /*
         model.addAttribute("connection",connectionDTO);
         return connectionsService.saveNewConnection(connectionDTO);*/
@@ -103,6 +97,23 @@ public class ConnectionsController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        ConnectionDTO newConnectionDTO = connectionsService.getCreditor(Long.valueOf(friendName));
+
+        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO.getId());
+
+        if (foundRelationDTO != null) {
+            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
+            log.error("There is already a relation "+connectionDTO.getEmail());
+
+        }else {
+            RelationDTO relationDTO = RelationDTO.builder()
+                    .user(connectionDTO)
+                    .connectionFriend(newConnectionDTO)
+                    .build();
+
+            relationService.newRelation(relationDTO);
+        }
+
         List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
         model.addAttribute("connectionsList",connectionsList);
         return "redirect:/";
