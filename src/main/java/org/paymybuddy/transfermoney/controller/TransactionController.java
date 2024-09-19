@@ -190,10 +190,13 @@ public class TransactionController {
         return "transfer";
     }*/
    @GetMapping("/page/{pageNo}")
-   public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
+   public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
+                               @RequestParam("sortField") String sortField,
+                               @RequestParam("sortDir") String sortDir,
+                               Model model) {
        int pageSize = 3;
 
-       Page<Transactions> page = transactionsService.findPaginated(pageNo, pageSize);
+       Page<Transactions> page = transactionsService.findPaginated(pageNo, pageSize, sortField, sortDir);
        List < Transactions > transactionsList = page.getContent();
 
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -211,6 +214,10 @@ public class TransactionController {
        model.addAttribute("totalPages", page.getTotalPages());
        model.addAttribute("totalItems", page.getTotalElements());
        model.addAttribute("transactionsList", transactionsList);
+
+       model.addAttribute("sortField", sortField);
+       model.addAttribute("sortDir", sortDir);
+       model.addAttribute("reverseSortDir", sortDir.equals("desc") ? "asc" : "desc");
 
        return  "transferTest";
    }
@@ -249,8 +256,8 @@ public class TransactionController {
         model.addAttribute("username", connectionDTO.getName());
         model.addAttribute("debtorAccountList",bankAccountDTOList);
 
-        //return "transferTest";
-        return findPaginated(1, model);
+        //return findPaginated(1, model);
+        return findPaginated(1, "transactionDate", "desc", model);
     }
 
 

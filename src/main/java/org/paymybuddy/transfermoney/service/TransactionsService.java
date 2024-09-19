@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -97,13 +99,14 @@ public class TransactionsService {
 
         return new PageImpl<Book>(list, PageRequest.of(currentPage, pageSize),transactions.size());
     }*/
-    public Page<Transactions> findPaginated(int pageNo, int pageSize){
+    public Page<Transactions> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection){
         /*public Page<TransactionsConnection> findPaginated(int pageNo, int pageSize, Date transactionDate){
-        Sort sort = sortTransactions.equalsIgnoreCase(Sort.Transactions.ASC.name()) ? Sort.by(transactionDate).ascending() :
-                Sort.by(transactionDate).descending();*/
+         */
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortField).descending() :
+                Sort.by(sortField).ascending();
 
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Transactions> transactions = transactionsRepository.findAll(pageable);
         return transactions;
     }

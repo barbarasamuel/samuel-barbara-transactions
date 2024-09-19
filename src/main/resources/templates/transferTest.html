@@ -55,16 +55,15 @@
                     <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
                     <!---->
                 </select>
-                <div class="w_two_sendmoney"><button onclick="addConnectionPopup()">Add Connection</button></div>
+                <div class="w_two_sendmoney"><button id="button_add" onclick="addConnectionPopup()">Add Connection</button></div>
             </form>
             <div class="hiddenpopup" id="popup">
             <!--<div id="popup" style="display:none;">-->
-                <form id="popupForm">
-                    <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                <!--<form id="popupForm">
+                    <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required>--><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">--><!--
                         <option value="" disabled selected>Select a connection</option>
                         <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
-                        <!---->
-                    </select>
+                    </select>-->
                     <!--<button type="submit">Valid</button>-->
                     <button>Valid</button>
                 </form>
@@ -146,10 +145,16 @@
                     <th>My Transactions</th>
                 </tr>
                 <tr class="title-element">
-                    <th>Date</th>
-                    <th>Connection</th>
+                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=transactionDate&sortDir=' + ${reverseSortDir}}">
+                        Date
+                    </a></th>
+                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=creditor.name&sortDir=' + ${reverseSortDir}}">
+                        Connection
+                    </a></th>
                     <th>Description</th>
-                    <th>Amount</th>
+                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=amount&sortDir=' + ${reverseSortDir}}">
+                        Amount
+                    </a></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -167,20 +172,21 @@
                             Total Rows: [[${totalItems}]]
                     </div>
                     <div>
-                        <a th:href="@{'/page/' + ${1}}">
+                        <a th:href="@{'/page/' + ${1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                             <button class="pagination" type="button">&#171;</button>
                         </a>
 
                     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                          <a th:href="@{'/page/' + ${i}}">
+                          <!--<a th:href="@{'/page/' + ${i}}">-->
+                          <a th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                              <button class="pagination" type="button">[[${i}]]</button>
                         </a>
                     </span>
-                        <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}}">
+                        <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                             <button class="pagination" type="button">Next</button>
                         </a>
 
-                        <a class="pagination" th:href="@{'/page/' + ${totalPages}}">
+                        <a class="pagination" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
                             <button class="pagination" type="button">&#187;</button>
                         </a>
                         </div>
