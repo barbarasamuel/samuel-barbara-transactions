@@ -43,19 +43,30 @@
         <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
         <div class="wrapper_sendmoney">
             <form action="#" id="newConnection" method="post" th:action="@{/connection/list}">
-                <!--<input id="friendName" type="hidden" th:name="friendName" />
-                <input id="addInput" name="addInput" type="hidden" value="" />-->
                 <input id="friendName" name="friendName" type="hidden" value="" />
-
+                <table>
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="wrapper_addconnection" style="background-color:white;">
                 <div class="w_one_sendmoney">Send Money</div>
                 <!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
                 <div class="w_two_sendmoney"><button id="openPopup" type="submit">Add Connection</button></div>-->
-                <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                                <div class="w_three_sendmoney">
+                                <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
                     <option value="" disabled selected>Select a connection</option>
                     <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
                     <!---->
                 </select>
-                <div class="w_two_sendmoney"><button id="button_add" onclick="addConnectionPopup()">Add Connection</button></div>
+                                </div>
+                <div class="w_five_sendmoney"><button id="button_add" onclick="addConnectionPopup()">Add Connection</button></div>
+                                </div>
+                            </td>
+                    </tr>
+                </tbody>
+                </table>
             </form>
             <div class="hiddenpopup" id="popup">
             <!--<div id="popup" style="display:none;">-->
@@ -86,7 +97,7 @@
                 <table>
                     <thead>
                     </thead>
-                    <tbody>
+                    <tbody><tr>
                     <td><div class="wrapper_description" style="background-color:#e0e0e0;">
                         <!--<a th:href="@{/transaction/save}">-->
                         <div class="w_one_description">
@@ -127,7 +138,8 @@
                             <button type="button" id="button_pay" onclick="payPopup()">Pay</button>
                         </div>
                         <!-- </a>-->
-                    </div></td>
+                    </div>
+                    </td>
                     </tr>
                     </tbody>
                 </table>

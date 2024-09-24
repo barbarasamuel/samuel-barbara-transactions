@@ -4,9 +4,7 @@ import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.Mapper.RelationMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Relation;
-import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
-import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +22,6 @@ public class RelationService {
     @Autowired
     ConnectionMapper connectionMapper;
 
-    @Autowired
-    ConnectionsRepository connectionsRepository;
-
     /**
      *
      * To get the list of friends
@@ -35,7 +30,6 @@ public class RelationService {
     public List<RelationsConnection> getRelations(ConnectionDTO user){
 
         List<RelationsConnection> relationsConnectionList = new ArrayList<>();
-        //List<Relation> relationsEntityList = relationRepository.findByConnectionFriendId(user.getId());
         List<Relation> relationsEntityList = relationRepository.findByUserId(user.getId());
         List<RelationDTO> relationsDTOList= relationMapper.convertListToDTO(relationsEntityList);
         for(RelationDTO relationDTO:relationsDTOList){
@@ -46,10 +40,7 @@ public class RelationService {
             relationsConnectionList.add(relationsConnection);
         }
         return relationsConnectionList;
-        /*
-        Connection connection = connectionMapper.convertToEntity(user);
-        List<Relation> relationsList = relationRepository.findByUser(connection);
-        return relationMapper.convertListToDTO(relationsList);*/
+
     }
 
     /**
@@ -62,8 +53,10 @@ public class RelationService {
         relationRepository.save(relation);
     }
 
-    public RelationDTO getRelation(Long id){
-        Optional<Relation> relation = relationRepository.findById(id);
-        return relationMapper.convertToDTO(relation.get());
+    public RelationDTO getRelation(ConnectionDTO connectionFriendDTO, ConnectionDTO connectionUserDTO){
+        Connection connectionFriend = connectionMapper.convertToEntity(connectionFriendDTO);
+        Connection connectionUser = connectionMapper.convertToEntity(connectionUserDTO);
+        Relation relation = relationRepository.findByConnectionFriendAndUser(connectionFriend, connectionUser);
+        return relationMapper.convertToDTO(relation);
     }
 }

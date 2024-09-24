@@ -25,9 +25,8 @@ public class BankAccountService {
      * To get the connection bank account
      *
      */
-    /////public BankAccountDTO getConnectionAccount(ConnectionDTO connectionDTO){
     public BankAccountDTO getConnectionAccount(Long id){
-        /////BankAccount bankAccount = bankAccountRepository.findByConnectionBankAccountId(connectionDTO.getId());
+
         Optional bankAccountOptional = bankAccountRepository.findById(id);
         BankAccount bankAccount = (BankAccount) bankAccountOptional.get();
         return bankAccountMapper.convertToDTO(bankAccount);

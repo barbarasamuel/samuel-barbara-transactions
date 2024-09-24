@@ -23,6 +23,12 @@ public class ApiRest {
 
     @Autowired
     BankAccountService bankAccountService;
+
+    /**
+     *
+     * To load data for the list of the relation bank accounts
+     *
+     */
     @GetMapping(value="/dropdown", produces = {"application/json"})
     public ResponseEntity<List<BankAccountDTO>>fillDropdownContent(@RequestParam String selectedValue, Model model){
         ConnectionDTO connectionDTO = connectionsService.getCreditor(Long.valueOf(selectedValue));

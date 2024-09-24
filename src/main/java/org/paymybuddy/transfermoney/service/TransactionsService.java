@@ -1,12 +1,14 @@
 package org.paymybuddy.transfermoney.service;
 
+
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.Mapper.TransactionMapper;
-//import org.hibernate.query.Page;
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.TransactionDTO;
 import org.paymybuddy.transfermoney.model.TransactionsConnection;
+import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,8 @@ public class TransactionsService {
     TransactionMapper transactionMapper;
     @Autowired
     ConnectionMapper connectionMapper;
+    @Autowired
+    ConnectionsRepository connectionsRepository;
 
 
     //private final List<Book> transactions = TransactionUtils.buildTransactions();
@@ -64,7 +68,12 @@ public class TransactionsService {
         }
         return transactionMapper.convertListToDTO(transactionsEntityList);
     }
-    //@Override
+
+    /**
+     *
+     * To get the user transactions
+     *
+     */
     public List<TransactionsConnection> getTransactionsFromUser(ConnectionDTO user){
 
         List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
@@ -83,31 +92,20 @@ public class TransactionsService {
 
     }
 
-    //public Page<TransactionDTO> getPage(SpringDataWebProperties.Pageable pageable){
-    /*public PageImpl<Book> findPaginated(Pageable pageable){
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Book> list;
+    /**
+     *
+     * To manage the pagination by page and sorted by date by default
+     *
+     */
+    public Page<Transactions> findPaginated(ConnectionDTO debtorDTO, int pageNo, int pageSize, String sortField, String sortDirection){
 
-        if (transactions.size() < startItem){
-            list = Collections.emptyList();
-        }else{
-            int toIndex = Math.min(startItem + pageSize, transactions.size());
-            list = transactions.subList(startItem,toIndex);
-        }
-
-        return new PageImpl<Book>(list, PageRequest.of(currentPage, pageSize),transactions.size());
-    }*/
-    public Page<Transactions> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection){
-        /*public Page<TransactionsConnection> findPaginated(int pageNo, int pageSize, Date transactionDate){
-         */
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortField).descending() :
                 Sort.by(sortField).ascending();
 
         Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<Transactions> transactions = transactionsRepository.findAll(pageable);
+        Connection debtor = connectionMapper.convertToEntity(debtorDTO);
+        Page<Transactions> transactions = transactionsRepository.findAllByDebtor(debtor,pageable);
         return transactions;
     }
 

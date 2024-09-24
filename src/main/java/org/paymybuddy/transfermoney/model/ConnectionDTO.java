@@ -20,6 +20,4 @@ public class ConnectionDTO {
     private String email;
     @NotEmpty(message = "Thanks to fill your password.")
     private String password;
-    //@NotEmpty(message = "Thanks to fill your balance (min 50€.")
-    //private Double balance;
 }

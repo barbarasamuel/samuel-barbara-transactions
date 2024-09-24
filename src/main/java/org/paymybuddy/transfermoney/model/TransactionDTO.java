@@ -14,16 +14,7 @@ import java.util.Date;
 @Builder
 @Data
 public class TransactionDTO {
-    /*
 
-    @NotEmpty(message = "Thanks to fill the connection field.")
-    private String connection;
-
-    @NotEmpty(message = "Thanks to fill the description field.")
-    private String description;
-
-    @NotEmpty(message = "Thanks to fill the amount field (min 1€.")
-    private Double amount;*/
     private Long id;
     private String description;
     private Double amount;

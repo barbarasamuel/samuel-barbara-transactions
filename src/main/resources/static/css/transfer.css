@@ -39,7 +39,7 @@ tbody tr:nth-child(odd) {
    grid-column: 4;
    grid-row: 1;
 }
-.wrapper_description {
+.wrapper_description, .wrapper_addconnection {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;

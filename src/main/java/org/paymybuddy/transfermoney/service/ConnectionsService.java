@@ -30,19 +30,6 @@ public class ConnectionsService {
 
     /**
      *
-     * To save a new connection
-     *
-     */
-    public ConnectionDTO newConnection(ConnectionDTO connectionDTO) {
-
-        Connection connection = connectionMapper.convertToEntity(connectionDTO);
-        connection = connectionsRepository.save(connection);
-        return connectionMapper.convertToDTO(connection);
-
-    }
-
-    /**
-     *
      * To get a connection thanks to his/her email
      *
      */
@@ -51,15 +38,6 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection);
     }
 
-    /**
-     *
-     * To get a connection thanks to his/her name
-     *
-     */
-    public ConnectionDTO getConnection(String name){
-        Connection connection = connectionsRepository.findByName(name);
-        return connectionMapper.convertToDTO(connection);
-    }
 
     /**
      *
@@ -71,8 +49,12 @@ public class ConnectionsService {
         return connectionMapper.convertToDTO(connection.get());
     }
 
+    /**
+     *
+     * To save a new connection
+     *
+     */
     public ConnectionDTO save(ConnectionDTO newConnectionDTO){
-
 
         Connection connection = connectionMapper.convertToEntity(newConnectionDTO);
         connection = connectionsRepository.save(connection);
@@ -89,13 +71,4 @@ public class ConnectionsService {
         connectionsRepository.save(connection);
     }
 
-    /**
-     *
-     * To get a new relation
-     *
-     */
-    /*public ConnectionDTO getNewConnection(String friendName){
-
-        return connectionMapper.convertToDTO(connection);
-    }*/
 }

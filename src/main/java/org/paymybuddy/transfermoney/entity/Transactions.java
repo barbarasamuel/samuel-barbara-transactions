@@ -1,7 +1,6 @@
 package org.paymybuddy.transfermoney.entity;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +20,6 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
     private Long id;
-
-    /*@Column(name = "typeTransaction")
-    private String typeTransaction;*/
 
     @Column(nullable=false)
     private String description;
