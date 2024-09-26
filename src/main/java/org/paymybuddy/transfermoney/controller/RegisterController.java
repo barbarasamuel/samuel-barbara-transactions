@@ -37,13 +37,13 @@ public class RegisterController {
 
        if (bindingResult.hasErrors()) {
             model.addAttribute("registerForm", registerForm);
-            log.info("Error in registration");
+            log.error("Error in registration");
             return "register";
         }
 
         if(Objects.equals(connectionsService.getIdentifiant(registerForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
-            log.info("Error in registration: email already exists");
+            log.error("Error in registration: email already exists");
             return "register";
         }
 

@@ -1,6 +1,7 @@
 package org.paymybuddy.transfermoney.controller;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.service.*;
@@ -17,7 +18,7 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
-
+@Slf4j
 @Controller
 public class TransactionController {
    /**/ @Autowired
@@ -74,6 +75,7 @@ public class TransactionController {
            creditorAccountDTO.setBalance(updatedCreditorBalance);
            bankAccountService.saveBankAccount(creditorAccountDTO);
 
+           log.info("Transaction successful");
            List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
 
            model.addAttribute("transactionsList", transactionsList);
@@ -123,6 +125,7 @@ public class TransactionController {
        model.addAttribute("sortDir", sortDir);
        model.addAttribute("reverseSortDir", sortDir.equals("desc") ? "asc" : "desc");
 
+       log.info("Page or sort modified");
        return  "transferTest";
    }
 

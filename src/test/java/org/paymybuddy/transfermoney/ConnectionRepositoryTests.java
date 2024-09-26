@@ -24,9 +24,9 @@ public class ConnectionRepositoryTests {
     @Test
     public void testAddConnection() {
         Connection connection = new Connection();
-        connection.setEmail("jeanne@email.com");
-        connection.setPassword("motdepa0");
-        connection.setName("Jeanne");
+        connection.setEmail("bertrand@email.com");
+        connection.setPassword("Mo@depa0");
+        connection.setName("Bertrand");
 
         Connection savedConnection = connectionsRepository.save(connection);
 

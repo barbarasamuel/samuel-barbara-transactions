@@ -1,6 +1,7 @@
 package org.paymybuddy.transfermoney.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ContactDTO;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+@Slf4j
 @Controller
 public class ContactController {
     @Autowired
@@ -43,6 +44,7 @@ public class ContactController {
 
         contactService.addedMessage(contactDTO);
 
+        log.info("New message");
         return "redirect:/";
     }
 

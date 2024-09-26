@@ -36,7 +36,7 @@ public class ConnectionsController {
      */
     @PostMapping("/connection/list")
     @Transactional
-    public String addnewConnection( @RequestParam("friendName") String friendName, Model model) {
+    public String addNewConnection( @RequestParam("friendName") String friendName, Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -47,7 +47,7 @@ public class ConnectionsController {
 
         if (foundRelationDTO != null) {
             //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
-            log.error("There is already a relation "+connectionDTO.getEmail());
+            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
 
         }else {
             RelationDTO relationDTO = RelationDTO.builder()
@@ -56,6 +56,7 @@ public class ConnectionsController {
                     .build();
 
             relationService.newRelation(relationDTO);
+            log.info("Created relation with "+ newConnectionDTO.getEmail());
         }
 
         List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);

@@ -41,13 +41,13 @@ public class ProfileController {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("profileForm", profileForm);
-            log.info("Error in profile");
+            log.error("Error in the email");
             return "profile";
         }
 
         if(Objects.equals(connectionsService.getIdentifiant(profileForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
-            log.info("Error in profile: email already exists");
+            log.error("Error in profile: email already exists");
             return "profile";
         }
 
@@ -59,6 +59,7 @@ public class ProfileController {
 
         connectionsService.updatedConnection(connectionDTO);
 
+        log.info("Modified email");
         session.invalidate();
         return "redirect:/login";
     }
@@ -82,19 +83,19 @@ public class ProfileController {
                 if (bindingResult.hasErrors()) {
 
                     model.addAttribute("profileForm", profileForm);
-                    log.info("Error in profile");
+                    log.error("Error in the password");
                     return "profile";
                 }
             }else {
                 bindingResult.rejectValue("confirmPassword", "error.profileForm", "The confirm password is different from the new password.");
                 model.addAttribute("profileForm", profileForm);
-                log.info("Error in new password");
+                log.error("Error in new password");
                 return "profile";
             }
         }else {
             bindingResult.rejectValue("oldPassword", "error.profileForm", "Error in the old password.");
             model.addAttribute("profileForm", profileForm);
-            log.info("Error in the old password");
+            log.error("Error in the old password");
             return "profile";
         }
 
@@ -102,6 +103,7 @@ public class ProfileController {
 
         connectionsService.updatedConnection(connectionDTO);
 
+        log.info("Modified password");
         session.invalidate();
         return "redirect:/login";
     }
