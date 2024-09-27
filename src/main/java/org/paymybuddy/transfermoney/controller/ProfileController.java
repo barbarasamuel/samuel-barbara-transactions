@@ -34,7 +34,6 @@ public class ProfileController {
      *
      */
     @PostMapping("/profile/updateEmail")
-    @Transactional
     public String updateProfile(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
 
@@ -63,7 +62,6 @@ public class ProfileController {
      *
      */
     @PostMapping("/profile/updatePassword")
-    @Transactional
     public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
         ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm, bindingResult);

@@ -30,7 +30,6 @@ public class RegisterController {
      *
      */
     @PostMapping("/register/save")
-    @Transactional
     public String registration(@Valid @ModelAttribute("registerForm") RegisterForm registerForm,
                                BindingResult bindingResult,
                                Model model){
@@ -47,18 +46,8 @@ public class RegisterController {
             return "register";
         }
 
-        ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                .email(registerForm.getEmail())
-                .name(registerForm.getName())
-                .password((registerForm.getPassword()))
-                .build();
+        registrationService.saveRegistration(registerForm);
 
-        ConnectionDTO newConnectionDTO = registrationService.saveConnection(connectionDTO);
-
-
-        registrationService.saveBankAccount(newConnectionDTO);
-
-        log.info("New user created");
         return "login";
     }
 
