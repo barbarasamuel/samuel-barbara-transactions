@@ -33,18 +33,8 @@ public class ContactController {
     @Transactional
     public String newContact(@RequestParam("message") String message, Error error) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
+        connectionsService.addMessage(message);
 
-        ContactDTO contactDTO = ContactDTO.builder()
-                .sender(connectionDTO)
-                .message(message)
-                .build();
-
-        contactService.addedMessage(contactDTO);
-
-        log.info("New message");
         return "redirect:/";
     }
 

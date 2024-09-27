@@ -1,12 +1,16 @@
 package org.paymybuddy.transfermoney.service;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
+import org.paymybuddy.transfermoney.model.ContactDTO;
 import org.paymybuddy.transfermoney.model.RelationDTO;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +25,20 @@ public class ConnectionsService {
     ConnectionMapper connectionMapper;
     @Autowired
     RelationService relationService;
+    @Autowired
+    ContactService contactService;
 
     /**
      *
      * To add a connection
      *
      */
-    public ConnectionDTO addConnection(UserDetails userDetails,String friendName){
+
+    @Transactional
+    public ConnectionDTO addConnection(String friendName){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
         ConnectionDTO newConnectionDTO = getCreditor(Long.valueOf(friendName));
@@ -51,6 +62,22 @@ public class ConnectionsService {
         return connectionDTO;
     }
 
+    public void addMessage(String message){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+
+        ContactDTO contactDTO = ContactDTO.builder()
+                .sender(connectionDTO)
+                .message(message)
+                .build();
+
+        contactService.addedMessage(contactDTO);
+
+        log.info("New message");
+    }
     /**
      *
      * To get all the connections

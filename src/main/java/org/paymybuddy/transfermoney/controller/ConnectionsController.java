@@ -35,12 +35,9 @@ public class ConnectionsController {
      *
      */
     @PostMapping("/connection/list")
-    @Transactional
     public String addNewConnection( @RequestParam("friendName") String friendName, Model model) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = connectionsService.addConnection(userDetails,friendName);
+        ConnectionDTO connectionDTO = connectionsService.addConnection(friendName);
 
         List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
         model.addAttribute("connectionsList",connectionsList);
