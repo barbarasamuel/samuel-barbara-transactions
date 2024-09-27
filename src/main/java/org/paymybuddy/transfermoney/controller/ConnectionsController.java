@@ -40,24 +40,7 @@ public class ConnectionsController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        ConnectionDTO newConnectionDTO = connectionsService.getCreditor(Long.valueOf(friendName));
-
-        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO, connectionDTO);
-
-        if (foundRelationDTO != null) {
-            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
-            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
-
-        }else {
-            RelationDTO relationDTO = RelationDTO.builder()
-                    .user(connectionDTO)
-                    .connectionFriend(newConnectionDTO)
-                    .build();
-
-            relationService.newRelation(relationDTO);
-            log.info("Created relation with "+ newConnectionDTO.getEmail());
-        }
+        ConnectionDTO connectionDTO = connectionsService.addConnection(userDetails,friendName);
 
         List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
         model.addAttribute("connectionsList",connectionsList);

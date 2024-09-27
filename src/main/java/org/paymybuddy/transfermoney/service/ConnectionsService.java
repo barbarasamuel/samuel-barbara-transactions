@@ -1,22 +1,55 @@
 package org.paymybuddy.transfermoney.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
+import org.paymybuddy.transfermoney.model.RelationDTO;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class ConnectionsService {
     @Autowired
     ConnectionsRepository connectionsRepository;
     @Autowired
     ConnectionMapper connectionMapper;
+    @Autowired
+    RelationService relationService;
 
+    /**
+     *
+     * To add a connection
+     *
+     */
+    public ConnectionDTO addConnection(UserDetails userDetails,String friendName){
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        ConnectionDTO newConnectionDTO = getCreditor(Long.valueOf(friendName));
+
+        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO, connectionDTO);
+
+        if (foundRelationDTO != null) {
+            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
+            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
+
+        }else {
+            RelationDTO relationDTO = RelationDTO.builder()
+                    .user(connectionDTO)
+                    .connectionFriend(newConnectionDTO)
+                    .build();
+
+            relationService.newRelation(relationDTO);
+            log.info("Created relation with "+ newConnectionDTO.getEmail());
+        }
+
+        return connectionDTO;
+    }
 
     /**
      *
