@@ -6,6 +6,7 @@ import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ContactDTO;
+import org.paymybuddy.transfermoney.model.ProfileForm;
 import org.paymybuddy.transfermoney.model.RelationDTO;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +80,64 @@ public class ConnectionsService {
 
         log.info("New message");
     }
+
+    /**
+     *
+     * To update the email
+     *
+     */
+    public void emailUpdating(ProfileForm profileForm){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        connectionDTO.setEmail(profileForm.getEmail());
+
+        updatedConnection(connectionDTO);
+
+        log.info("Modified email");
+    }
+
+    /**
+     *
+     * To update the password
+     *
+     */
+    public ConnectionDTO passwordUpdatingStart(ProfileForm profileForm, BindingResult bindingResult){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        profileForm.setEmail(connectionDTO.getEmail());
+
+        return connectionDTO;
+    }
+
+    public void passwordUpdatingFollowing(ConnectionDTO connectionDTO, ProfileForm profileForm){
+        connectionDTO.setPassword(profileForm.getConfirmPassword());
+
+        updatedConnection(connectionDTO);
+
+        log.info("Modified password");
+    }
+
+    /**
+     *
+     * To get the profile
+     *
+     */
+    public ProfileForm getProfile(ProfileForm profileForm){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+
+        profileForm.setEmail(connectionDTO.getEmail());
+        profileForm.setOldPassword(connectionDTO.getPassword());
+
+        return profileForm;
+    }
+
     /**
      *
      * To get all the connections

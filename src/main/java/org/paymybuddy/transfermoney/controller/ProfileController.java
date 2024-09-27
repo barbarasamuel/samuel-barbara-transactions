@@ -51,15 +51,8 @@ public class ProfileController {
             return "profile";
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        connectionsService.emailUpdating(profileForm);
 
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        connectionDTO.setEmail(profileForm.getEmail());
-
-        connectionsService.updatedConnection(connectionDTO);
-
-        log.info("Modified email");
         session.invalidate();
         return "redirect:/login";
     }
@@ -72,11 +65,8 @@ public class ProfileController {
     @PostMapping("/profile/updatePassword")
     @Transactional
     public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        profileForm.setEmail(connectionDTO.getEmail());
+        ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm, bindingResult);
 
         if (Objects.equals(connectionDTO.getPassword(), profileForm.getOldPassword())){
             if (Objects.equals(profileForm.getNewPassword(), profileForm.getConfirmPassword())) {
@@ -99,11 +89,8 @@ public class ProfileController {
             return "profile";
         }
 
-        connectionDTO.setPassword(profileForm.getConfirmPassword());
+        connectionsService.passwordUpdatingFollowing(connectionDTO,profileForm);
 
-        connectionsService.updatedConnection(connectionDTO);
-
-        log.info("Modified password");
         session.invalidate();
         return "redirect:/login";
     }
@@ -116,13 +103,8 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profile(ProfileForm profileForm, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-
-        profileForm.setEmail(connectionDTO.getEmail());
-        profileForm.setOldPassword(connectionDTO.getPassword());
+        profileForm = connectionsService.getProfile(profileForm);
 
         model.addAttribute("profileForm",profileForm);
 
