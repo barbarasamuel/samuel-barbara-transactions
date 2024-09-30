@@ -39,43 +39,11 @@ public class TransactionController {
      *
      */
        @PostMapping("/transactions/save")
-       @Transactional
        public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
                                      Model model){
 
-           ConnectionDTO creditorDTO = connectionsService.getCreditor(transactionForm.getId());
+           ConnectionDTO debtorDTO = connectionsService.saveTransaction(transactionForm);
 
-           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-           UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-           ConnectionDTO debtorDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-
-           TransactionDTO transactionDTO = TransactionDTO.builder()
-                   .creditor(creditorDTO)
-                   .debtor(debtorDTO)
-                   .description(transactionForm.getDescription())
-                   .amount(transactionForm.getAmount())
-                   .transactionDate(new Date())
-                   .build();
-
-           TransactionDTO newTransactionDTO = transactionsService.saveTransaction(transactionDTO);
-
-           BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
-           Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
-
-           debtorAccountDTO.setId(transactionForm.getIdDebtorAccount());
-           debtorAccountDTO.setConnectionBankAccount(debtorDTO);
-           debtorAccountDTO.setBalance(updatedDebtorBalance);
-           bankAccountService.saveBankAccount(debtorAccountDTO);
-
-           BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
-           Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
-
-           creditorAccountDTO.setId(transactionForm.getIdCreditorAccount());
-           creditorAccountDTO.setConnectionBankAccount(creditorDTO);
-           creditorAccountDTO.setBalance(updatedCreditorBalance);
-           bankAccountService.saveBankAccount(creditorAccountDTO);
-
-           log.info("Transaction successful");
            List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
 
            model.addAttribute("transactionsList", transactionsList);

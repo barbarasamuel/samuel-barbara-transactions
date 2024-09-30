@@ -4,10 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.ContactDTO;
-import org.paymybuddy.transfermoney.model.ProfileForm;
-import org.paymybuddy.transfermoney.model.RelationDTO;
+import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -29,6 +27,48 @@ public class ConnectionsService {
     RelationService relationService;
     @Autowired
     ContactService contactService;
+    @Autowired
+    TransactionsService transactionsService;
+    @Autowired
+    BankAccountService bankAccountService;
+    @Transactional
+    public ConnectionDTO saveTransaction(TransactionForm transactionForm){
+        ConnectionDTO creditorDTO = getCreditor(transactionForm.getId());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO debtorDTO = getIdentifiant(userDetails.getUsername());
+
+        TransactionDTO transactionDTO = TransactionDTO.builder()
+                .creditor(creditorDTO)
+                .debtor(debtorDTO)
+                .description(transactionForm.getDescription())
+                .amount(transactionForm.getAmount())
+                .transactionDate(new Date())
+                .build();
+
+        TransactionDTO newTransactionDTO = transactionsService.saveTransaction(transactionDTO);
+
+        BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
+        Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
+
+        debtorAccountDTO.setId(transactionForm.getIdDebtorAccount());
+        debtorAccountDTO.setConnectionBankAccount(debtorDTO);
+        debtorAccountDTO.setBalance(updatedDebtorBalance);
+        bankAccountService.saveBankAccount(debtorAccountDTO);
+
+        BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
+        Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
+
+        creditorAccountDTO.setId(transactionForm.getIdCreditorAccount());
+        creditorAccountDTO.setConnectionBankAccount(creditorDTO);
+        creditorAccountDTO.setBalance(updatedCreditorBalance);
+        bankAccountService.saveBankAccount(creditorAccountDTO);
+
+        log.info("Transaction successful");
+
+        return debtorDTO;
+    }
 
     /**
      *
