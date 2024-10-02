@@ -8,6 +8,9 @@ import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,18 +37,35 @@ public class RegisterController {
                                BindingResult bindingResult,
                                Model model){
 
-       if (bindingResult.hasErrors()) {
+       /*if (bindingResult.hasErrors()) {
             model.addAttribute("registerForm", registerForm);
             log.error("Error in registration");
             return "register";
-        }
+        }*/
 
-        if(Objects.equals(connectionsService.getIdentifiant(registerForm.getEmail()), "There is already an account registered with that email")) {
+        //////////////////////////////
+
+        if(connectionsService.emailChecking(registerForm)){
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
             log.error("Error in registration: email already exists");
             return "register";
         }
 
+
+        if (Objects.equals(registerForm.getPassword(), registerForm.getConfirmPassword())) {
+            if (bindingResult.hasErrors()) {
+
+                model.addAttribute("profileForm", registerForm);
+                log.error("Error in the password");
+                return "register";
+            }
+        }else {
+            bindingResult.rejectValue("confirmPassword", "error.registerForm", "The confirm password is different from the new password.");
+            model.addAttribute("profileForm", registerForm);
+            log.error("Error in new password");
+            return "register";
+        }
+        /////////////////////////////
         registrationService.saveRegistration(registerForm);
 
         return "login";

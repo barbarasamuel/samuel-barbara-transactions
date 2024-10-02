@@ -70,7 +70,9 @@
                                th:field="*{password}"
                                type="password"
                         />
-
+                        <p th:errors="*{password}"
+                           th:if="${#fields.hasErrors('password')}">
+                        </p>
                     </div>
                     <div>
                         <label for="confirmPassword"></label><input

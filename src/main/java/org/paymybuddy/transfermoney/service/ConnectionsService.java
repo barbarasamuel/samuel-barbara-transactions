@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -186,6 +187,18 @@ public class ConnectionsService {
     public List<ConnectionDTO> getAllConnections(){
         List<Connection> connectionList = connectionsRepository.findAll();
         return connectionMapper.convertListToDTO(connectionList);
+    }
+
+    /**
+     *
+     * To know whether his/her email already exists
+     *
+     */
+    public boolean emailChecking(RegisterForm registerForm){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return Objects.equals(userDetails.getUsername(), registerForm.getEmail());
     }
 
     /**
