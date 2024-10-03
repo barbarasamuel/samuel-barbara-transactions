@@ -38,17 +38,17 @@ public class TransactionController {
      * To add a transaction
      *
      */
-       @PostMapping("/transactions/save")
-       public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
-                                     Model model){
+   @PostMapping("/transactions/save")
+   public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
+                                 Model model){
 
-           ConnectionDTO debtorDTO = connectionsService.saveTransaction(transactionForm);
+       ConnectionDTO debtorDTO = connectionsService.saveTransaction(transactionForm);
 
-           List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
+       List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
 
-           model.addAttribute("transactionsList", transactionsList);
-           return  "redirect:/";
-       }
+       model.addAttribute("transactionsList", transactionsList);
+       return  "redirect:/";
+   }
 
     @GetMapping("/transfer")
     public String transactionPage( Model model, Principal principal){

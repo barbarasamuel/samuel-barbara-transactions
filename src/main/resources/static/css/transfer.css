@@ -103,7 +103,7 @@ table {
        z-index:1000;
        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  .viewedpopup{
+  /*.viewedpopup{
     display: block;
     position: fixed;
            left: 50%;
@@ -113,7 +113,7 @@ table {
            background-color: white;
            z-index:100;
            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }/**/
+  }*/
   #myTransactionsList a,
   #myTransactionsList a:visited,
   #myTransactionsList a:active{

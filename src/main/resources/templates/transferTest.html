@@ -18,246 +18,241 @@
 </head>
 
 <body>
-
-
-<header>
-    <nav>
-        <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
-        <div>
-            <a th:href="@{/}">Home</a>
-            <a th:href="@{/}">Transfer</a>
-            <a th:href="@{/profile}">Profile</a>
-            <a th:href="@{/contact}">Contact</a>
-            <a th:href="@{/logout}">Log off</a>
-        </div>
-    </nav>
-</header>
-<main>
-    <section>
-        <div class="bandeau">
-            <p class="bandeau_text">Home / Transfer</p>
-        </div>
-
-    </section>
-    <section class="centered_section">
-        <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
-        <div>
-            <!--<div class="wraper_sendmoney">-->
-            <form action="#" id="newConnection" method="post" th:action="@{/connection/list}">
-                <input id="friendName" name="friendName" type="hidden" value="" />
-
-                                <div class="wrapper" style="background-color:white;">
-                <div class="element1">Send Money</div>
-                <!--<div class="w_two_sendmoney"><button onclick="addConnectionPopup()" type="submit">Add Connection</button></div>
-                <div class="w_two_sendmoney"><button id="openPopup" type="submit">Add Connection</button></div>-->
-                                <div class="element2">
-                                <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
-                    <option value="" disabled selected>Select a connection</option>
-                    <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
-                    <!---->
-                </select>
-                                </div>
-                <div class="element3"><button id="button_add" onclick="addConnectionPopup()">Add Connection</button></div>
-                                </div>
-
-            </form>
-
-            <form action="#" id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${newTransaction}">
-                <!---->
-                <input id="hiddenDescriptionInput" type="hidden" th:name="description" /><!--th:name="${transactionDescription}" th:value="${description}"-->
-                <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
-                <div class="wrapper" style="background-color:#e0e0e0;">
-                        <!---->
-                        <div class="element4">
-                            <select id="debtorAccount-select" th:name="idDebtorAccount" required>
-                                <option value="" disabled selected>Select a debtor account</option>
-                                <option th:each="debtorAccount : ${debtorAccountList}" th:attr="value=${debtorAccount.id}" th:text="${debtorAccount.id}"></option>
-                            </select>
-                        </div>
-                        <div class="element5">
-
-                            <select id="connection-select" th:name="id" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
-                                <option value="" disabled selected>Select a connection</option>
-                                <option th:each="connection : ${connectionsList}" th:attr="value=${connection.id}" th:text="${connection.connectionName}"></option>
-
-                            </select>
-
-                        </div>
-                        <div class="element6">
-                            <select id="creditorAccount-select" th:name="idCreditorAccount" required>
-                                <option value="" disabled selected>Select a creditor account</option>
-                                <option th:each="creditorAccount : ${creditorAccountList}" th:attr="value=${creditorAccount.id}" th:text="${creditorAccount.id}"></option>
-                            </select>
-                        </div>
-                        <div class="element7">
-                            <input type="number" id="amount" class="element_border" placeholder="1€" th:name="amount" required/>
-
-                        </div>
-                        <div class="element8">
-                            <button type="button" id="button_pay" onclick="payPopup()">Pay</button>
-                        </div>
-
-                    </div>
-            </form>
-        </div>
-    </section>
-
-    <section class="centered_section">
-        <form action="#" id="transactionsList" method="post" th:action="@{/transactions/list}">
-            <div class="wrapper">
-                <div class="element9">
-            <table id="myTransactionsList" class="element_border">
-
-                <thead>
-                <tr>
-                    <th>My Transactions</th>
-                </tr>
-                <tr class="title-element">
-                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=transactionDate&sortDir=' + ${reverseSortDir}}">
-                        Date
-                    </a></th>
-                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=creditor.name&sortDir=' + ${reverseSortDir}}">
-                        Connection
-                    </a></th>
-                    <th>Description</th>
-                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=amount&sortDir=' + ${reverseSortDir}}">
-                        Amount
-                    </a></th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr th:each = "transactions : ${transactionsList}" >
-                        <td style="text-align:center;" th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
-                        <td style="text-align:center;" th:text = "${transactions.creditor.name}"></td>
-                        <td style="text-align:center;" th:text = "${transactions.description}"></td>
-                        <td style="text-align:center;" th:text = "${transactions.amount}"></td>
-                    </tr>
-               </tbody>
-           </table>
+    <header>
+        <nav>
+            <div><img th:src="@{/img/paymybuddy.PNG}" width="123" alt="Logo Pay my buddy" ></div>
+            <div>
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/}">Transfer</a>
+                <a th:href="@{/profile}">Profile</a>
+                <a th:href="@{/contact}">Contact</a>
+                <a th:href="@{/logout}">Log off</a>
             </div>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <div class="bandeau">
+                <p class="bandeau_text">Home / Transfer</p>
+            </div>
+
+        </section>
+        <section class="centered_section">
+            <div><h1>Welcome <span th:text="${username}"></span>!</h1></div>
+            <div>
+                <!---->
+                <form action="#" id="newConnection" method="post" th:action="@{/connection/list}">
+                    <input id="friendName" name="friendName" type="hidden" value="" />
+
+                    <div class="wrapper" style="background-color:white;">
+                        <div class="element1">Send Money</div>
+                        <!---->
+                         <div class="element2">
+                            <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                            <option value="" disabled selected>Select a connection</option>
+                            <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
+                            </select><!---->
+
+                         </div>
+                        <div class="element3"><button id="button_add" onclick="addConnectionPopup()">Add Connection</button></div>
+                    </div>
+
+                </form>
+
+                <form action="#" id="newTransaction" method="post" th:action="@{/transactions/save}" th:object="${newTransaction}">
+                    <!---->
+                    <input id="hiddenDescriptionInput" type="hidden" th:name="description" /><!--th:name="${transactionDescription}" th:value="${description}"-->
+                    <input id="descriptionInput" name="descriptionInput" type="hidden" value="" />
+                    <div class="wrapper" style="background-color:#e0e0e0;">
+                            <!---->
+                            <div class="element4">
+                                <select id="debtorAccount-select" th:name="idDebtorAccount" required>
+                                    <option value="" disabled selected>Select a debtor account</option>
+                                    <option th:each="debtorAccount : ${debtorAccountList}" th:attr="value=${debtorAccount.id}" th:text="${debtorAccount.id}"></option>
+                                </select>
+                            </div>
+                            <div class="element5">
+
+                                <select id="connection-select" th:name="id" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                                    <option value="" disabled selected>Select a connection</option>
+                                    <option th:each="connection : ${connectionsList}" th:attr="value=${connection.id}" th:text="${connection.connectionName}"></option>
+
+                                </select>
+
+                            </div>
+                            <div class="element6">
+                                <select id="creditorAccount-select" th:name="idCreditorAccount" required>
+                                    <option value="" disabled selected>Select a creditor account</option>
+                                    <option th:each="creditorAccount : ${creditorAccountList}" th:attr="value=${creditorAccount.id}" th:text="${creditorAccount.id}"></option>
+                                </select>
+                            </div>
+                            <div class="element7">
+                                <input type="number" id="amount" class="element_border" placeholder="1€" th:name="amount" required/>
+
+                            </div>
+                            <div class="element8">
+                                <button type="button" id="button_pay" onclick="payPopup()">Pay</button>
+                            </div>
+
+                        </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="centered_section">
+            <form action="#" id="transactionsList" method="post" th:action="@{/transactions/list}">
+                <div class="wrapper">
+                    <div class="element9">
+                        <table id="myTransactionsList" class="element_border">
+
+                            <thead>
+                            <tr>
+                                <th>My Transactions</th>
+                            </tr>
+                            <tr class="title-element">
+                                <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=transactionDate&sortDir=' + ${reverseSortDir}}">
+                                    Date
+                                </a></th>
+                                <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=creditor.name&sortDir=' + ${reverseSortDir}}">
+                                    Connection
+                                </a></th>
+                                <th>Description</th>
+                                <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=amount&sortDir=' + ${reverseSortDir}}">
+                                    Amount
+                                </a></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each = "transactions : ${transactionsList}" >
+                                    <td style="text-align:center;" th:text = "${#dates.format(transactions.transactionDate,'dd/MM/yyyy')}"></td>
+                                    <td style="text-align:center;" th:text = "${transactions.creditor.name}"></td>
+                                    <td style="text-align:center;" th:text = "${transactions.description}"></td>
+                                    <td style="text-align:center;" th:text = "${transactions.amount}"></td>
+                                </tr>
+                           </tbody>
+                       </table>
+                    </div>
                 </div>
                 <div th:if="${totalPages > 1}">
                     <div>
                         <div class="pagination">
                             Total Rows: [[${totalItems}]]
-                    </div>
-                    <div>
-                        <a th:href="@{'/page/' + ${1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
-                            <button class="pagination" type="button">&#171;</button>
-                        </a>
-
-                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-
-                          <a th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
-                             <button class="pagination" type="button">[[${i}]]</button>
-                        </a>
-                    </span>
-                        <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
-                            <button class="pagination" type="button">Next</button>
-                        </a>
-
-                        <a class="pagination" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
-                            <button class="pagination" type="button">&#187;</button>
-                        </a>
                         </div>
                         <div>
+                            <a th:href="@{'/page/' + ${1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                                <button class="pagination" type="button">&#171;</button>
+                            </a>
 
+                            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+
+                                  <a th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                                     <button class="pagination" type="button">[[${i}]]</button>
+                                </a>
+                            </span>
+                            <a th:if="${currentPage < totalPages}" class="pagination" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                                <button class="pagination" type="button">Next</button>
+                            </a>
+
+                            <a class="pagination" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                                <button class="pagination" type="button">&#187;</button>
+                            </a>
                         </div>
+
                     </div>
                 </div>
 
-            <!--</div>-->
-       </form>
-   </section>
-</main>
-<footer>
-</footer>
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-    console.log("test1");
-        document.getElementById('connection-select').addEventListener('change', function(){
-        var selectedValue = this.value;
-        updateCreditorAccountSelect(selectedValue);
-        });
-    });
-
-    function updateCreditorAccountSelect(selectedValue){
-        fetch('/dropdown?selectedValue='+selectedValue)
-        .then(response => response.json())
-        .then(data =>{
-            var dropdownContent = document. getElementById('creditorAccount-select');
-            dropdownContent.innerHTML = '';
-            data.forEach(value => {
-                console.log("test2");
-                var option = document.createElement('option');
-                option.value = value.id;
-                option.textContent = value.id;
-                dropdownContent.appendChild(option);
+                <!---->
+           </form>
+       </section>
+    </main>
+    <footer>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+        console.log("test1");
+            document.getElementById('connection-select').addEventListener('change', function(){
+            var selectedValue = this.value;
+            updateCreditorAccountSelect(selectedValue);
             });
-        })
-        .catch(error => console.error('Error: ', error));
+        });
 
-        /*const userAction = async () => {
-        const response = await fetch('/dropdown');
-        const myJson = await response.json();*/ //extract JSON from the http response
-        // do something with myJson
-        //}
-    }
+        function updateCreditorAccountSelect(selectedValue){
+            fetch('/dropdown?selectedValue='+selectedValue)
+            .then(response => response.json())
+            .then(data =>{
+                var dropdownContent = document. getElementById('creditorAccount-select');
+                dropdownContent.innerHTML = '';
+                data.forEach(value => {
+                    console.log("test2");
+                    var option = document.createElement('option');
+                    option.value = value.id;
+                    option.textContent = value.id;
+                    dropdownContent.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error: ', error));
 
-    function addConnectionPopup(){
-        console.log("function addConnectionPopup");
-        /**/
-        const selectedOption = document.getElementById('addConnection-select').value;
-        if(selectedOption){
-            document.getElementById('friendName').value = selectedOption;
-            //document.getElementById('popup').classList.remove('active');
-            document.getElementById('newConnection').submit;
-        }else{
-            alert("Select an option.");
-        }
-    //});
-
-
-    }
-    function addConnectionValid(){
-
-        const selectedOption = document.getElementById('addConnection-select').value;
-        if(selectedOption){
-            document.getElementById('friendName').value = selectedOption;
-            document.getElementById('popup').classList.remove('active');
-            document.getElementById('newConnection').submit;
-        }else{
-            alert("Select an option.");
+            /*const userAction = async () => {
+            const response = await fetch('/dropdown');
+            const myJson = await response.json();*/ //extract JSON from the http response
+            // do something with myJson
+            //}
         }
 
-    }
-    /*document.getElementById('openPopup').addEventListener('click', function(){
-        console.log("test");
-        document.getElementById('popup').classList.add('active');
-    });
+        function addConnectionPopup(){
+            console.log("function addConnectionPopup");
+            /**/
+            const selectedOption = document.getElementById('addConnection-select').value;
+            if(selectedOption){
+                document.getElementById('friendName').value = selectedOption;
+                //document.getElementById('popup').classList.remove('active');
+                document.getElementById('newConnection').submit;
+            }else{
+                alert("Select an option.");
+            }
+        //});
 
-    document.getElementById('popupForm').addEventListener('submit', function(event){
-        event.preventDefault();
-        const selectedOption = document.getElementById('addConnection-select').value;
-        if(selectedOption){
-            document.getElementById('friendName').value = selectedOption;
-            document.getElementById('popup').classList.remove('active');
-            document.getElementById('newConnection').submit;
-        }else{
-            alert("Select an option.");
-        }
-    });*/
 
-    function payPopup(){
-        var descriptionInput = prompt("Write the transactions description");
-        if(descriptionInput!=null){
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("hiddenDescriptionInput").value = descriptionInput;
-            document.getElementById("newTransaction").submit();
         }
-    }
-</script>
+        function addConnectionValid(){
+
+            const selectedOption = document.getElementById('addConnection-select').value;
+            if(selectedOption){
+                document.getElementById('friendName').value = selectedOption;
+                document.getElementById('popup').classList.remove('active');
+                document.getElementById('newConnection').submit;
+            }else{
+                alert("Select an option.");
+            }
+
+        }
+        /*document.getElementById('openPopup').addEventListener('click', function(){
+            console.log("test");
+            document.getElementById('popup').classList.add('active');
+        });
+
+        document.getElementById('popupForm').addEventListener('submit', function(event){
+            event.preventDefault();
+            const selectedOption = document.getElementById('addConnection-select').value;
+            if(selectedOption){
+                document.getElementById('friendName').value = selectedOption;
+                document.getElementById('popup').classList.remove('active');
+                document.getElementById('newConnection').submit;
+            }else{
+                alert("Select an option.");
+            }
+        });*/
+
+        function payPopup(){
+            var descriptionInput = prompt("Write the transactions description");
+            if(descriptionInput!=null){
+                document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+                document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+                document.getElementById("hiddenDescriptionInput").value = descriptionInput;
+                document.getElementById("newTransaction").submit();
+            }
+        }
+    </script>
 
 </body>
 </html>
