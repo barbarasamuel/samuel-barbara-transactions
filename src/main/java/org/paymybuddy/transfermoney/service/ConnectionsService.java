@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
+import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +35,7 @@ public class ConnectionsService {
     @Autowired
     BankAccountService bankAccountService;
     @Transactional
-    public ConnectionDTO saveTransaction(TransactionForm transactionForm){
+    public List <TransactionDTO> saveTransaction(TransactionForm transactionForm){
         ConnectionDTO creditorDTO = getCreditor(transactionForm.getId());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,8 +70,40 @@ public class ConnectionsService {
 
         log.info("Transaction successful");
 
-        return debtorDTO;
+        return transactionsService.getTransactions(debtorDTO.getId());
     }
+
+    /**
+     *
+     * To manage the pagination of the transactions table
+     *
+     */
+    public ManagePaginationDTO managePagination(int pageNo, String sortField, String sortDir){
+        int pageSize = 3;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+
+        Page<Transactions> page = transactionsService.findPaginated(connectionDTO, pageNo, pageSize, sortField, sortDir);
+        List < Transactions > transactionsList = page.getContent();
+
+        List<ConnectionDTO> allConnectionsList = getAllConnections();
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+
+        ManagePaginationDTO managePaginationDTO = ManagePaginationDTO.builder()
+                .allConnectionsList(allConnectionsList)
+                .connectionsList(connectionsList)
+                .connectionDTO(connectionDTO)
+                .bankAccountDTOList(bankAccountDTOList)
+                .page(page)
+                .transactionsList(transactionsList)
+                .build();
+
+        return managePaginationDTO;
+    }
+
 
     /**
      *

@@ -1,21 +1,14 @@
 package org.paymybuddy.transfermoney.controller;
 
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -27,10 +20,6 @@ public class TransactionController {
     @Autowired
     ConnectionsService connectionsService;
 
-    @Autowired
-    BankAccountService bankAccountService;
-    @Autowired
-    RelationService relationService;
 
 
     /**
@@ -42,9 +31,7 @@ public class TransactionController {
    public String saveTransaction(@ModelAttribute TransactionForm transactionForm,
                                  Model model){
 
-       ConnectionDTO debtorDTO = connectionsService.saveTransaction(transactionForm);
-
-       List <TransactionDTO> transactionsList =  transactionsService.getTransactions(debtorDTO.getId());
+       List <TransactionDTO> transactionsList = connectionsService.saveTransaction(transactionForm);
 
        model.addAttribute("transactionsList", transactionsList);
        return  "redirect:/";
@@ -66,28 +53,17 @@ public class TransactionController {
                                @RequestParam("sortField") String sortField,
                                @RequestParam("sortDir") String sortDir,
                                Model model) {
-       int pageSize = 3;
 
+       ManagePaginationDTO managePaginationDTO = connectionsService.managePagination(pageNo, sortField, sortDir);
 
-       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-       ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-
-       Page<Transactions> page = transactionsService.findPaginated(connectionDTO, pageNo, pageSize, sortField, sortDir);
-       List < Transactions > transactionsList = page.getContent();
-
-       List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
-       List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-       List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
-
-       model.addAttribute("allConnectionsList", allConnectionsList);
-       model.addAttribute("connectionsList", connectionsList);
-       model.addAttribute("username", connectionDTO.getName());
-       model.addAttribute("debtorAccountList",bankAccountDTOList);
+       model.addAttribute("allConnectionsList", managePaginationDTO.getAllConnectionsList());
+       model.addAttribute("connectionsList", managePaginationDTO.getConnectionsList());
+       model.addAttribute("username", managePaginationDTO.getConnectionDTO().getName());
+       model.addAttribute("debtorAccountList",managePaginationDTO.getBankAccountDTOList());
        model.addAttribute("currentPage", pageNo);
-       model.addAttribute("totalPages", page.getTotalPages());
-       model.addAttribute("totalItems", page.getTotalElements());
-       model.addAttribute("transactionsList", transactionsList);
+       model.addAttribute("totalPages", managePaginationDTO.getPage().getTotalPages());
+       model.addAttribute("totalItems", managePaginationDTO.getPage().getTotalElements());
+       model.addAttribute("transactionsList", managePaginationDTO.getTransactionsList());
 
        model.addAttribute("sortField", sortField);
        model.addAttribute("sortDir", sortDir);
@@ -105,19 +81,13 @@ public class TransactionController {
     @GetMapping("/")
     public String home (Model model){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
-        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+        TransferPageDTO transferPageDTO = transactionsService.accessTransferPage();
 
-        model.addAttribute("allConnectionsList", allConnectionsList);
-        model.addAttribute("connectionsList", connectionsList);
-        model.addAttribute("transactionsList", transactionsList);/**/
-        model.addAttribute("username", connectionDTO.getName());
-        model.addAttribute("debtorAccountList",bankAccountDTOList);
+        model.addAttribute("allConnectionsList", transferPageDTO.getAllConnectionsList());
+        model.addAttribute("connectionsList", transferPageDTO.getConnectionsList());
+        model.addAttribute("transactionsList", transferPageDTO.getTransactionsList());/**/
+        model.addAttribute("username", transferPageDTO.getConnectionDTO().getName());
+        model.addAttribute("debtorAccountList",transferPageDTO.getBankAccountDTOList());
 
         return findPaginated(1, "transactionDate", "desc", model);
     }
