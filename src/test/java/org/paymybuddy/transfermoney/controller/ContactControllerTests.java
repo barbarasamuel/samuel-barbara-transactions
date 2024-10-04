@@ -31,7 +31,7 @@ public class ContactControllerTests {
     private WebApplicationContext webApplicationContext;
     @Autowired
     private MockMvc mockMvc;
-    
+
 
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})

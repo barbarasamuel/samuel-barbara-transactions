@@ -31,9 +31,8 @@ public class ApiRest {
      */
     @GetMapping(value="/dropdown", produces = {"application/json"})
     public ResponseEntity<List<BankAccountDTO>>fillDropdownContent(@RequestParam String selectedValue, Model model){
-        ConnectionDTO connectionDTO = connectionsService.getCreditor(Long.valueOf(selectedValue));
-        List<BankAccountDTO> creditorAccountList = bankAccountService.getUserAccountsList(connectionDTO);
 
+        List<BankAccountDTO> creditorAccountList = bankAccountService.fillDropdown(Long.valueOf(selectedValue));
         return ResponseEntity.status(HttpStatus.OK).body(creditorAccountList);
     }
 }

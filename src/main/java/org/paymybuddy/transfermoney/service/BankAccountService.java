@@ -20,6 +20,9 @@ public class BankAccountService {
     @Autowired
     BankAccountRepository bankAccountRepository;
 
+    @Autowired
+    ConnectionsService connectionsService;
+
     /**
      *
      * To get the connection bank account
@@ -33,6 +36,15 @@ public class BankAccountService {
 
     }
 
+    /**
+     *
+     * To fill the dropdown content
+     *
+     */
+    public List<BankAccountDTO> fillDropdown(Long selectedValue) {
+        ConnectionDTO connectionDTO = connectionsService.getCreditor(selectedValue);
+        return getUserAccountsList(connectionDTO);
+    }
     /**
      *
      * To calculate the new debtor balance
