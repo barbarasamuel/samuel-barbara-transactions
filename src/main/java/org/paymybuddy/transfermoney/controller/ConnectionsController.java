@@ -37,9 +37,8 @@ public class ConnectionsController {
     @PostMapping("/connection/list")
     public String addNewConnection( @RequestParam("friendName") String friendName, Model model) {
 
-        ConnectionDTO connectionDTO = connectionsService.addConnection(friendName);
+        List<RelationsConnection> connectionsList = connectionsService.addConnection(friendName);
 
-        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
         model.addAttribute("connectionsList",connectionsList);
         return "redirect:/";
     }

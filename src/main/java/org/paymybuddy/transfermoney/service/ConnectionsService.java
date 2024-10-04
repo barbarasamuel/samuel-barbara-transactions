@@ -112,7 +112,7 @@ public class ConnectionsService {
      */
 
     @Transactional
-    public ConnectionDTO addConnection(String friendName){
+    public List<RelationsConnection> addConnection(String friendName){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -136,7 +136,7 @@ public class ConnectionsService {
             log.info("Created relation with "+ newConnectionDTO.getEmail());
         }
 
-        return connectionDTO;
+        return relationService.getRelations(connectionDTO);
     }
 
     public void addMessage(String message){
