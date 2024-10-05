@@ -81,7 +81,7 @@ public class TransactionController {
     @GetMapping("/")
     public String home (Model model){
 
-        TransferPageDTO transferPageDTO = transactionsService.accessTransferPage();
+        TransferPageDTO transferPageDTO = connectionsService.accessTransferPage();
 
         model.addAttribute("allConnectionsList", transferPageDTO.getAllConnectionsList());
         model.addAttribute("connectionsList", transferPageDTO.getConnectionsList());

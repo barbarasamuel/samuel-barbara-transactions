@@ -104,6 +104,39 @@ public class ConnectionsService {
         return managePaginationDTO;
     }
 
+    /**
+     *
+     * To load the transferTest.html page
+     *
+     */
+    public TransferPageDTO accessTransferPage(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        List<ConnectionDTO> allConnectionsList = getAllConnections();
+        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
+        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+
+        return TransferPageDTO.builder()
+                .connectionDTO(connectionDTO)
+                .allConnectionsList(allConnectionsList)
+                .connectionsList(connectionsList)
+                .transactionsList(transactionsList)
+                .bankAccountDTOList(bankAccountDTOList)
+                .build();
+    }
+
+    /**
+     *
+     * To fill the dropdown content
+     *
+     */
+    public List<BankAccountDTO> fillDropdown(Long selectedValue) {
+        ConnectionDTO connectionDTO = getCreditor(selectedValue);
+        return bankAccountService.getUserAccountsList(connectionDTO);
+    }
 
     /**
      *

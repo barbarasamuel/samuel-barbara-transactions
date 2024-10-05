@@ -32,15 +32,6 @@ public class TransactionsService {
     TransactionMapper transactionMapper;
     @Autowired
     ConnectionMapper connectionMapper;
-    //@Autowired
-    //ConnectionsRepository connectionsRepository;
-    @Autowired
-    ConnectionsService connectionsService;
-    @Autowired
-    RelationService relationService;
-    @Autowired
-    BankAccountService bankAccountService;
-
 
 
     /**
@@ -57,24 +48,6 @@ public class TransactionsService {
         return transactionMapper.convertToDTO(transactions);
     }
 
-    public TransferPageDTO accessTransferPage(){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = connectionsService.getIdentifiant(userDetails.getUsername());
-        List<ConnectionDTO> allConnectionsList = connectionsService.getAllConnections();
-        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-        List<TransactionsConnection> transactionsList = getTransactionsFromUser(connectionDTO);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
-
-        return TransferPageDTO.builder()
-                .connectionDTO(connectionDTO)
-                .allConnectionsList(allConnectionsList)
-                .connectionsList(connectionsList)
-                .transactionsList(transactionsList)
-                .bankAccountDTOList(bankAccountDTOList)
-                .build();
-    }
     /**
      *
      * To get the list of transactions from the user
