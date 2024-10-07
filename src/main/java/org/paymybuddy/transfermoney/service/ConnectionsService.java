@@ -252,7 +252,7 @@ public class ConnectionsService {
      *
      */
     public List<ConnectionDTO> getAllConnections(){
-        List<Connection> connectionList = connectionsRepository.findAll();
+        List<Connection> connectionList = connectionsRepository.findAllByOrderByEmailAsc();
         return connectionMapper.convertListToDTO(connectionList);
     }
 

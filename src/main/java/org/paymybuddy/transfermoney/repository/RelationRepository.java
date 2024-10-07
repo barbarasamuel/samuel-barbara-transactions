@@ -15,6 +15,6 @@ import java.util.List;
 public interface RelationRepository extends CrudRepository<Relation,Long> {
     List<Relation> findByUser(Connection user);
     List<Relation> findByConnectionFriendId(Long user);
-    List<Relation> findByUserId(Long user);
+    List<Relation> findByUserIdOrderByConnectionFriendNameAsc(Long user);
     Relation findByConnectionFriendAndUser(Connection connectionFriend, Connection user);
 }

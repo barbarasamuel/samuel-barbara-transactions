@@ -20,6 +20,6 @@ public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
 
     List<Connection> findAllByEmailNot(String email);
 
-    List<Connection> findAll();
+    List<Connection> findAllByOrderByEmailAsc();
 
 }
