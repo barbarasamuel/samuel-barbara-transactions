@@ -37,20 +37,14 @@ public class RegisterController {
                                BindingResult bindingResult,
                                Model model){
 
-       /*if (bindingResult.hasErrors()) {
+        ConnectionDTO connectionDTO = connectionsService.checkEmail(registerForm.getEmail());
+        if((connectionDTO != null) && Objects.equals(registerForm.getEmail(), connectionDTO.getEmail())){
+
+            model.addAttribute("errorMessage","This email already exists.");
             model.addAttribute("registerForm", registerForm);
-            log.error("Error in registration");
-            return "register";
-        }*/
-
-        //////////////////////////////
-
-        if(connectionsService.emailChecking(registerForm)){
-            bindingResult.rejectValue("email", null, "There is already an account registered with that email");
-            log.error("Error in registration: email already exists");
+            log.error("This email already exists.");
             return "register";
         }
-
 
         if (Objects.equals(registerForm.getPassword(), registerForm.getConfirmPassword())) {
             if (bindingResult.hasErrors()) {
@@ -65,7 +59,7 @@ public class RegisterController {
             log.error("Error in new password");
             return "register";
         }
-        /////////////////////////////
+
         registrationService.saveRegistration(registerForm);
 
         return "login";

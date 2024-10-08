@@ -246,6 +246,11 @@ public class ConnectionsService {
         return profileForm;
     }
 
+    public ConnectionDTO checkEmail(String email){
+        Connection connection = connectionsRepository.findByEmail(email);
+        return connectionMapper.convertToDTO(connection);
+    }
+
     /**
      *
      * To get all the connections
@@ -254,18 +259,6 @@ public class ConnectionsService {
     public List<ConnectionDTO> getAllConnections(){
         List<Connection> connectionList = connectionsRepository.findAllByOrderByEmailAsc();
         return connectionMapper.convertListToDTO(connectionList);
-    }
-
-    /**
-     *
-     * To know whether his/her email already exists
-     *
-     */
-    public boolean emailChecking(RegisterForm registerForm){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return Objects.equals(userDetails.getUsername(), registerForm.getEmail());
     }
 
     /**

@@ -60,6 +60,7 @@
                            th:if="${#fields.hasErrors('email')}">
                         </p>
                     </div>
+                    <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
                     <div>
                         <label for="password"></label><input
                                id="password"

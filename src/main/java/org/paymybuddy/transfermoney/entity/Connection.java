@@ -18,6 +18,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "Connection",
+                uniqueConstraints = {
+                        @UniqueConstraint(columnNames = {
+                                "email"
+                        })
+                })/**/
 public class Connection implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

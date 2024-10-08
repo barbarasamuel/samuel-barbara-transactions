@@ -99,6 +99,19 @@ public class SecurityConfiguration {
                 .build();
     }
 
+    /*
+    // Config Remember Me.
+		http.authorizeRequests().and() //
+				.rememberMe().tokenRepository(this.persistentTokenRepository()) //
+				.tokenValiditySeconds(1 * 24 * 60 * 60);
+	*/
+    /*
+    *@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+		db.setDataSource(dataSource);
+		return db;
+	}*/
     /*@Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
