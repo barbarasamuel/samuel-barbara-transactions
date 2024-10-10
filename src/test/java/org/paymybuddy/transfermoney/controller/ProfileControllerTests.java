@@ -3,6 +3,7 @@ package org.paymybuddy.transfermoney.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ProfileForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,5 +54,64 @@ public class ProfileControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("<!DOCTYPE html>")))
                 .andReturn();
+    }
+
+    @Test
+    public void updateProfileTest() throws Exception {
+        mockMvc.perform(post("/profile/updateEmail")
+                .contentType("ProfileForm"))
+                .andExpect(status().is3xxRedirection())
+                .andReturn();
+
+    }
+
+
+    @Test
+    public void badOldPasswordTest() throws Exception {
+        ProfileForm profileForm = new ProfileForm();
+        profileForm.setEmail("gerard@email.fr");
+        profileForm.setOldPassword("My@ldmdp2");
+        profileForm.setNewPassword("Mo@depa2");
+        profileForm.setConfirmPassword("Mo@depa2");
+
+        ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                .password("My-ldmdp2")
+                .email("gerard@email.fr")
+                .name("Gerard")
+                .build();
+
+        when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
+
+        mockMvc.perform(post("/profile/updatePassword")
+                .contentType("ProfileForm"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+    }
+
+    @Test
+    public void updatePasswordTest() throws Exception {
+        ProfileForm profileForm = new ProfileForm();
+        profileForm.setEmail("gerard@email.fr");
+        profileForm.setOldPassword("Mo@depa2");
+        profileForm.setNewPassword("My@dmdp2");
+        profileForm.setConfirmPassword("My@dmdp2");
+
+        ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                .password("Mo@depa2")
+                .email("gerard@email.fr")
+                .name("Gerard")
+                .build();
+
+        when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
+
+        mockMvc.perform(post("/profile/updatePassword")
+                .flashAttr("ProfileForm", profileForm)
+                .param("oldPassword", profileForm.getOldPassword())
+                .param("newPassword", profileForm.getNewPassword())
+                .param("confirmPassword", profileForm.getConfirmPassword()))
+                .andExpect(status().is3xxRedirection())
+                .andReturn();
+
     }
 }
