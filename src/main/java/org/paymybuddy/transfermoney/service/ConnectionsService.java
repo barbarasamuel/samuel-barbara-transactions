@@ -172,6 +172,11 @@ public class ConnectionsService {
         return relationService.getRelations(connectionDTO);
     }
 
+    /**
+     *
+     * To save a message
+     *
+     */
     public void addMessage(String message){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -246,6 +251,11 @@ public class ConnectionsService {
         return profileForm;
     }
 
+    /**
+     *
+     * To check whether the email exists
+     *
+     */
     public ConnectionDTO checkEmail(String email){
         Connection connection = connectionsRepository.findByEmail(email);
         return connectionMapper.convertToDTO(connection);

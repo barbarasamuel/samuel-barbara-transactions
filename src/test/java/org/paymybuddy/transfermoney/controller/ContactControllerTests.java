@@ -1,23 +1,33 @@
 package org.paymybuddy.transfermoney.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.model.ConnectionDTO;
+import org.paymybuddy.transfermoney.model.ContactDTO;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
+import org.paymybuddy.transfermoney.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,18 +42,16 @@ public class ContactControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private ContactService contactService;
 
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void newContactTest() throws Exception {
-/*
-
-        //passer un body de la requete http
-        mockMvc.perform(post("/contact/save"))
-                .andExpect(status().isCreated())
+        mockMvc.perform(MockMvcRequestBuilders.post("/contact/save")
+                .param("message", "Test"))
+                .andExpect(status().is3xxRedirection())
                 .andReturn();
-
-        verify(connectionsService,times(1)).addMessage(any());*/
     }
 
     @Test

@@ -91,4 +91,34 @@ public class ConnectionsServiceTests {
                 assertTrue(renderedHtml.contains(String.valueOf(currentRelation.getId())));
             }
         }*/
+    /*
+    @Test
+        public void addMessageTest() throws Exception {
+    // Arrange
+    ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                .name("Gerard")
+                .email("gerard@email.fr")
+                .password("Mo@depa2")
+                .build();
+
+        ContactDTO contactDTO = ContactDTO.builder()
+                .sender(connectionDTO)
+                .message("Test")
+                .build();
+
+        contactService.addedMessage(contactDTO);
+        List<RelationsConnection> connectionsList = new ArrayList<RelationsConnection>();
+
+        RelationsConnection relationsConnection1 = new RelationsConnection(3L,"Amandine");
+        RelationsConnection relationsConnection2 = new RelationsConnection(1L,"Auguste");
+        RelationsConnection relationsConnection3 = new RelationsConnection(1L,"Elise");
+        RelationsConnection relationsConnection4 = new RelationsConnection(4L,"Georgette");
+        RelationsConnection relationsConnection5 = new RelationsConnection(2L,"Gerard");
+        connectionsList.add(relationsConnection1);
+        connectionsList.add(relationsConnection2);
+        connectionsList.add(relationsConnection3);
+        connectionsList.add(relationsConnection4);
+        connectionsList.add(relationsConnection5);
+
+        when(contactService.addedMessage(contactDTO)).thenReturn(connectionsList);*/
 }
