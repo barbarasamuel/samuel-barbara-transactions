@@ -30,7 +30,7 @@ public class ContactController {
      *
      */
     @PostMapping("/contact/save")
-    public String newContact(@RequestParam("message") String message, Error error) {
+    public String newContact(@RequestParam("message") String message) {
 
         connectionsService.addMessage(message);
 

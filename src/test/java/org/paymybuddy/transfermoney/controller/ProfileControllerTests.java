@@ -33,6 +33,11 @@ public class ProfileControllerTests {
     @MockBean
     private ConnectionsService connectionsService;
 
+    /**
+     *
+     * To verify the profile page can't be accessed without the identifiers
+     *
+     */
     @Test
     public void profileSecureTest() throws Exception {
         mockMvc.perform(get("/profile"))
@@ -41,21 +46,33 @@ public class ProfileControllerTests {
 
     }
 
+    /**
+     *
+     * To verify the profile page is accessible with the identifiers
+     *
+     */
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void profileTest() throws Exception {
+        //Arrange
         ProfileForm profileForm = new ProfileForm();
         profileForm.setEmail("gerard@email.fr");
-        profileForm.setOldPassword("My@ldmdp2");
+        profileForm.setOldPassword("My@lmdp2");
 
         when(connectionsService.getProfile(any())).thenReturn(profileForm);
 
+        //Act
         mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("<!DOCTYPE html>")))
                 .andReturn();
     }
 
+    /**
+     *
+     * To verify the redirection when we modify the username
+     *
+     */
     @Test
     public void updateProfileTest() throws Exception {
         mockMvc.perform(post("/profile/updateEmail")
@@ -65,9 +82,14 @@ public class ProfileControllerTests {
 
     }
 
-
+    /**
+     *
+     * To verify we stay in the profile page when we try to modify the password with a wrong old password
+     *
+     */
     @Test
     public void badOldPasswordTest() throws Exception {
+        //Arrange
         ProfileForm profileForm = new ProfileForm();
         profileForm.setEmail("gerard@email.fr");
         profileForm.setOldPassword("My@ldmdp2");
@@ -82,6 +104,7 @@ public class ProfileControllerTests {
 
         when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
 
+        //Act
         mockMvc.perform(post("/profile/updatePassword")
                 .contentType("ProfileForm"))
                 .andExpect(status().isOk())
@@ -89,8 +112,14 @@ public class ProfileControllerTests {
 
     }
 
+    /**
+     *
+     * To verify the redirection when we modify the password with good old password and good new password
+     *
+     */
     @Test
     public void updatePasswordTest() throws Exception {
+        //Arrange
         ProfileForm profileForm = new ProfileForm();
         profileForm.setEmail("gerard@email.fr");
         profileForm.setOldPassword("Mo@depa2");
@@ -105,6 +134,7 @@ public class ProfileControllerTests {
 
         when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
 
+        //Act
         mockMvc.perform(post("/profile/updatePassword")
                 .flashAttr("ProfileForm", profileForm)
                 .param("oldPassword", profileForm.getOldPassword())

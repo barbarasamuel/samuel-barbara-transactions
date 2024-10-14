@@ -45,6 +45,11 @@ public class ContactControllerTests {
     @MockBean
     private ContactService contactService;
 
+    /**
+     *
+     * To test the redirection for private page when the user contacts the administrator
+     *
+     */
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void newContactTest() throws Exception {
@@ -54,6 +59,11 @@ public class ContactControllerTests {
                 .andReturn();
     }
 
+    /**
+     *
+     * To verify the contact page can't be accessed without the identifiers
+     *
+     */
     @Test
     public void contactSecureTest() throws Exception {
         mockMvc.perform(get("/contact"))
@@ -62,6 +72,11 @@ public class ContactControllerTests {
 
     }
 
+    /**
+     *
+     * To verify the contact page is accessible with the identifiers
+     *
+     */
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void contactTest() throws Exception {

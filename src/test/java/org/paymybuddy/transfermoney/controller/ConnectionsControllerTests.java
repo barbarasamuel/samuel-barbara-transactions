@@ -24,6 +24,11 @@ public class ConnectionsControllerTests {
     @MockBean
     ConnectionsService connectionsService;
 
+    /**
+     *
+     * To test the redirection when we add a friend
+     *
+     */
     @Test
     public void addNewConnectionTest() throws Exception {
 

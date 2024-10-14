@@ -32,6 +32,11 @@ public class RegisterControllerTests {
     /*@MockBean
     private ConnectionsService connectionsService;*/
 
+    /**
+     *
+     * To verify the register page is accessible without the identifiers
+     *
+     */
     @Test
     public void registerSecureTest() throws Exception {
         mockMvc.perform(get("/register"))
@@ -40,8 +45,12 @@ public class RegisterControllerTests {
 
     }
 
+    /**
+     *
+     * To verify the existence of the registerForm and access to the register page without the identifiers
+     *
+     */
     @Test
-    @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void registerTest() throws Exception {
 
         mockMvc.perform(get("/register"))

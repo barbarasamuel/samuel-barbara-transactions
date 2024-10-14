@@ -30,6 +30,11 @@ public class TransactionControllerTests {
     @MockBean
     private ConnectionsService connectionsService;
 
+    /**
+     *
+     * To verify the transferTest page can't be accessed without the identifiers
+     *
+     */
     @Test
     public void transferSecureTest() throws Exception {
         mockMvc.perform(get("/transfer"))
@@ -38,6 +43,11 @@ public class TransactionControllerTests {
 
     }
 
+    /**
+     *
+     * To verify the transferTest page is accessible with the identifiers
+     *
+     */
     @Test
     @WithMockUser(username="gerard@email.fr",roles={"USER"})
     public void transferTest() throws Exception {
