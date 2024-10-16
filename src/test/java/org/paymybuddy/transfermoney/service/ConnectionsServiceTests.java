@@ -1,35 +1,200 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.paymybuddy.transfermoney.controller.ConnectionsController;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.paymybuddy.transfermoney.Mapper.BankAccountMapper;
+import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.Mapper.ContactMapper;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.entity.Relation;
+import org.paymybuddy.transfermoney.entity.Contact;
+import org.paymybuddy.transfermoney.model.BankAccountDTO;
+import org.paymybuddy.transfermoney.model.ConnectionDTO;
+import org.paymybuddy.transfermoney.model.ContactDTO;
+import org.paymybuddy.transfermoney.model.ProfileForm;
+import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
-import org.paymybuddy.transfermoney.repository.RelationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.paymybuddy.transfermoney.repository.ContactRepository;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ConnectionsServiceTests {
+        @InjectMocks
+        private ConnectionsService connectionsService;
+        @Mock
+        private ConnectionsRepository connectionsRepository;
+        @Mock
+        private ConnectionMapper connectionMapper;
+        @InjectMocks
+        private ContactService contactService;
+        @Mock
+        private ContactRepository contactRepository;
+        @Mock
+        private ContactMapper contactMapper;
+
+
+        /**
+         *
+         * Should return the identifiant from the email
+         *
+         */
+        @Test
+        public void shouldGetIdentifiantTest() {
+            //Arrange
+            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                    .id(2L)
+                    .name("Gerard")
+                    .email("gerard@email.com")
+                    .password("Mo@depa2")
+                    .build();
+
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
+
+            when(connectionsRepository.findByEmail(any(String.class))).thenReturn(connection);
+            when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(connectionDTO);
+
+            //Act
+            ConnectionDTO connectionDTOResponse = connectionsService.getIdentifiant(connectionDTO.getEmail());
+
+            //Assert
+            verify(connectionsRepository,times(1)).findByEmail(connectionDTO.getEmail());
+            assertNotNull(connectionDTOResponse);
+            assertEquals(connectionDTO.getEmail(),connectionDTOResponse.getEmail());
+            assertEquals(connectionDTO.getId(),connectionDTOResponse.getId());
+
+        }
+
+        /**
+         *
+         * Should get the id creditor
+         *
+         */
+        @Test
+        public void shouldGetCreditorTest(){
+            //Arrange
+            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                    .id(2L)
+                    .name("Gerard")
+                    .email("gerard@email.com")
+                    .password("Mo@depa2")
+                    .build();
+
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
+
+            when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(connection));
+            when(connectionMapper.convertToDTO(connection)).thenReturn(connectionDTO);
+
+            //Act
+            ConnectionDTO connectionDTOResponse = connectionsService.getCreditor(2L);
+
+            //Assert
+            Mockito.verify(connectionsRepository, times(1)).findById(2L);
+            assertNotNull(connectionDTOResponse);
+            assertEquals(connectionDTO.getEmail(), connectionDTOResponse.getEmail());
+        }
+
+        /**
+         *
+         * Should call the save method to save a message
+         *
+         */
+        @Test
+        public void shouldAddMessageTest() {
+            //Arrange
+            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                    .id(2L)
+                    .name("Gerard")
+                    .email("gerard@email.com")
+                    .password("Mo@depa2")
+                    .build();
+
+            ContactDTO contactDTOTest = ContactDTO.builder()
+                    .id(8L)
+                    .sender(connectionDTO)
+                    .message("Message du test unitaire")
+                    .build();
+
+            Contact contact = contactMapper.convertToEntity(contactDTOTest);
+
+            when(connectionsService.getIdentifiant("gerard@email.com")).thenReturn(connectionDTO);
+            when(contactMapper.convertToEntity(any(ContactDTO.class))).thenReturn(contact);
+            when(contactRepository.save(any(Contact.class))).thenReturn(contact);
+
+            //Act
+            contactService.addedMessage(contactDTOTest);
+
+
+            //Contact contactTest = contactRepository.findTop1BySenderOrderByIdDesc(connection);
+
+            //Assert
+            Mockito.verify(contactRepository, times(1)).save(contact);
+        /*assertNotNull(contactTest);
+        assertEquals("Message du test unitaire",contactTest.getMessage());*/
+        }
+
+        /**
+         *
+         * Should return all the connections which are in the database
+         *
+         */
+        @Test
+        public void shouldGetAllConnectionsTest(){
+            //Arrange
+            List<Connection> connectionsList = new ArrayList<>();
+            List<ConnectionDTO> connectionsDTOList = new ArrayList<>();
+            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+                    .id(2L)
+                    .name("Gerard")
+                    .email("gerard@email.com")
+                    .password("Mo@depa2")
+                    .build();
+            Connection connection = connectionMapper.convertToEntity(connectionDTO);
+
+            connectionsList.add(connection);
+
+            ConnectionDTO connectionResponseDTO = ConnectionDTO.builder()
+                    .id(1L)
+                    .name("Auguste")
+                    .email("auguste@email.com")
+                    .password("Mo@depa1")
+                    .build();
+            connectionsDTOList.add(connectionResponseDTO);
+
+            when(connectionsRepository.findAllByOrderByEmailAsc()).thenReturn(connectionsList);
+            when(connectionMapper.convertListToDTO(connectionsList)).thenReturn(connectionsDTOList);
+
+            //Act
+            List<ConnectionDTO> connectionsDTOResponseList = connectionsService.getAllConnections();
+
+            //Assert
+            verify(connectionsRepository, times(1)).findAllByOrderByEmailAsc();
+            assertEquals(connectionsDTOList.size(),connectionsDTOResponseList.size());
+        }
+
 
        /* @Autowired
         private ConnectionsController connectionsController;

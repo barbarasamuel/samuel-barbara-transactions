@@ -211,6 +211,7 @@
 				<version>3.0.0</version>
 				<configuration>
 					<includes>
+						<include>**/*IT.java</include>
 						<include>**/*Tests.java</include>
 					</includes>
 				</configuration>

@@ -1,5 +1,6 @@
 package org.paymybuddy.transfermoney.repository;
 
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Contact;
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,4 +10,5 @@ import org.springframework.data.repository.CrudRepository;
  *
  */
 public interface ContactRepository  extends CrudRepository<Contact,Long> {
+    Contact findTop1BySenderOrderByIdDesc(Connection Sender);
 }
