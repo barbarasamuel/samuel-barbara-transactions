@@ -5,20 +5,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.paymybuddy.transfermoney.Mapper.BankAccountMapper;
-import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.Mapper.ContactMapper;
+import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.ContactMapper;
+import org.paymybuddy.transfermoney.mapper.RelationMapper;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
-import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Contact;
-import org.paymybuddy.transfermoney.model.BankAccountDTO;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.ContactDTO;
-import org.paymybuddy.transfermoney.model.ProfileForm;
-import org.paymybuddy.transfermoney.repository.BankAccountRepository;
+import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.ContactRepository;
+import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -41,6 +37,7 @@ public class ConnectionsServiceTests {
         private ConnectionsRepository connectionsRepository;
         @Mock
         private ConnectionMapper connectionMapper;
+
         @InjectMocks
         private ContactService contactService;
         @Mock
@@ -48,6 +45,12 @@ public class ConnectionsServiceTests {
         @Mock
         private ContactMapper contactMapper;
 
+        @InjectMocks
+        private RelationService relationService;
+        @Mock
+        private RelationRepository relationRepository;
+        @Mock
+        private RelationMapper relationMapper;
 
         /**
          *
@@ -116,6 +119,101 @@ public class ConnectionsServiceTests {
             assertNotNull(connectionDTOResponse);
             assertEquals(connectionDTO.getEmail(), connectionDTOResponse.getEmail());
         }
+
+    /**
+     *
+     * Should add a friend in the list
+     *
+     */
+    @Test
+    public void shouldAddConnectionTest(){
+        /*//Arrange
+        List<RelationsConnection> relationsConnectionList = new ArrayList<>();
+
+        ConnectionDTO userDTO = ConnectionDTO.builder()
+                .id(2L)
+                .name("Gerard")
+                .email("gerard@email.com")
+                .password("Mo@depa2")
+                .build();
+
+        Connection user = new Connection();
+        user.setId(2L);
+        user.setName("Gerard");
+        user.setEmail("gerard@email.com");
+        user.setPassword("Mo@depa2");
+
+        ConnectionDTO friendDTO = ConnectionDTO.builder()
+                .id(2L)
+                .name("Gerard")
+                .email("gerard@email.com")
+                .password("Mo@depa2")
+                .build();
+
+        Connection friend = new Connection();
+        friend.setId(2L);
+        friend.setName("Gerard");
+        friend.setEmail("gerard@email.com");
+        friend.setPassword("Mo@depa2");
+
+
+        RelationDTO relationDTO = RelationDTO.builder()
+                .id(1L)
+                .user(userDTO)
+                .connectionFriend(friendDTO)
+                .build();
+
+        Relation relation = new Relation();
+        relation.setId(1L);
+        relation.setUser(user);
+        relation.setConnectionFriend(friend);
+
+        Relation newRelation = new Relation();
+        relation.setUser(user);
+        relation.setConnectionFriend(friend);
+
+        relationsConnectionList.add()
+        ;
+        //getIdentifiant
+        when(connectionsRepository.findByEmail(any(String.class))).thenReturn(user);
+        when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(userDTO);
+        //getCreditor
+        when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(friend));
+        when(connectionMapper.convertToDTO(friend)).thenReturn(friendDTO);
+        //getRelation
+        when(connectionMapper.convertToEntity(any(ConnectionDTO.class))).thenReturn(friend);
+        when(connectionMapper.convertToEntity(any(ConnectionDTO.class))).thenReturn(user);
+        when(relationRepository.findByConnectionFriendAndUser(any(Connection.class), any(Connection.class))).thenReturn(relation);
+        when(relationMapper.convertToDTO(any(Relation.class))).thenReturn(relationDTO);
+        //newRelation
+        when(relationMapper.convertToEntity(any(RelationDTO.class))).thenReturn(newRelation);
+        when(relationRepository.save(any(Relation.class))).thenReturn(relation);
+        //getRelations
+        */
+        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        ConnectionDTO newConnectionDTO = getCreditor(Long.valueOf(friendName));
+
+        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO, connectionDTO);
+
+        if (foundRelationDTO != null) {
+            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
+            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
+
+        }else {
+            RelationDTO relationDTO = RelationDTO.builder()
+                    .user(connectionDTO)
+                    .connectionFriend(newConnectionDTO)
+                    .build();
+
+            relationService.newRelation(relationDTO);
+            log.info("Created relation with "+ newConnectionDTO.getEmail());
+        }*/
+
+        /*return relationService.getRelations(connectionDTO);*/
+    }
 
         /**
          *

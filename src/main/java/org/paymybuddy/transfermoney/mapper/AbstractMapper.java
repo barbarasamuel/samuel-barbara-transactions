@@ -1,4 +1,4 @@
-package org.paymybuddy.transfermoney.Mapper;
+package org.paymybuddy.transfermoney.mapper;
 
 
 import java.util.List;

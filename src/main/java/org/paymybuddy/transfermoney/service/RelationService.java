@@ -1,7 +1,7 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.Mapper.RelationMapper;
+import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.RelationMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Relation;
 import org.paymybuddy.transfermoney.model.*;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RelationService {

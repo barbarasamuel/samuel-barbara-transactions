@@ -1,27 +1,21 @@
 package org.paymybuddy.transfermoney.service;
 
 
-import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.Mapper.TransactionMapper;
+import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
-import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

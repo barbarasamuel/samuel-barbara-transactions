@@ -1,4 +1,4 @@
-package org.paymybuddy.transfermoney.Mapper;
+package org.paymybuddy.transfermoney.mapper;
 
 import org.mapstruct.Mapper;
 import org.paymybuddy.transfermoney.entity.Connection;

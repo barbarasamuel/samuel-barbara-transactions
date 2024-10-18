@@ -2,7 +2,7 @@ package org.paymybuddy.transfermoney.service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 @Slf4j
 @Service

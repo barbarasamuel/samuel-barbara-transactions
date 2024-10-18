@@ -2,8 +2,8 @@ package org.paymybuddy.transfermoney.service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.Mapper.BankAccountMapper;
-import org.paymybuddy.transfermoney.Mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
+import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.BankAccountDTO;

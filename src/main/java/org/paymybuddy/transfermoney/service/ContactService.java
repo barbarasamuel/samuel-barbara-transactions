@@ -1,6 +1,6 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.paymybuddy.transfermoney.Mapper.ContactMapper;
+import org.paymybuddy.transfermoney.mapper.ContactMapper;
 import org.paymybuddy.transfermoney.entity.Contact;
 import org.paymybuddy.transfermoney.model.ContactDTO;
 import org.paymybuddy.transfermoney.repository.ContactRepository;
