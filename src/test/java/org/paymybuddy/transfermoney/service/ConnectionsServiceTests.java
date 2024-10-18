@@ -60,12 +60,12 @@ public class ConnectionsServiceTests {
         @Test
         public void shouldGetIdentifiantTest() {
             //Arrange
-            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
                     .id(2L)
                     .name("Gerard")
                     .email("gerard@email.com")
                     .password("Mo@depa2")
-                    .build();
+                    .build();*/
 
             Connection connection = new Connection();
             connection.setId(2L);
@@ -74,16 +74,16 @@ public class ConnectionsServiceTests {
             connection.setPassword("Mo@depa2");
 
             when(connectionsRepository.findByEmail(any(String.class))).thenReturn(connection);
-            when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(connectionDTO);
+            //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(connectionDTO);
 
             //Act
-            ConnectionDTO connectionDTOResponse = connectionsService.getIdentifiant(connectionDTO.getEmail());
+            Connection connectionResponse = connectionsService.getIdentifiant(connection.getEmail());
 
             //Assert
-            verify(connectionsRepository,times(1)).findByEmail(connectionDTO.getEmail());
-            assertNotNull(connectionDTOResponse);
-            assertEquals(connectionDTO.getEmail(),connectionDTOResponse.getEmail());
-            assertEquals(connectionDTO.getId(),connectionDTOResponse.getId());
+            verify(connectionsRepository,times(1)).findByEmail(connection.getEmail());
+            assertNotNull(connectionResponse);
+            assertEquals(connection.getEmail(),connectionResponse.getEmail());
+            assertEquals(connection.getId(),connectionResponse.getId());
 
         }
 
@@ -95,12 +95,12 @@ public class ConnectionsServiceTests {
         @Test
         public void shouldGetCreditorTest(){
             //Arrange
-            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
                     .id(2L)
                     .name("Gerard")
                     .email("gerard@email.com")
                     .password("Mo@depa2")
-                    .build();
+                    .build();*/
 
             Connection connection = new Connection();
             connection.setId(2L);
@@ -109,15 +109,15 @@ public class ConnectionsServiceTests {
             connection.setPassword("Mo@depa2");
 
             when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(connection));
-            when(connectionMapper.convertToDTO(connection)).thenReturn(connectionDTO);
+            //when(connectionMapper.convertToDTO(connection)).thenReturn(connectionDTO);
 
             //Act
-            ConnectionDTO connectionDTOResponse = connectionsService.getCreditor(2L);
+            Connection connectionResponse = connectionsService.getCreditor(2L);
 
             //Assert
             Mockito.verify(connectionsRepository, times(1)).findById(2L);
-            assertNotNull(connectionDTOResponse);
-            assertEquals(connectionDTO.getEmail(), connectionDTOResponse.getEmail());
+            assertNotNull(connectionResponse);
+            assertEquals(connection.getEmail(), connectionResponse.getEmail());
         }
 
     /**
@@ -223,33 +223,42 @@ public class ConnectionsServiceTests {
         @Test
         public void shouldAddMessageTest() {
             //Arrange
-            ConnectionDTO connectionDTO = ConnectionDTO.builder()
+            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
                     .id(2L)
                     .name("Gerard")
                     .email("gerard@email.com")
                     .password("Mo@depa2")
-                    .build();
+                    .build();*/
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
 
-            ContactDTO contactDTOTest = ContactDTO.builder()
+            /*ContactDTO contactDTOTest = ContactDTO.builder()
                     .id(8L)
                     .sender(connectionDTO)
                     .message("Message du test unitaire")
-                    .build();
+                    .build();*/
+            Contact contactTest = new Contact();
+            contactTest.setId(8L);
+            contactTest.setSender(connection);
+            contactTest.setMessage("Message du test unitaire");
 
-            Contact contact = contactMapper.convertToEntity(contactDTOTest);
+            //Contact contact = contactMapper.convertToEntity(contactDTOTest);
 
-            when(connectionsService.getIdentifiant("gerard@email.com")).thenReturn(connectionDTO);
-            when(contactMapper.convertToEntity(any(ContactDTO.class))).thenReturn(contact);
-            when(contactRepository.save(any(Contact.class))).thenReturn(contact);
+            when(connectionsService.getIdentifiant("gerard@email.com")).thenReturn(connection);
+            //when(contactMapper.convertToEntity(any(Contact.class))).thenReturn(contact);
+            when(contactRepository.save(any(Contact.class))).thenReturn(contactTest);
 
             //Act
-            contactService.addedMessage(contactDTOTest);
+            contactService.addedMessage(contactTest);
 
 
             //Contact contactTest = contactRepository.findTop1BySenderOrderByIdDesc(connection);
 
             //Assert
-            Mockito.verify(contactRepository, times(1)).save(contact);
+            Mockito.verify(contactRepository, times(1)).save(contactTest);
         /*assertNotNull(contactTest);
         assertEquals("Message du test unitaire",contactTest.getMessage());*/
         }
@@ -263,34 +272,40 @@ public class ConnectionsServiceTests {
         public void shouldGetAllConnectionsTest(){
             //Arrange
             List<Connection> connectionsList = new ArrayList<>();
-            List<ConnectionDTO> connectionsDTOList = new ArrayList<>();
+            /*List<ConnectionDTO> connectionsDTOList = new ArrayList<>();
             ConnectionDTO connectionDTO = ConnectionDTO.builder()
                     .id(2L)
                     .name("Gerard")
                     .email("gerard@email.com")
                     .password("Mo@depa2")
                     .build();
-            Connection connection = connectionMapper.convertToEntity(connectionDTO);
+            Connection connection = connectionMapper.convertToEntity(connectionDTO);*/
+
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
 
             connectionsList.add(connection);
 
-            ConnectionDTO connectionResponseDTO = ConnectionDTO.builder()
+            /*ConnectionDTO connectionResponseDTO = ConnectionDTO.builder()
                     .id(1L)
                     .name("Auguste")
                     .email("auguste@email.com")
                     .password("Mo@depa1")
                     .build();
-            connectionsDTOList.add(connectionResponseDTO);
+            connectionsDTOList.add(connectionResponseDTO);*/
 
             when(connectionsRepository.findAllByOrderByEmailAsc()).thenReturn(connectionsList);
-            when(connectionMapper.convertListToDTO(connectionsList)).thenReturn(connectionsDTOList);
+            //when(connectionMapper.convertListToDTO(connectionsList)).thenReturn(connectionsDTOList);
 
             //Act
             List<ConnectionDTO> connectionsDTOResponseList = connectionsService.getAllConnections();
 
             //Assert
             verify(connectionsRepository, times(1)).findAllByOrderByEmailAsc();
-            assertEquals(connectionsDTOList.size(),connectionsDTOResponseList.size());
+            assertEquals(connectionsList.size(),connectionsDTOResponseList.size());
         }
 
 

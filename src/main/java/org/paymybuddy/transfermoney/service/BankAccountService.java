@@ -1,9 +1,9 @@
 package org.paymybuddy.transfermoney.service;
 
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.model.BankAccountDTO;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,12 @@ public class BankAccountService {
      * To get the connection bank account
      *
      */
-    public BankAccountDTO getConnectionAccount(Long id){
+    public BankAccount getConnectionAccount(Long id){
 
-        Optional bankAccountOptional = bankAccountRepository.findById(id);
-        BankAccount bankAccount = (BankAccount) bankAccountOptional.get();
-        return bankAccountMapper.convertToDTO(bankAccount);
+        Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(id);
+
+        return (BankAccount) bankAccountOptional.get();
+        //return bankAccountMapper.convertToDTO(bankAccount);
 
     }
 
@@ -38,9 +39,9 @@ public class BankAccountService {
      * To calculate the new debtor balance
      *
      */
-    public Double updateDebtorAccount(BankAccountDTO debtorAccountDTO, Double amount) {
+    public Double updateDebtorAccount(BankAccount debtorAccount, Double amount) {
 
-        Double balanceWithTransaction = debtorAccountDTO.getBalance() - amount;
+        Double balanceWithTransaction = debtorAccount.getBalance() - amount;
         Double finalBalance = balanceWithTransaction - (amount*0.5/100);
         finalBalance = Math.round(finalBalance * Math.pow(10,2)) / Math.pow(10,2);
 
@@ -52,9 +53,9 @@ public class BankAccountService {
      * To calculate the new creditor balance
      *
      */
-    public Double updateCreditorAccount(BankAccountDTO creditorAccountDTO,Double amount){
+    public Double updateCreditorAccount(BankAccount creditorAccount,Double amount){
 
-        Double finalBalance = creditorAccountDTO.getBalance() + amount;
+        Double finalBalance = creditorAccount.getBalance() + amount;
         finalBalance = Math.round(finalBalance * Math.pow(10,2)) / Math.pow(10,2);
 
         return finalBalance;
@@ -65,9 +66,9 @@ public class BankAccountService {
      * To save or update the new balance
      *
      */
-    public void saveBankAccount(BankAccountDTO bankAccountDTO){
+    public void saveBankAccount(BankAccount bankAccount){
 
-        BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
+        //BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
         bankAccountRepository.save(bankAccount);
     }
 
@@ -76,9 +77,9 @@ public class BankAccountService {
      * To get the user accounts list
      *
      */
-    public List<BankAccountDTO> getUserAccountsList(ConnectionDTO connectionDTO){
+    public List<BankAccountDTO> getUserAccountsList(Connection connection){
 
-        List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connectionDTO.getId());
+        List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
         return bankAccountMapper.convertListToDTO(bankAccountList);
 
     }

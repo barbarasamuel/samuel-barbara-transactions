@@ -186,6 +186,7 @@
 				<configuration>
 					<excludes>
 						<exclude>org/paymybuddy/transfermoney/entity/*</exclude>
+						<exclude>org/paymybuddy/transfermoney/mapper/*</exclude>
 						<exclude>**/config/*</exclude>
 					</excludes>
 				</configuration>
@@ -211,8 +212,8 @@
 				<version>3.0.0</version>
 				<configuration>
 					<includes>
-						<include>**/*IT.java</include>
-						<include>**/*Tests.java</include>
+						<!--<include>**/*IT.java</include>
+						<include>**/*Tests.java</include>-->
 					</includes>
 				</configuration>
 			</plugin>

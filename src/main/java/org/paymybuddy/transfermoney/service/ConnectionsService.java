@@ -2,9 +2,8 @@ package org.paymybuddy.transfermoney.service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.paymybuddy.transfermoney.entity.*;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,41 +34,47 @@ public class ConnectionsService {
     BankAccountService bankAccountService;
     @Transactional
     public List <TransactionDTO> saveTransaction(TransactionForm transactionForm){
-        ConnectionDTO creditorDTO = getCreditor(transactionForm.getId());
+        Connection creditor = getCreditor(transactionForm.getId());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO debtorDTO = getIdentifiant(userDetails.getUsername());
+        Connection debtor = getIdentifiant(userDetails.getUsername());
 
-        TransactionDTO transactionDTO = TransactionDTO.builder()
+        /*TransactionDTO transactionDTO = TransactionDTO.builder()
                 .creditor(creditorDTO)
                 .debtor(debtorDTO)
-                .description(transactionForm.getDescription())
-                .amount(transactionForm.getAmount())
-                .transactionDate(new Date())
-                .build();
+                .description()
+                .amount()
+                .transactionDate()
+                .build();*/
+        Transactions transactions = new Transactions();
+        transactions.setCreditor(creditor);
+        transactions.setDebtor(debtor);
+        transactions.setDescription(transactionForm.getDescription());
+        transactions.setAmount(transactionForm.getAmount());
+        transactions.setTransactionDate(new Date());
 
-        TransactionDTO newTransactionDTO = transactionsService.saveTransaction(transactionDTO);
+        Transactions newTransaction = transactionsService.saveTransaction(transactions);
 
-        BankAccountDTO debtorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
-        Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccountDTO,transactionForm.getAmount());
+        BankAccount debtorAccount = bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount());
+        Double updatedDebtorBalance = bankAccountService.updateDebtorAccount(debtorAccount,transactionForm.getAmount());
 
-        debtorAccountDTO.setId(transactionForm.getIdDebtorAccount());
-        debtorAccountDTO.setConnectionBankAccount(debtorDTO);
-        debtorAccountDTO.setBalance(updatedDebtorBalance);
-        bankAccountService.saveBankAccount(debtorAccountDTO);
+        debtorAccount.setId(transactionForm.getIdDebtorAccount());
+        debtorAccount.setConnectionBankAccount(debtor);
+        debtorAccount.setBalance(updatedDebtorBalance);
+        bankAccountService.saveBankAccount(debtorAccount);
 
-        BankAccountDTO creditorAccountDTO = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
-        Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccountDTO,transactionForm.getAmount());
+        BankAccount creditorAccount = bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount());
+        Double updatedCreditorBalance = bankAccountService.updateCreditorAccount(creditorAccount,transactionForm.getAmount());
 
-        creditorAccountDTO.setId(transactionForm.getIdCreditorAccount());
-        creditorAccountDTO.setConnectionBankAccount(creditorDTO);
-        creditorAccountDTO.setBalance(updatedCreditorBalance);
-        bankAccountService.saveBankAccount(creditorAccountDTO);
+        creditorAccount.setId(transactionForm.getIdCreditorAccount());
+        creditorAccount.setConnectionBankAccount(creditor);
+        creditorAccount.setBalance(updatedCreditorBalance);
+        bankAccountService.saveBankAccount(creditorAccount);
 
         log.info("Transaction successful");
 
-        return transactionsService.getTransactions(debtorDTO.getId());
+        return transactionsService.getTransactions(debtor.getId());
     }
 
     /**
@@ -82,16 +87,18 @@ public class ConnectionsService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        Connection connection = getIdentifiant(userDetails.getUsername());
 
-        Page<Transactions> page = transactionsService.findPaginated(connectionDTO, pageNo, pageSize, sortField, sortDir);
+        Page<Transactions> page = transactionsService.findPaginated(connection, pageNo, pageSize, sortField, sortDir);
         List < Transactions > transactionsList = page.getContent();
 
         List<ConnectionDTO> allConnectionsList = getAllConnections();
-        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+        List<RelationsConnection> connectionsList = relationService.getRelations(connection);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connection);
 
-        ManagePaginationDTO managePaginationDTO = ManagePaginationDTO.builder()
+        ConnectionDTO connectionDTO = connectionMapper.convertToDTO(connection);
+
+        return ManagePaginationDTO.builder()
                 .allConnectionsList(allConnectionsList)
                 .connectionsList(connectionsList)
                 .connectionDTO(connectionDTO)
@@ -99,8 +106,6 @@ public class ConnectionsService {
                 .page(page)
                 .transactionsList(transactionsList)
                 .build();
-
-        return managePaginationDTO;
     }
 
     /**
@@ -112,12 +117,13 @@ public class ConnectionsService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        Connection connection = getIdentifiant(userDetails.getUsername());
         List<ConnectionDTO> allConnectionsList = getAllConnections();
-        List<RelationsConnection> connectionsList = relationService.getRelations(connectionDTO);
-        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connectionDTO);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connectionDTO);
+        List<RelationsConnection> connectionsList = relationService.getRelations(connection);
+        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connection);
+        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connection);
 
+        ConnectionDTO connectionDTO = connectionMapper.convertToDTO(connection);
         return TransferPageDTO.builder()
                 .connectionDTO(connectionDTO)
                 .allConnectionsList(allConnectionsList)
@@ -133,8 +139,8 @@ public class ConnectionsService {
      *
      */
     public List<BankAccountDTO> fillDropdown(Long selectedValue) {
-        ConnectionDTO connectionDTO = getCreditor(selectedValue);
-        return bankAccountService.getUserAccountsList(connectionDTO);
+        Connection connection = getCreditor(selectedValue);
+        return bankAccountService.getUserAccountsList(connection);
     }
 
     /**
@@ -149,26 +155,29 @@ public class ConnectionsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
-        ConnectionDTO newConnectionDTO = getCreditor(Long.valueOf(friendName));
+        Connection connection = getIdentifiant(userDetails.getUsername());
+        Connection newConnection = getCreditor(Long.valueOf(friendName));
 
-        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO, connectionDTO);
+        Relation foundRelation = relationService.getRelation(newConnection, connection);
 
-        if (foundRelationDTO != null) {
+        if (foundRelation != null) {
             //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
-            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
+            log.error("There is already a relation with "+ newConnection.getEmail());
 
         }else {
-            RelationDTO relationDTO = RelationDTO.builder()
-                    .user(connectionDTO)
-                    .connectionFriend(newConnectionDTO)
-                    .build();
+            /*RelationDTO relationDTO = RelationDTO.builder()
+                    .user(DTO)
+                    .connectionFriend(DTO)
+                    .build();*/
+            Relation relation = new Relation();
+            relation.setUser(connection);
+            relation.setConnectionFriend(newConnection);
 
-            relationService.newRelation(relationDTO);
-            log.info("Created relation with "+ newConnectionDTO.getEmail());
+            relationService.newRelation(relation);
+            log.info("Created relation with "+ newConnection.getEmail());
         }
 
-        return relationService.getRelations(connectionDTO);
+        return relationService.getRelations(connection);
     }
 
     /**
@@ -181,14 +190,18 @@ public class ConnectionsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        Connection connection = getIdentifiant(userDetails.getUsername());
 
-        ContactDTO contactDTO = ContactDTO.builder()
+        /*ContactDTO contactDTO = ContactDTO.builder()
                 .sender(connectionDTO)
                 .message(message)
-                .build();
+                .build();*/
 
-        contactService.addedMessage(contactDTO);
+        Contact contact = new Contact();
+        contact.setSender(connection);
+        contact.setMessage(message);
+
+        contactService.addedMessage(contact);
 
         log.info("New message");
     }
@@ -202,10 +215,10 @@ public class ConnectionsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
-        connectionDTO.setEmail(profileForm.getEmail());
+        Connection connection = getIdentifiant(userDetails.getUsername());
+        connection.setEmail(profileForm.getEmail());
 
-        updatedConnection(connectionDTO);
+        updatedConnection(connection);
 
         log.info("Modified email");
     }
@@ -215,20 +228,21 @@ public class ConnectionsService {
      * To update the password
      *
      */
-    public ConnectionDTO passwordUpdatingStart(ProfileForm profileForm, BindingResult bindingResult){
+    public ConnectionDTO passwordUpdatingStart(ProfileForm profileForm){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
-        profileForm.setEmail(connectionDTO.getEmail());
+        Connection connection = getIdentifiant(userDetails.getUsername());
+        profileForm.setEmail(connection.getEmail());
 
-        return connectionDTO;
+        return connectionMapper.convertToDTO(connection);
     }
 
     public void passwordUpdatingFollowing(ConnectionDTO connectionDTO, ProfileForm profileForm){
-        connectionDTO.setPassword(profileForm.getConfirmPassword());
-
-        updatedConnection(connectionDTO);
+        //connectionDTO.setPassword(profileForm.getConfirmPassword());
+        Connection connection = connectionMapper.convertToEntity(connectionDTO);
+        connection.setPassword(profileForm.getConfirmPassword());
+        updatedConnection(connection);
 
         log.info("Modified password");
     }
@@ -242,10 +256,10 @@ public class ConnectionsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
+        Connection connection = getIdentifiant(userDetails.getUsername());
 
-        profileForm.setEmail(connectionDTO.getEmail());
-        profileForm.setOldPassword(connectionDTO.getPassword());
+        profileForm.setEmail(connection.getEmail());
+        profileForm.setOldPassword(connection.getPassword());
 
         return profileForm;
     }
@@ -275,9 +289,9 @@ public class ConnectionsService {
      * To get a connection thanks to his/her email
      *
      */
-    public ConnectionDTO getIdentifiant(String email){
-        Connection connection = connectionsRepository.findByEmail(email);
-        return connectionMapper.convertToDTO(connection);
+    public Connection getIdentifiant(String email){
+        return connectionsRepository.findByEmail(email);
+        //return connectionMapper.convertToDTO(connection);
     }
 
 
@@ -286,9 +300,10 @@ public class ConnectionsService {
      * To get a connection thanks to his/her id
      *
      */
-    public ConnectionDTO getCreditor(Long id){
+    public Connection getCreditor(Long id){
         Optional<Connection> connection = connectionsRepository.findById(id);
-        return connectionMapper.convertToDTO(connection.get());
+        return connection.get();
+        //return connectionMapper.convertToDTO(connection.get());
     }
 
     /**
@@ -308,8 +323,8 @@ public class ConnectionsService {
      * To update a connection
      *
      */
-    public void updatedConnection(ConnectionDTO connectionDTO) {
-        Connection connection = connectionMapper.convertToEntity(connectionDTO);
+    public void updatedConnection(Connection connection) {
+        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
         connectionsRepository.save(connection);
     }
 

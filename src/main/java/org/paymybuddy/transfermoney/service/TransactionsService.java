@@ -33,13 +33,13 @@ public class TransactionsService {
      * To save a new transaction
      *
      */
-    public TransactionDTO saveTransaction(TransactionDTO transactionDTO) {
-        Transactions transactions = transactionMapper.convertToEntity(transactionDTO);
+    public Transactions saveTransaction(Transactions transaction) {
+        //Transactions transactions = transactionMapper.convertToEntity(transactionDTO);
 
 
-        transactions = transactionsRepository.save(transactions);
+        return transactionsRepository.save(transaction);
 
-        return transactionMapper.convertToDTO(transactions);
+        //return transactionMapper.convertToDTO(transactions);
     }
 
     /**
@@ -68,17 +68,26 @@ public class TransactionsService {
      * To get the user transactions
      *
      */
-    public List<TransactionsConnection> getTransactionsFromUser(ConnectionDTO user){
+    public List<TransactionsConnection> getTransactionsFromUser(Connection user){
 
         List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
         List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(user.getId());
-        List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
+        /*List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
         for(TransactionDTO transactionDTO:transactionsDTOList){
             TransactionsConnection transactionsConnection = new TransactionsConnection(
                     transactionDTO.getTransactionDate(),
                     transactionDTO.getCreditor().getName(),
                     transactionDTO.getDescription(),
                     transactionDTO.getAmount()
+            );
+            transactionsConnectionList.add(transactionsConnection);
+        }*/
+        for(Transactions transaction:transactionsEntityList){
+            TransactionsConnection transactionsConnection = new TransactionsConnection(
+                    transaction.getTransactionDate(),
+                    transaction.getCreditor().getName(),
+                    transaction.getDescription(),
+                    transaction.getAmount()
             );
             transactionsConnectionList.add(transactionsConnection);
         }
@@ -91,16 +100,15 @@ public class TransactionsService {
      * To manage the pagination by page and sorted by date by default
      *
      */
-    public Page<Transactions> findPaginated(ConnectionDTO debtorDTO, int pageNo, int pageSize, String sortField, String sortDirection){
+    public Page<Transactions> findPaginated(Connection debtor, int pageNo, int pageSize, String sortField, String sortDirection){
 
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortField).descending() :
                 Sort.by(sortField).ascending();
 
         Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Connection debtor = connectionMapper.convertToEntity(debtorDTO);
-        Page<Transactions> transactions = transactionsRepository.findAllByDebtor(debtor,pageable);
-        return transactions;
+        //Connection debtor = connectionMapper.convertToEntity(debtor);
+        return transactionsRepository.findAllByDebtor(debtor,pageable);
     }
 
 }

@@ -26,15 +26,23 @@ public class RelationService {
      * To get the list of friends
      *
      */
-    public List<RelationsConnection> getRelations(ConnectionDTO user){
+    public List<RelationsConnection> getRelations(Connection user){
 
         List<RelationsConnection> relationsConnectionList = new ArrayList<>();
         List<Relation> relationsEntityList = relationRepository.findByUserIdOrderByConnectionFriendNameAsc(user.getId());
-        List<RelationDTO> relationsDTOList= relationMapper.convertListToDTO(relationsEntityList);
+        /*List<RelationDTO> relationsDTOList= relationMapper.convertListToDTO(relationsEntityList);
         for(RelationDTO relationDTO:relationsDTOList){
             RelationsConnection relationsConnection = new RelationsConnection(
                     relationDTO.getConnectionFriend().getId(),
                     relationDTO.getConnectionFriend().getName()
+            );
+            relationsConnectionList.add(relationsConnection);
+        }*/
+
+        for(Relation relation:relationsEntityList){
+            RelationsConnection relationsConnection = new RelationsConnection(
+                    relation.getConnectionFriend().getId(),
+                    relation.getConnectionFriend().getName()
             );
             relationsConnectionList.add(relationsConnection);
         }
@@ -47,15 +55,15 @@ public class RelationService {
      * To create a new relation
      *
      */
-    public void newRelation(RelationDTO relationDTO){
-        Relation relation = relationMapper.convertToEntity(relationDTO);
+    public void newRelation(Relation relation){
+        //Relation relation = relationMapper.convertToEntity(relationDTO);
         relationRepository.save(relation);
     }
 
-    public RelationDTO getRelation(ConnectionDTO connectionFriendDTO, ConnectionDTO connectionUserDTO){
-        Connection connectionFriend = connectionMapper.convertToEntity(connectionFriendDTO);
-        Connection connectionUser = connectionMapper.convertToEntity(connectionUserDTO);
-        Relation relation = relationRepository.findByConnectionFriendAndUser(connectionFriend, connectionUser);
-        return relationMapper.convertToDTO(relation);
+    public Relation getRelation(Connection connectionFriend, Connection connectionUser){
+        /*Connection connectionFriend = connectionMapper.convertToEntity(connectionFriend);
+        Connection connectionUser = connectionMapper.convertToEntity(connectionUser);*/
+        return relationRepository.findByConnectionFriendAndUser(connectionFriend, connectionUser);
+        //return relationMapper.convertToDTO(relation);
     }
 }

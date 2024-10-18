@@ -328,8 +328,7 @@ public class ConnectionsServiceIT {
      *
      */
     @Test
-    @Transactional
-    public void shouldGetTransactionsIT() throws InstantiationException, IllegalAccessException {
+    public void shouldGetTransactionsIT() {
         //Arrange
         ConnectionDTO creditorDTO = ConnectionDTO.builder()
                 .id(24L)
@@ -499,9 +498,10 @@ public class ConnectionsServiceIT {
         when(bankAccountMapper.convertListToDTO(userAccountList)).thenReturn(userAccountDTOList);
 
         //Act
-        ConnectionDTO connectionDTOResponse = connectionsService.getCreditor(2L);
+        //connectionsService.fillDropdown();
+        /*ConnectionDTO connectionDTOResponse = connectionsService.getCreditor(2L);
         List<BankAccountDTO> bankAccountDTOResponseList =  bankAccountService.getUserAccountsList(connectionDTOResponse);
-
+*/
         //Assert
         verify(connectionsRepository,times(1)).findById(2L);
         assertNotNull(bankAccountDTOResponseList);

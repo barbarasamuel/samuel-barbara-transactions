@@ -33,15 +33,19 @@ public class RegistrationService {
      */
     @Transactional
     public void saveRegistration(RegisterForm registerForm){
-        ConnectionDTO connectionDTO = ConnectionDTO.builder()
+        /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
                 .email(registerForm.getEmail())
                 .name(registerForm.getName())
                 .password((registerForm.getPassword()))
-                .build();
+                .build();*/
+        Connection connection = new Connection();
+        connection.setEmail(registerForm.getEmail());
+        connection.setName(registerForm.getName());
+        connection.setPassword(registerForm.getPassword());
 
-        ConnectionDTO newConnectionDTO = saveConnection(connectionDTO);
+        Connection newConnection = saveConnection(connection);
 
-        saveBankAccount(newConnectionDTO);
+        saveBankAccount(newConnection);
 
         log.info("New user created");
     }
@@ -51,12 +55,12 @@ public class RegistrationService {
      * To add a new user
      *
      */
-    public ConnectionDTO saveConnection(ConnectionDTO connectionDTO){
+    public Connection saveConnection(Connection connection){
 
-        Connection connection = connectionMapper.convertToEntity(connectionDTO);
-        connection = connectionsRepository.save(connection);
+        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
+        return connectionsRepository.save(connection);
 
-        return connectionMapper.convertToDTO(connection);
+        //return connectionMapper.convertToDTO(connection);
 
     }
 
@@ -65,15 +69,18 @@ public class RegistrationService {
      * To create a bank account for a new user
      *
      */
-    public void saveBankAccount(ConnectionDTO connectionDTO){
+    public void saveBankAccount(Connection connection){
 
-        Connection connection = connectionMapper.convertToEntity(connectionDTO);
+        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
 
-        BankAccountDTO bankAccountDTO = BankAccountDTO.builder()
+        /*BankAccountDTO bankAccountDTO = BankAccountDTO.builder()
                 .balance(50.00)
-                .build();
+                .build();*/
 
-        BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setBalance(50.00);
+
+        //BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
         bankAccount.setConnectionBankAccount(connection);
         bankAccountRepository.save(bankAccount);
     }

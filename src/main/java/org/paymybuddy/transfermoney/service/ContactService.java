@@ -21,10 +21,10 @@ public class ContactService {
      * To save a new message
      *
      */
-    public void addedMessage(ContactDTO newContactDTO){
+    public void addedMessage(Contact newContact){
 
-        Contact contact = contactMapper.convertToEntity(newContactDTO);
-        contactRepository.save(contact);
+        //Contact contact = contactMapper.convertToEntity(newContactDTO);
+        contactRepository.save(newContact);
 
     }
 }

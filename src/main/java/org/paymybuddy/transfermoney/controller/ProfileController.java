@@ -64,7 +64,7 @@ public class ProfileController {
     @PostMapping("/profile/updatePassword")
     public String updatePassword(@Valid @ModelAttribute("profileForm") ProfileForm profileForm, BindingResult bindingResult, Model model){
 
-        ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm, bindingResult);
+        ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm);
 
         if (Objects.equals(connectionDTO.getPassword(), profileForm.getOldPassword())){
             if (Objects.equals(profileForm.getNewPassword(), profileForm.getConfirmPassword())) {

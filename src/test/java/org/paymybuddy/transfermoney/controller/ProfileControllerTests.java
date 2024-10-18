@@ -102,7 +102,7 @@ public class ProfileControllerTests {
                 .name("Gerard")
                 .build();
 
-        when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
+        when(connectionsService.passwordUpdatingStart(any())).thenReturn(connectionDTO);
 
         //Act
         mockMvc.perform(post("/profile/updatePassword")
@@ -132,7 +132,7 @@ public class ProfileControllerTests {
                 .name("Gerard")
                 .build();
 
-        when(connectionsService.passwordUpdatingStart(any(),any())).thenReturn(connectionDTO);
+        when(connectionsService.passwordUpdatingStart(any())).thenReturn(connectionDTO);
 
         //Act
         mockMvc.perform(post("/profile/updatePassword")
