@@ -52,6 +52,22 @@ public class ConnectionsServiceTests {
         @Mock
         private RelationMapper relationMapper;
 
+        @Test
+        public void shoulfSave(){
+            //Arrange
+            TransactionForm transactionForm = new TransactionForm();
+            transactionForm.setIdCreditorAccount(24L);
+            transactionForm.setDescription("Restaurant");
+            transactionForm.setIdDebtorAccount(2L);
+            transactionForm.setAmount(14.00);
+
+            //Act
+            List <TransactionDTO> transactionsList = connectionsService.saveTransaction(transactionForm);
+
+            //
+            assertNotNull(transactionsList);
+        }
+
         /**
          *
          * Should return the identifiant from the email

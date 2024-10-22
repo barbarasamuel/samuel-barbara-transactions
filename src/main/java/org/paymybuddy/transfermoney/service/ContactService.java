@@ -23,7 +23,6 @@ public class ContactService {
      */
     public void addedMessage(Contact newContact){
 
-        //Contact contact = contactMapper.convertToEntity(newContactDTO);
         contactRepository.save(newContact);
 
     }

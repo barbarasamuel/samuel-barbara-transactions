@@ -34,12 +34,9 @@ public class TransactionsService {
      *
      */
     public Transactions saveTransaction(Transactions transaction) {
-        //Transactions transactions = transactionMapper.convertToEntity(transactionDTO);
-
 
         return transactionsRepository.save(transaction);
 
-        //return transactionMapper.convertToDTO(transactions);
     }
 
     /**
@@ -47,20 +44,9 @@ public class TransactionsService {
      * To get the list of transactions from the user
      *
      */
-    public List<TransactionDTO> getTransactions(Long idDebtorAccount){
-        List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
-        List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(idDebtorAccount);
-        List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
-        for(TransactionDTO transactionDTO:transactionsDTOList){
-            TransactionsConnection transactionsConnection = new TransactionsConnection(
-                    transactionDTO.getTransactionDate(),
-                    transactionDTO.getCreditor().getName(),
-                    transactionDTO.getDescription(),
-                    transactionDTO.getAmount()
-            );
-            transactionsConnectionList.add(transactionsConnection);
-        }
-        return transactionMapper.convertListToDTO(transactionsEntityList);
+    public List<Transactions> getTransactions(Long idDebtorAccount){
+
+        return transactionsRepository.findByDebtorId(idDebtorAccount);
     }
 
     /**
@@ -72,16 +58,7 @@ public class TransactionsService {
 
         List<TransactionsConnection> transactionsConnectionList = new ArrayList<>();
         List<Transactions> transactionsEntityList = transactionsRepository.findByDebtorId(user.getId());
-        /*List<TransactionDTO> transactionsDTOList= transactionMapper.convertListToDTO(transactionsEntityList);
-        for(TransactionDTO transactionDTO:transactionsDTOList){
-            TransactionsConnection transactionsConnection = new TransactionsConnection(
-                    transactionDTO.getTransactionDate(),
-                    transactionDTO.getCreditor().getName(),
-                    transactionDTO.getDescription(),
-                    transactionDTO.getAmount()
-            );
-            transactionsConnectionList.add(transactionsConnection);
-        }*/
+
         for(Transactions transaction:transactionsEntityList){
             TransactionsConnection transactionsConnection = new TransactionsConnection(
                     transaction.getTransactionDate(),
@@ -107,7 +84,7 @@ public class TransactionsService {
 
         Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        //Connection debtor = connectionMapper.convertToEntity(debtor);
+
         return transactionsRepository.findAllByDebtor(debtor,pageable);
     }
 

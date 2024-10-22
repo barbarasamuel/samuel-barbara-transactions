@@ -93,9 +93,10 @@ public class SecurityConfiguration {
                         .failureHandler(new AuthenticationFailureHandlerCustom()))
                 .logout(httpSecurityLogoutConfigurer ->
                         httpSecurityLogoutConfigurer.logoutUrl("/logout"))
+                .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret").tokenValiditySeconds(120))
                 /*http.authorizeRequests().and()
                 .rememberMe().tokenRepository(this.persistentTokenRepository())
-                .tokenValiditySeconds(365 * 24 * 60 * 60);*/
+                .tokenValiditySeconds(1 * 1 * 2 * 60);*/
                 .build();
     }
 

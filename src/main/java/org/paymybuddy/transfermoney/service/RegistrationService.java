@@ -71,16 +71,9 @@ public class RegistrationService {
      */
     public void saveBankAccount(Connection connection){
 
-        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
-
-        /*BankAccountDTO bankAccountDTO = BankAccountDTO.builder()
-                .balance(50.00)
-                .build();*/
-
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(50.00);
 
-        //BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
         bankAccount.setConnectionBankAccount(connection);
         bankAccountRepository.save(bankAccount);
     }

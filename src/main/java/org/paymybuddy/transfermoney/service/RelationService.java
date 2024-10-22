@@ -30,14 +30,6 @@ public class RelationService {
 
         List<RelationsConnection> relationsConnectionList = new ArrayList<>();
         List<Relation> relationsEntityList = relationRepository.findByUserIdOrderByConnectionFriendNameAsc(user.getId());
-        /*List<RelationDTO> relationsDTOList= relationMapper.convertListToDTO(relationsEntityList);
-        for(RelationDTO relationDTO:relationsDTOList){
-            RelationsConnection relationsConnection = new RelationsConnection(
-                    relationDTO.getConnectionFriend().getId(),
-                    relationDTO.getConnectionFriend().getName()
-            );
-            relationsConnectionList.add(relationsConnection);
-        }*/
 
         for(Relation relation:relationsEntityList){
             RelationsConnection relationsConnection = new RelationsConnection(

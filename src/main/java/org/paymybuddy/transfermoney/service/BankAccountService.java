@@ -30,7 +30,6 @@ public class BankAccountService {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(id);
 
         return (BankAccount) bankAccountOptional.get();
-        //return bankAccountMapper.convertToDTO(bankAccount);
 
     }
 
@@ -68,7 +67,6 @@ public class BankAccountService {
      */
     public void saveBankAccount(BankAccount bankAccount){
 
-        //BankAccount bankAccount = bankAccountMapper.convertToEntity(bankAccountDTO);
         bankAccountRepository.save(bankAccount);
     }
 
@@ -81,7 +79,6 @@ public class BankAccountService {
 
         List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
         return bankAccountMapper.convertListToDTO(bankAccountList);
-
     }
 
 }

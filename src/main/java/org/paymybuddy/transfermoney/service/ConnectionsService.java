@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.entity.*;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
+import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class ConnectionsService {
     @Autowired
     TransactionsService transactionsService;
     @Autowired
+    TransactionMapper transactionMapper;
+    @Autowired
     BankAccountService bankAccountService;
     @Transactional
     public List <TransactionDTO> saveTransaction(TransactionForm transactionForm){
@@ -40,13 +43,6 @@ public class ConnectionsService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Connection debtor = getIdentifiant(userDetails.getUsername());
 
-        /*TransactionDTO transactionDTO = TransactionDTO.builder()
-                .creditor(creditorDTO)
-                .debtor(debtorDTO)
-                .description()
-                .amount()
-                .transactionDate()
-                .build();*/
         Transactions transactions = new Transactions();
         transactions.setCreditor(creditor);
         transactions.setDebtor(debtor);
@@ -74,7 +70,8 @@ public class ConnectionsService {
 
         log.info("Transaction successful");
 
-        return transactionsService.getTransactions(debtor.getId());
+        List<Transactions> transactionsList= transactionsService.getTransactions(debtor.getId());
+        return transactionMapper.convertListToDTO(transactionsList);
     }
 
     /**
@@ -165,10 +162,7 @@ public class ConnectionsService {
             log.error("There is already a relation with "+ newConnection.getEmail());
 
         }else {
-            /*RelationDTO relationDTO = RelationDTO.builder()
-                    .user(DTO)
-                    .connectionFriend(DTO)
-                    .build();*/
+
             Relation relation = new Relation();
             relation.setUser(connection);
             relation.setConnectionFriend(newConnection);
@@ -191,11 +185,6 @@ public class ConnectionsService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Connection connection = getIdentifiant(userDetails.getUsername());
-
-        /*ContactDTO contactDTO = ContactDTO.builder()
-                .sender(connectionDTO)
-                .message(message)
-                .build();*/
 
         Contact contact = new Contact();
         contact.setSender(connection);
@@ -239,7 +228,7 @@ public class ConnectionsService {
     }
 
     public void passwordUpdatingFollowing(ConnectionDTO connectionDTO, ProfileForm profileForm){
-        //connectionDTO.setPassword(profileForm.getConfirmPassword());
+
         Connection connection = connectionMapper.convertToEntity(connectionDTO);
         connection.setPassword(profileForm.getConfirmPassword());
         updatedConnection(connection);
@@ -291,7 +280,6 @@ public class ConnectionsService {
      */
     public Connection getIdentifiant(String email){
         return connectionsRepository.findByEmail(email);
-        //return connectionMapper.convertToDTO(connection);
     }
 
 
@@ -303,7 +291,6 @@ public class ConnectionsService {
     public Connection getCreditor(Long id){
         Optional<Connection> connection = connectionsRepository.findById(id);
         return connection.get();
-        //return connectionMapper.convertToDTO(connection.get());
     }
 
     /**
@@ -324,7 +311,6 @@ public class ConnectionsService {
      *
      */
     public void updatedConnection(Connection connection) {
-        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
         connectionsRepository.save(connection);
     }
 
