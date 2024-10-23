@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -35,6 +36,9 @@ public class ConnectionsService {
     TransactionMapper transactionMapper;
     @Autowired
     BankAccountService bankAccountService;
+    @Autowired
+    RegistrationService registrationService;
+
     @Transactional
     public List <TransactionDTO> saveTransaction(TransactionForm transactionForm){
         Connection creditor = getCreditor(transactionForm.getId());
@@ -162,6 +166,10 @@ public class ConnectionsService {
             log.error("There is already a relation with "+ newConnection.getEmail());
 
         }else {
+
+            if(Objects.equals(userDetails.getUsername(), newConnection.getUsername())){
+                registrationService.saveBankAccount(newConnection);
+            }
 
             Relation relation = new Relation();
             relation.setUser(connection);
