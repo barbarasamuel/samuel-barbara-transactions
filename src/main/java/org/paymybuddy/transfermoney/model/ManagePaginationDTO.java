@@ -13,9 +13,9 @@ public class ManagePaginationDTO {
 
     ConnectionDTO connectionDTO;
     Page<Transactions> page;
-    List< Transactions > transactionsList;
-    List<ConnectionDTO> allConnectionsList;
-    List<RelationsConnection> connectionsList;
+    List<TransactionDTO> transactionsDTOList;
+    List<ConnectionDTO> allConnectionsDTOList;
+    List<RelationsConnection> relationsConnectionList;
     List<BankAccountDTO> bankAccountDTOList;
 
 }

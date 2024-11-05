@@ -14,11 +14,12 @@ import java.util.Optional;
 public interface ConnectionsRepository extends CrudRepository<Connection,Long>{
     Connection findByEmail(String email);
 
-    Connection findByName(String name);
-    /**/
+    /*Connection findByName(String name);
+    */
+    Boolean existsByEmail(String email);
     Optional<Connection> findById(Long id);
 
-    List<Connection> findAllByEmailNot(String email);
+    /*List<Connection> findAllByEmailNot(String email);*/
 
     List<Connection> findAllByOrderByEmailAsc();
 

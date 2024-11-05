@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 public class TransferPageDTO {
     private ConnectionDTO connectionDTO;
-    private List<ConnectionDTO> allConnectionsList;
-    private List<RelationsConnection> connectionsList;
-    private List<TransactionsConnection> transactionsList;
+    private List<ConnectionDTO> allConnectionsDTOList;
+    private List<RelationsConnection> relationsConnectionList;
+    private List<TransactionsConnection> transactionsConnectionList;
     private List<BankAccountDTO> bankAccountDTOList;
 }

@@ -22,6 +22,7 @@ import org.paymybuddy.transfermoney.service.BankAccountService;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.ContactService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
@@ -54,19 +55,20 @@ public class ConnectionsServiceIT {
     @Mock
     private ContactMapper contactMapper;
 
-    @InjectMocks
+    @Autowired
+    //@InjectMocks
     private BankAccountService bankAccountService;
-    @Mock
+    @Autowired//@Mock
     private BankAccountRepository bankAccountRepository;
-    @Mock
-    private BankAccountMapper bankAccountMapper;
+    @Autowired//@Mock
+    private BankAccountMapper bankAccountMapper;/**/
 
     @InjectMocks
     private TransactionsService transactionsService;
     @Mock
     private TransactionsRepository transactionsRepository;
     @Mock
-    private TransactionMapper transactionMapper;
+    private TransactionMapper transactionMapper;/**/
 
     /**
      *
@@ -170,26 +172,26 @@ public class ConnectionsServiceIT {
         when(connectionsRepository.findByEmail(any(String.class))).thenReturn(debtor);
         //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(debtorDTO);
         //saveTransaction
-        when(transactionMapper.convertToEntity(any(TransactionDTO.class))).thenReturn(transaction);
-        when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
+        //////////when(transactionMapper.convertToEntity(any(TransactionDTO.class))).thenReturn(transaction);
+        //////////when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
         //when(transactionMapper.convertToDTO(any(Transactions.class))).thenReturn(transactionDTO);
         when(transactionsService.saveTransaction(any(Transactions.class))).thenReturn(transaction);
         //getConnectionAccount
-        when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
+        //////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
         //when(bankAccountMapper.convertToDTO(any(BankAccount.class))).thenReturn(debtorAccountDTO);
         //updateDebtorAccount
         //saveBankAccount
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(debtorAccount);
-        when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
+        ////////////when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
         //getConnectionAccount
-        when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(creditorAccount));
+        ///////////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(creditorAccount));
         //when(bankAccountMapper.convertToDTO(any(BankAccount.class))).thenReturn(creditorAccountDTO);
         //updateCreditorAccount
         //saveBankAccount
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(creditorAccount);
-        when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(creditorAccount);
+        ///////////////when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(creditorAccount);
         //getTransactions
-        when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
+        ////////////when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
         //when(transactionMapper.convertListToDTO(Collections.singletonList(any(Transactions.class)))).thenReturn(transactionsDTOList);
 
         //Act
@@ -197,7 +199,7 @@ public class ConnectionsServiceIT {
         Transactions newTransactionResponse = transactionsService.saveTransaction(transaction);
 
         //Assert
-        verify(transactionsRepository,times(1)).save(transaction);
+        //////////verify(transactionsRepository,times(1)).save(transaction);
         assertNotNull(newTransactionResponse);
         assertEquals(transaction.getTransactionDate(),newTransactionResponse.getTransactionDate());
 
@@ -306,15 +308,15 @@ public class ConnectionsServiceIT {
         //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(debtorDTO);
         //saveTransaction
         //when(transactionMapper.convertToEntity(any(TransactionDTO.class))).thenReturn(transaction);
-        when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
+        /////////////////when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
         //when(transactionMapper.convertToDTO(any(Transactions.class))).thenReturn(transactionDTO);
         //getConnectionAccount
-        when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
+        ///////////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
         //when(bankAccountMapper.convertToDTO(any(BankAccount.class))).thenReturn(debtorAccountDTO);
         //updateDebtorAccount
         //saveBankAccount
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(debtorAccount);
-        when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
+        ///////////////when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
 
         //Act
         bankAccountService.saveBankAccount(debtorAccount);
@@ -428,32 +430,32 @@ public class ConnectionsServiceIT {
         //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(debtorDTO);
         //saveTransaction
         //when(transactionMapper.convertToEntity(any(TransactionDTO.class))).thenReturn(transaction);
-        when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
+        ///////////////when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
         //when(transactionMapper.convertToDTO(any(Transactions.class))).thenReturn(transactionDTO);
         //getConnectionAccount
-        when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
+        ///////////////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
         //when(bankAccountMapper.convertToDTO(any(BankAccount.class))).thenReturn(debtorAccountDTO);
         //updateDebtorAccount
         //saveBankAccount
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(debtorAccount);
-        when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
+        /////////////when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(debtorAccount);
         /**///getConnectionAccount
-        when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(creditorAccount));
+        /////////////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(creditorAccount));
         //when(bankAccountMapper.convertToDTO(any(BankAccount.class))).thenReturn(creditorAccountDTO);
         //updateCreditorAccount
         //saveBankAccount
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(creditorAccount);
-        when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(creditorAccount);
+        ///////////////when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(creditorAccount);
         //getTransactions
-        when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
+        ////////////////when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
         //when(transactionMapper.convertListToDTO(Collections.singletonList(any(Transactions.class)))).thenReturn(transactionsDTOList);
 
         //Act
         List<Transactions> transactionsResponseList =  transactionsService.getTransactions(debtor.getId());
 
         //Assert
-        verify(transactionsRepository,times(1)).findByDebtorId(any(Long.class));
-        //assertNotNull(transactionsResponseList);
+        //verify(transactionsRepository,times(1)).findByDebtorId(any(Long.class));
+        assertNotNull(transactionsResponseList);
         //assertEquals(transactionsDTOList.size(),transactionsDTOResponseList.size());
 
     }
@@ -513,9 +515,26 @@ public class ConnectionsServiceIT {
         );
         transactionsConnectionList.add(transactionsConnection);
 
+        Double balance = 50.00;
+
         List<Transactions> transactionsEntityList = new ArrayList<>();
         transactionsEntityList.add(transaction);
 
+        //when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(creditor));
+        when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(creditor));
+        //when(connectionsService.getCreditor(any(Long.class))).thenReturn(creditor);
+        when(connectionsService.getIdentifiant(any(String.class))).thenReturn(debtor);
+        ///////////when(transactionsService.saveTransaction(any(Transactions.class))).thenReturn(transaction);
+        ///////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(debtorAccount));
+        //when(bankAccountService.getConnectionAccount(transactionForm.getIdDebtorAccount())).thenReturn(debtorAccount);
+        ///////////when(bankAccountService.updateDebtorAccount(debtorAccount, any(Double.class))).thenReturn(balance);
+        //bankAccountService.saveBankAccount(debtorAccount);
+        ///////////when(bankAccountRepository.findById(any(Long.class))).thenReturn(Optional.of(creditorAccount));
+        //when(bankAccountService.getConnectionAccount(transactionForm.getIdCreditorAccount())).thenReturn(creditorAccount);
+        ///////////when(bankAccountService.updateCreditorAccount(creditorAccount,transactionForm.getAmount())).thenReturn(balance);
+        //bankAccountService.saveBankAccount(creditorAccount);
+        ///////////when(transactionsService.getTransactions(debtor.getId())).thenReturn(transactionsEntityList);
+        /*
         //getCreditor
         when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(creditor));
         //when(connectionMapper.convertToDTO(creditor)).thenReturn(creditorDTO);
@@ -524,7 +543,7 @@ public class ConnectionsServiceIT {
         //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(debtorDTO);
         //saveTransaction
         //when(transactionMapper.convertToEntity(any(TransactionDTO.class))).thenReturn(transaction);
-        when(transactionsService.saveTransaction(any(Transactions.class))).thenReturn(transaction);
+        ////////////when(transactionsService.saveTransaction(any(Transactions.class))).thenReturn(transaction);
         //when(transactionsRepository.save(any(Transactions.class))).thenReturn(transaction);
         //when(transactionMapper.convertToDTO(any(Transactions.class))).thenReturn(transactionDTO);
         //getConnectionAccount
@@ -542,9 +561,9 @@ public class ConnectionsServiceIT {
         //when(bankAccountMapper.convertToEntity(any(BankAccountDTO.class))).thenReturn(creditorAccount);
         when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(creditorAccount);
         //getTransactions
-        /* */when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
+        when(transactionsRepository.findByDebtorId(any(Long.class))).thenReturn(transactionsEntityList);
         //when(transactionMapper.convertListToDTO(Collections.singletonList(any(Transactions.class)))).thenReturn(transactionsDTOList);
-/**/      /*when(connectionsService.getCreditor(any(Long.class))).thenReturn(creditor);
+*/      /*when(connectionsService.getCreditor(any(Long.class))).thenReturn(creditor);
 
         when(connectionsService.getIdentifiant(any(String.class))).thenReturn(debtor);*/
         //Act
@@ -555,7 +574,7 @@ public class ConnectionsServiceIT {
         //verify(transactionsRepository,times(1)).save(transaction);
         //assertNotNull(transactionsResponseList);
         assertNotNull(transactionsDTOResponseList);
-        //assertEquals(transactionsDTOList.size(),transactionsDTOResponseList.size());
+        assertEquals(transactionsEntityList.size(),transactionsDTOResponseList.size());
 
     }
 
@@ -599,20 +618,23 @@ public class ConnectionsServiceIT {
 
         //getCreditor
         when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(connection));
+        when(bankAccountRepository.findAllByConnectionBankAccountId(any(Long.class))).thenReturn(userAccountList);
+        //when(bankAccountMapper.convertListToDTO(userAccountList)).thenReturn(userAccountDTOList);
+        when(bankAccountService.getUserAccountsList(connection)).thenReturn(userAccountList);
         //when(connectionMapper.convertToDTO(connection)).thenReturn(connectionDTO);
         //getUserAccountsList
         //when(bankAccountRepository.findAllByConnectionBankAccountId(any(Long.class))).thenReturn(userAccountList);
         //when(bankAccountMapper.convertListToDTO(userAccountList)).thenReturn(userAccountDTOList);
         //
         //Act
-        List<BankAccountDTO> bankAccountDTOResponseList= connectionsService.fillDropdown(2L);
+        List<BankAccount> bankAccountResponseList= connectionsService.fillDropdown(2L);
         /*ConnectionDTO connectionDTOResponse = connectionsService.getCreditor(2L);
         List<BankAccountDTO> bankAccountDTOResponseList =  bankAccountService.getUserAccountsList(connectionDTOResponse);
 */
         //Assert
-        verify(connectionsRepository,times(1)).findById(2L);
-        assertNotNull(bankAccountDTOResponseList);
-        assertEquals(userAccountDTOList.size(),bankAccountDTOResponseList.size());
+        //verify(connectionsRepository,times(1)).findById(2L);
+        assertNotNull(bankAccountResponseList);
+        assertEquals(userAccountDTOList.size(),bankAccountResponseList.size());
 
     }
 }

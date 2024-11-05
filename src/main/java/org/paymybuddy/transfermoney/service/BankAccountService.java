@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class BankAccountService {
@@ -75,10 +77,11 @@ public class BankAccountService {
      * To get the user accounts list
      *
      */
-    public List<BankAccountDTO> getUserAccountsList(Connection connection){
+    public List<BankAccount> getUserAccountsList(Connection connection){
 
-        List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
-        return bankAccountMapper.convertListToDTO(bankAccountList);
+        //List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
+        return bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
+        //return bankAccountMapper.convertListToDTO(bankAccountList);
     }
 
 }

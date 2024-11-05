@@ -56,14 +56,14 @@ public class TransactionController {
 
        ManagePaginationDTO managePaginationDTO = connectionsService.managePagination(pageNo, sortField, sortDir);
 
-       model.addAttribute("allConnectionsList", managePaginationDTO.getAllConnectionsList());
-       model.addAttribute("connectionsList", managePaginationDTO.getConnectionsList());
+       model.addAttribute("allConnectionsList", managePaginationDTO.getAllConnectionsDTOList());
+       model.addAttribute("connectionsList", managePaginationDTO.getRelationsConnectionList());
        model.addAttribute("username", managePaginationDTO.getConnectionDTO().getName());
        model.addAttribute("debtorAccountList",managePaginationDTO.getBankAccountDTOList());
        model.addAttribute("currentPage", pageNo);
        model.addAttribute("totalPages", managePaginationDTO.getPage().getTotalPages());
        model.addAttribute("totalItems", managePaginationDTO.getPage().getTotalElements());
-       model.addAttribute("transactionsList", managePaginationDTO.getTransactionsList());
+       model.addAttribute("transactionsList", managePaginationDTO.getTransactionsDTOList());
 
        model.addAttribute("sortField", sortField);
        model.addAttribute("sortDir", sortDir);
@@ -83,9 +83,9 @@ public class TransactionController {
 
         TransferPageDTO transferPageDTO = connectionsService.accessTransferPage();
 
-        model.addAttribute("allConnectionsList", transferPageDTO.getAllConnectionsList());
-        model.addAttribute("connectionsList", transferPageDTO.getConnectionsList());
-        model.addAttribute("transactionsList", transferPageDTO.getTransactionsList());/**/
+        model.addAttribute("allConnectionsList", transferPageDTO.getAllConnectionsDTOList());
+        model.addAttribute("connectionsList", transferPageDTO.getRelationsConnectionList());
+        model.addAttribute("transactionsList", transferPageDTO.getTransactionsConnectionList());/**/
         model.addAttribute("username", transferPageDTO.getConnectionDTO().getName());
         model.addAttribute("debtorAccountList",transferPageDTO.getBankAccountDTOList());
 

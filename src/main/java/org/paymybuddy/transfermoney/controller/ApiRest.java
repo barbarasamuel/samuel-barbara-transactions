@@ -1,5 +1,7 @@
 package org.paymybuddy.transfermoney.controller;
 
+import org.paymybuddy.transfermoney.entity.BankAccount;
+import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.model.BankAccountDTO;
 import org.paymybuddy.transfermoney.service.BankAccountService;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
@@ -18,6 +20,8 @@ public class ApiRest {
 
     @Autowired
     ConnectionsService connectionsService;
+    @Autowired
+    BankAccountMapper bankAccountMapper;
 
     /**
      *
@@ -27,7 +31,8 @@ public class ApiRest {
     @GetMapping(value="/dropdown", produces = {"application/json"})
     public ResponseEntity<List<BankAccountDTO>>fillDropdownContent(@RequestParam String selectedValue, Model model){
 
-        List<BankAccountDTO> creditorAccountList = connectionsService.fillDropdown(Long.valueOf(selectedValue));
-        return ResponseEntity.status(HttpStatus.OK).body(creditorAccountList);
+        List<BankAccount> creditorAccountList = connectionsService.fillDropdown(Long.valueOf(selectedValue));
+        List<BankAccountDTO> creditorAccountDTOList = bankAccountMapper.convertListToDTO(creditorAccountList);
+        return ResponseEntity.status(HttpStatus.OK).body(creditorAccountDTOList);
     }
 }

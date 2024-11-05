@@ -16,6 +16,6 @@ class TransfermoneyApplicationTests {
 	void contextLoads() {
 	}
 	public static void main(String[] args) {
-		SpringApplication.run(TransfermoneyApplication.class, args);
+		SpringApplication.run(TransfermoneyApplicationTests.class, args);
 	}
 }

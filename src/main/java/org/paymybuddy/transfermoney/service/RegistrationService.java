@@ -33,11 +33,7 @@ public class RegistrationService {
      */
     @Transactional
     public void saveRegistration(RegisterForm registerForm){
-        /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                .email(registerForm.getEmail())
-                .name(registerForm.getName())
-                .password((registerForm.getPassword()))
-                .build();*/
+
         Connection connection = new Connection();
         connection.setEmail(registerForm.getEmail());
         connection.setName(registerForm.getName());

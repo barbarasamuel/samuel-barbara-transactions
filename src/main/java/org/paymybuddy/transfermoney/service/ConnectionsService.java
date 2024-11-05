@@ -3,6 +3,7 @@ package org.paymybuddy.transfermoney.service;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.entity.*;
+import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.model.*;
@@ -36,6 +37,8 @@ public class ConnectionsService {
     TransactionMapper transactionMapper;
     @Autowired
     BankAccountService bankAccountService;
+    @Autowired
+    BankAccountMapper bankAccountMapper;
     @Autowired
     RegistrationService registrationService;
 
@@ -93,19 +96,17 @@ public class ConnectionsService {
         Page<Transactions> page = transactionsService.findPaginated(connection, pageNo, pageSize, sortField, sortDir);
         List < Transactions > transactionsList = page.getContent();
 
-        List<ConnectionDTO> allConnectionsList = getAllConnections();
+        List<Connection> allConnectionsList = getAllConnections();
         List<RelationsConnection> connectionsList = relationService.getRelations(connection);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connection);
-
-        ConnectionDTO connectionDTO = connectionMapper.convertToDTO(connection);
+        List<BankAccount> bankAccountList = bankAccountService.getUserAccountsList(connection);
 
         return ManagePaginationDTO.builder()
-                .allConnectionsList(allConnectionsList)
-                .connectionsList(connectionsList)
-                .connectionDTO(connectionDTO)
-                .bankAccountDTOList(bankAccountDTOList)
+                .allConnectionsDTOList(connectionMapper.convertListToDTO(allConnectionsList))
+                .relationsConnectionList(connectionsList)
+                .connectionDTO(connectionMapper.convertToDTO(connection))
+                .bankAccountDTOList(bankAccountMapper.convertListToDTO(bankAccountList))
                 .page(page)
-                .transactionsList(transactionsList)
+                .transactionsDTOList(transactionMapper.convertListToDTO(transactionsList))
                 .build();
     }
 
@@ -119,27 +120,26 @@ public class ConnectionsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Connection connection = getIdentifiant(userDetails.getUsername());
-        List<ConnectionDTO> allConnectionsList = getAllConnections();
+        List<Connection> allConnectionsList = getAllConnections();
         List<RelationsConnection> connectionsList = relationService.getRelations(connection);
-        List<TransactionsConnection> transactionsList = transactionsService.getTransactionsFromUser(connection);
-        List<BankAccountDTO> bankAccountDTOList = bankAccountService.getUserAccountsList(connection);
+        List<TransactionsConnection> transactionsConectionList = transactionsService.getTransactionsFromUser(connection);
+        List<BankAccount> bankAccountList = bankAccountService.getUserAccountsList(connection);
 
-        ConnectionDTO connectionDTO = connectionMapper.convertToDTO(connection);
         return TransferPageDTO.builder()
-                .connectionDTO(connectionDTO)
-                .allConnectionsList(allConnectionsList)
-                .connectionsList(connectionsList)
-                .transactionsList(transactionsList)
-                .bankAccountDTOList(bankAccountDTOList)
+                .connectionDTO(connectionMapper.convertToDTO(connection))
+                .allConnectionsDTOList(connectionMapper.convertListToDTO(allConnectionsList))
+                .relationsConnectionList(connectionsList)
+                .transactionsConnectionList(transactionsConectionList)
+                .bankAccountDTOList(bankAccountMapper.convertListToDTO(bankAccountList))
                 .build();
     }
 
     /**
      *
-     * To fill the dropdown content
+     * To fill the dropdown content(list of creditor accounts)
      *
      */
-    public List<BankAccountDTO> fillDropdown(Long selectedValue) {
+    public List<BankAccount> fillDropdown(Long selectedValue) {
         Connection connection = getCreditor(selectedValue);
         return bankAccountService.getUserAccountsList(connection);
     }
@@ -276,9 +276,9 @@ public class ConnectionsService {
      * To get all the connections
      *
      */
-    public List<ConnectionDTO> getAllConnections(){
-        List<Connection> connectionList = connectionsRepository.findAllByOrderByEmailAsc();
-        return connectionMapper.convertListToDTO(connectionList);
+    public List<Connection> getAllConnections(){
+        return connectionsRepository.findAllByOrderByEmailAsc();
+        //return connectionMapper.convertListToDTO(connectionList);
     }
 
     /**

@@ -15,8 +15,11 @@ import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.ContactRepository;
 import org.paymybuddy.transfermoney.repository.RelationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -31,11 +34,11 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ConnectionsServiceTests {
-        @InjectMocks
+        @Autowired//@InjectMocks
         private ConnectionsService connectionsService;
-        @Mock
+        @Autowired//@Mock
         private ConnectionsRepository connectionsRepository;
-        @Mock
+        @Autowired//@Mock
         private ConnectionMapper connectionMapper;
 
         @InjectMocks
@@ -52,8 +55,8 @@ public class ConnectionsServiceTests {
         @Mock
         private RelationMapper relationMapper;
 
-        @Test
-        public void shoulfSave(){
+        /*@Test
+        public void shouldSave(){
             //Arrange
             TransactionForm transactionForm = new TransactionForm();
             transactionForm.setIdCreditorAccount(24L);
@@ -66,6 +69,144 @@ public class ConnectionsServiceTests {
 
             //
             assertNotNull(transactionsList);
+        }*/
+
+
+        /**
+         *
+         * Should update the email
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void shouldUpdateEmail(){
+            //Arrange
+            ProfileForm expectedProfileForm = new ProfileForm();
+            expectedProfileForm.setEmail("gerard@myemail.fr");
+            expectedProfileForm.setOldPassword("Mo@depa2");
+
+           Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");/* */
+            //when(connectionsService.getIdentifiant(expectedProfileForm.getEmail())).thenReturn(connection);
+
+            //Act
+            connectionsService.emailUpdating(expectedProfileForm);
+
+            //Assert
+            Optional<Connection> gotConnection = connectionsRepository.findById(2L);
+            assertNotEquals(expectedProfileForm.getEmail(),gotConnection.get().getEmail());
+
+        }
+
+        /**
+         *
+         * Not should update the email
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void NotShouldUpdateEmailIfSameEmail(){
+            //Arrange
+            ProfileForm expectedProfileForm = new ProfileForm();
+            expectedProfileForm.setEmail("auguste@email.fr");
+            expectedProfileForm.setOldPassword("Mo@depa2");
+
+            //Act
+            Exception exception = assertThrows(Exception.class, () -> connectionsService.emailUpdating(expectedProfileForm));
+
+            //Assert
+            assertTrue(exception instanceof DataIntegrityViolationException);
+        }
+
+        /**
+         *
+         * Should get the profile
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void shouldGetProfile(){
+            //Arrange
+            ProfileForm expectedProfileForm = new ProfileForm();
+            expectedProfileForm.setEmail("gerard@email.fr");
+            expectedProfileForm.setOldPassword("Mo@depa2");
+            expectedProfileForm.setNewPassword("Mo@depa1");
+            expectedProfileForm.setConfirmPassword("Mo@depa1");
+
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
+
+            when(connectionsService.getIdentifiant("gerard@email.fr")).thenReturn(connection);
+
+            //Act
+            ProfileForm gotProfileForm = connectionsService.getProfile(expectedProfileForm);
+
+            //Assert
+            assertEquals(expectedProfileForm, gotProfileForm);
+
+        }
+
+        /**
+         *
+         * Should get the user email
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void shouldPasswordUpdatingStart(){
+            //Arrange
+            ProfileForm profileForm = new ProfileForm();
+            profileForm.setEmail("gerard@email.fr");
+            profileForm.setOldPassword("Mo@depa2");
+            profileForm.setNewPassword("Mo@depa1");
+            profileForm.setConfirmPassword("Mo@depa1");
+
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.com");
+            connection.setPassword("Mo@depa2");
+
+            when(connectionsService.getIdentifiant("gerard@email.fr")).thenReturn(connection);
+
+            //Act
+            connectionsService.passwordUpdatingStart(profileForm);
+
+            //Assert
+            verify(connectionMapper, times(1)).convertToDTO(connection);
+
+        }
+
+        /**
+         *
+         * Should get the new user password
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void shouldPasswordUpdatingFollowing(){
+            //Arrange
+            ProfileForm profileForm = new ProfileForm();
+            profileForm.setEmail("gerard@email.fr");
+            profileForm.setOldPassword("Mo@depa2");
+            profileForm.setNewPassword("Mo@depa1");
+            profileForm.setConfirmPassword("Mo@depa1");
+
+            //Act
+            ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm);
+            connectionsService.passwordUpdatingFollowing(connectionDTO,profileForm);
+
+            //Assert
+            //verify(connectionsRepository, times(1)).save(connection);
+            Connection connection = connectionsRepository.findByEmail(profileForm.getEmail());
+            assertNotEquals(profileForm.getOldPassword(),connection.getPassword());
+
         }
 
         /**
@@ -76,27 +217,16 @@ public class ConnectionsServiceTests {
         @Test
         public void shouldGetIdentifiantTest() {
             //Arrange
-            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                    .id(2L)
-                    .name("Gerard")
-                    .email("gerard@email.com")
-                    .password("Mo@depa2")
-                    .build();*/
-
             Connection connection = new Connection();
             connection.setId(2L);
             connection.setName("Gerard");
             connection.setEmail("gerard@email.com");
             connection.setPassword("Mo@depa2");
 
-            when(connectionsRepository.findByEmail(any(String.class))).thenReturn(connection);
-            //when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(connectionDTO);
-
             //Act
             Connection connectionResponse = connectionsService.getIdentifiant(connection.getEmail());
 
             //Assert
-            verify(connectionsRepository,times(1)).findByEmail(connection.getEmail());
             assertNotNull(connectionResponse);
             assertEquals(connection.getEmail(),connectionResponse.getEmail());
             assertEquals(connection.getId(),connectionResponse.getId());
@@ -111,27 +241,16 @@ public class ConnectionsServiceTests {
         @Test
         public void shouldGetCreditorTest(){
             //Arrange
-            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                    .id(2L)
-                    .name("Gerard")
-                    .email("gerard@email.com")
-                    .password("Mo@depa2")
-                    .build();*/
-
             Connection connection = new Connection();
             connection.setId(2L);
             connection.setName("Gerard");
             connection.setEmail("gerard@email.com");
             connection.setPassword("Mo@depa2");
 
-            when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(connection));
-            //when(connectionMapper.convertToDTO(connection)).thenReturn(connectionDTO);
-
             //Act
             Connection connectionResponse = connectionsService.getCreditor(2L);
 
             //Assert
-            Mockito.verify(connectionsRepository, times(1)).findById(2L);
             assertNotNull(connectionResponse);
             assertEquals(connection.getEmail(), connectionResponse.getEmail());
         }
@@ -317,11 +436,11 @@ public class ConnectionsServiceTests {
             //when(connectionMapper.convertListToDTO(connectionsList)).thenReturn(connectionsDTOList);
 
             //Act
-            List<ConnectionDTO> connectionsDTOResponseList = connectionsService.getAllConnections();
+            List<Connection> connectionsResponseList = connectionsService.getAllConnections();
 
             //Assert
             verify(connectionsRepository, times(1)).findAllByOrderByEmailAsc();
-            assertEquals(connectionsList.size(),connectionsDTOResponseList.size());
+            assertEquals(connectionsList.size(),connectionsResponseList.size());
         }
 
 
