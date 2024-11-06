@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ContactDTO;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureMockMvc
 public class ContactControllerTests {
     @Autowired

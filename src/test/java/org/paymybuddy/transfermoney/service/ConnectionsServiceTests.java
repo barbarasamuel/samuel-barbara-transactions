@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.mapper.ContactMapper;
 import org.paymybuddy.transfermoney.mapper.RelationMapper;
-import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Contact;
 import org.paymybuddy.transfermoney.model.*;
@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ConnectionsServiceTests {
         @Autowired//@InjectMocks
@@ -111,7 +111,7 @@ public class ConnectionsServiceTests {
         public void NotShouldUpdateEmailIfSameEmail(){
             //Arrange
             ProfileForm expectedProfileForm = new ProfileForm();
-            expectedProfileForm.setEmail("auguste@email.fr");
+            expectedProfileForm.setEmail("auguste@email.com");
             expectedProfileForm.setOldPassword("Mo@depa2");
 
             //Act

@@ -9,7 +9,7 @@ import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.mapper.ContactMapper;
 import org.paymybuddy.transfermoney.mapper.TransactionMapper;
-import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
@@ -39,7 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ConnectionsServiceIT {
     @InjectMocks

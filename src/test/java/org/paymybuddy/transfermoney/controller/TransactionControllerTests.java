@@ -2,7 +2,7 @@ package org.paymybuddy.transfermoney.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.paymybuddy.transfermoney.TransfermoneyApplicationTest;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.model.ProfileForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTest.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureMockMvc
 public class TransactionControllerTests {
     @Autowired
