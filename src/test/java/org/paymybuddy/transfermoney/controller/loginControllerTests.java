@@ -36,7 +36,7 @@ public class loginControllerTests {
     public void loginTest() throws Exception {
 
         mockMvc.perform(post("/process-login")
-                .param("username","gerard@email.com")
+                .param("username","gerard@email.fr")
                 .param("password","Mo@depa2"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();

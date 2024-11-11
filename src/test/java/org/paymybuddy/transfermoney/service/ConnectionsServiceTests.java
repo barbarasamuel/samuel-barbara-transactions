@@ -2,24 +2,20 @@ package org.paymybuddy.transfermoney.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.paymybuddy.transfermoney.entity.BankAccount;
+import org.paymybuddy.transfermoney.entity.Relation;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.mapper.ContactMapper;
-import org.paymybuddy.transfermoney.mapper.RelationMapper;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.entity.Contact;
 import org.paymybuddy.transfermoney.model.*;
+import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
-import org.paymybuddy.transfermoney.repository.ContactRepository;
 import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -27,12 +23,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class ConnectionsServiceTests {
         @Autowired//@InjectMocks
         private ConnectionsService connectionsService;
@@ -40,85 +35,64 @@ public class ConnectionsServiceTests {
         private ConnectionsRepository connectionsRepository;
         @Autowired//@Mock
         private ConnectionMapper connectionMapper;
-
-        @InjectMocks
-        private ContactService contactService;
-        @Mock
-        private ContactRepository contactRepository;
-        @Mock
-        private ContactMapper contactMapper;
-
-        @InjectMocks
-        private RelationService relationService;
-        @Mock
+        @Autowired
         private RelationRepository relationRepository;
-        @Mock
-        private RelationMapper relationMapper;
+        @Autowired
+        private BankAccountRepository bankAccountRepository;
 
-        /*@Test
-        public void shouldSave(){
+        /**
+         *
+         * Should save the transaction
+         *
+         */
+        @Test
+        @WithMockUser(username="gerard@email.fr",roles={"USER"})
+        public void shouldSaveTransaction(){
             //Arrange
             TransactionForm transactionForm = new TransactionForm();
+            transactionForm.setId(2L);
             transactionForm.setIdCreditorAccount(24L);
             transactionForm.setDescription("Restaurant");
             transactionForm.setIdDebtorAccount(2L);
             transactionForm.setAmount(14.00);
 
+            Connection debtor = new Connection();
+            debtor.setId(2L);
+            debtor.setName("Gerard");
+            debtor.setEmail("gerard@email.fr");
+            debtor.setPassword("Mo@depa2");
+
+            BankAccount debtorAccount = new BankAccount();
+            debtorAccount.setId(transactionForm.getIdDebtorAccount());
+            debtorAccount.setConnectionBankAccount(debtor);
+            debtorAccount.setBalance(50.00);
+            bankAccountRepository.save(debtorAccount);
+
+            Double balanceWithTransaction = debtorAccount.getBalance() - transactionForm.getAmount();
+            Double expectedBalance = balanceWithTransaction - (transactionForm.getAmount()*0.5/100);
+            expectedBalance = Math.round(expectedBalance * Math.pow(10,2)) / Math.pow(10,2);
+
+            Connection creditor = new Connection();
+            creditor.setId(2L);
+            creditor.setName("Gerard");
+            creditor.setEmail("gerard@email.fr");
+            creditor.setPassword("Mo@depa2");
+
+            BankAccount creditorAccount = new BankAccount();
+            creditorAccount.setId(transactionForm.getIdCreditorAccount());
+            creditorAccount.setConnectionBankAccount(creditor);
+            creditorAccount.setBalance(50.00);
+            bankAccountRepository.save(creditorAccount);
+
             //Act
             List <TransactionDTO> transactionsList = connectionsService.saveTransaction(transactionForm);
 
-            //
-            assertNotNull(transactionsList);
-        }*/
-
-
-        /**
-         *
-         * Should update the email
-         *
-         */
-        @Test
-        @WithMockUser(username="gerard@email.fr",roles={"USER"})
-        public void shouldUpdateEmail(){
-            //Arrange
-            ProfileForm expectedProfileForm = new ProfileForm();
-            expectedProfileForm.setEmail("gerard@myemail.fr");
-            expectedProfileForm.setOldPassword("Mo@depa2");
-
-           Connection connection = new Connection();
-            connection.setId(2L);
-            connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
-            connection.setPassword("Mo@depa2");/* */
-            //when(connectionsService.getIdentifiant(expectedProfileForm.getEmail())).thenReturn(connection);
-
-            //Act
-            connectionsService.emailUpdating(expectedProfileForm);
-
             //Assert
-            Optional<Connection> gotConnection = connectionsRepository.findById(2L);
-            assertNotEquals(expectedProfileForm.getEmail(),gotConnection.get().getEmail());
+            Optional<BankAccount> gotCreditorBankAccount = bankAccountRepository.findById(24L);
+            assertEquals(64.00, gotCreditorBankAccount.get().getBalance());
+            Optional<BankAccount> gotDebtorBankAccount = bankAccountRepository.findById(2L);
+            assertEquals(expectedBalance, gotDebtorBankAccount.get().getBalance());
 
-        }
-
-        /**
-         *
-         * Not should update the email
-         *
-         */
-        @Test
-        @WithMockUser(username="gerard@email.fr",roles={"USER"})
-        public void NotShouldUpdateEmailIfSameEmail(){
-            //Arrange
-            ProfileForm expectedProfileForm = new ProfileForm();
-            expectedProfileForm.setEmail("auguste@email.com");
-            expectedProfileForm.setOldPassword("Mo@depa2");
-
-            //Act
-            Exception exception = assertThrows(Exception.class, () -> connectionsService.emailUpdating(expectedProfileForm));
-
-            //Assert
-            assertTrue(exception instanceof DataIntegrityViolationException);
         }
 
         /**
@@ -136,50 +110,11 @@ public class ConnectionsServiceTests {
             expectedProfileForm.setNewPassword("Mo@depa1");
             expectedProfileForm.setConfirmPassword("Mo@depa1");
 
-            Connection connection = new Connection();
-            connection.setId(2L);
-            connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
-            connection.setPassword("Mo@depa2");
-
-            when(connectionsService.getIdentifiant("gerard@email.fr")).thenReturn(connection);
-
             //Act
             ProfileForm gotProfileForm = connectionsService.getProfile(expectedProfileForm);
 
             //Assert
             assertEquals(expectedProfileForm, gotProfileForm);
-
-        }
-
-        /**
-         *
-         * Should get the user email
-         *
-         */
-        @Test
-        @WithMockUser(username="gerard@email.fr",roles={"USER"})
-        public void shouldPasswordUpdatingStart(){
-            //Arrange
-            ProfileForm profileForm = new ProfileForm();
-            profileForm.setEmail("gerard@email.fr");
-            profileForm.setOldPassword("Mo@depa2");
-            profileForm.setNewPassword("Mo@depa1");
-            profileForm.setConfirmPassword("Mo@depa1");
-
-            Connection connection = new Connection();
-            connection.setId(2L);
-            connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
-            connection.setPassword("Mo@depa2");
-
-            when(connectionsService.getIdentifiant("gerard@email.fr")).thenReturn(connection);
-
-            //Act
-            connectionsService.passwordUpdatingStart(profileForm);
-
-            //Assert
-            verify(connectionMapper, times(1)).convertToDTO(connection);
 
         }
 
@@ -198,15 +133,20 @@ public class ConnectionsServiceTests {
             profileForm.setNewPassword("Mo@depa1");
             profileForm.setConfirmPassword("Mo@depa1");
 
+            Connection connection = new Connection();
+            connection.setId(2L);
+            connection.setName("Gerard");
+            connection.setEmail("gerard@email.fr");
+            connection.setPassword("Mo@depa2");
+
             //Act
             ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm);
             connectionsService.passwordUpdatingFollowing(connectionDTO,profileForm);
 
             //Assert
-            //verify(connectionsRepository, times(1)).save(connection);
-            Connection connection = connectionsRepository.findByEmail(profileForm.getEmail());
-            assertNotEquals(profileForm.getOldPassword(),connection.getPassword());
-
+            Connection gotConnection = connectionsRepository.findByEmail(profileForm.getEmail());
+            assertNotEquals(profileForm.getOldPassword(),gotConnection.getPassword());
+            connectionsRepository.save(connection);
         }
 
         /**
@@ -220,7 +160,7 @@ public class ConnectionsServiceTests {
             Connection connection = new Connection();
             connection.setId(2L);
             connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
+            connection.setEmail("gerard@email.fr");
             connection.setPassword("Mo@depa2");
 
             //Act
@@ -244,7 +184,7 @@ public class ConnectionsServiceTests {
             Connection connection = new Connection();
             connection.setId(2L);
             connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
+            connection.setEmail("gerard@email.fr");
             connection.setPassword("Mo@depa2");
 
             //Act
@@ -257,281 +197,86 @@ public class ConnectionsServiceTests {
 
     /**
      *
-     * Should add a friend in the list
+     * Should not expand the list when add a friend in the list because the friend already exists
      *
      */
     @Test
-    public void shouldAddConnectionTest(){
-        /*//Arrange
-        List<RelationsConnection> relationsConnectionList = new ArrayList<>();
-
-        ConnectionDTO userDTO = ConnectionDTO.builder()
-                .id(2L)
-                .name("Gerard")
-                .email("gerard@email.com")
-                .password("Mo@depa2")
-                .build();
+    @WithMockUser(username="gerard@email.fr",roles={"USER"})
+    public void shouldNotAddConnectionTest(){
+        //Arrange
+        List<RelationsConnection> gotRelationsConnectionList = new ArrayList<>();
 
         Connection user = new Connection();
         user.setId(2L);
         user.setName("Gerard");
-        user.setEmail("gerard@email.com");
+        user.setEmail("gerard@email.fr");
         user.setPassword("Mo@depa2");
-
-        ConnectionDTO friendDTO = ConnectionDTO.builder()
-                .id(2L)
-                .name("Gerard")
-                .email("gerard@email.com")
-                .password("Mo@depa2")
-                .build();
 
         Connection friend = new Connection();
         friend.setId(2L);
         friend.setName("Gerard");
-        friend.setEmail("gerard@email.com");
+        friend.setEmail("gerard@email.fr");
         friend.setPassword("Mo@depa2");
 
+        //Act
+        gotRelationsConnectionList = connectionsService.addConnection("2");
 
-        RelationDTO relationDTO = RelationDTO.builder()
-                .id(1L)
-                .user(userDTO)
-                .connectionFriend(friendDTO)
-                .build();
+        //Assert
+        assertEquals(4, gotRelationsConnectionList.size());
 
-        Relation relation = new Relation();
-        relation.setId(1L);
-        relation.setUser(user);
-        relation.setConnectionFriend(friend);
-
-        Relation newRelation = new Relation();
-        relation.setUser(user);
-        relation.setConnectionFriend(friend);
-
-        relationsConnectionList.add()
-        ;
-        //getIdentifiant
-        when(connectionsRepository.findByEmail(any(String.class))).thenReturn(user);
-        when(connectionMapper.convertToDTO(any(Connection.class))).thenReturn(userDTO);
-        //getCreditor
-        when(connectionsRepository.findById(any(Long.class))).thenReturn(Optional.of(friend));
-        when(connectionMapper.convertToDTO(friend)).thenReturn(friendDTO);
-        //getRelation
-        when(connectionMapper.convertToEntity(any(ConnectionDTO.class))).thenReturn(friend);
-        when(connectionMapper.convertToEntity(any(ConnectionDTO.class))).thenReturn(user);
-        when(relationRepository.findByConnectionFriendAndUser(any(Connection.class), any(Connection.class))).thenReturn(relation);
-        when(relationMapper.convertToDTO(any(Relation.class))).thenReturn(relationDTO);
-        //newRelation
-        when(relationMapper.convertToEntity(any(RelationDTO.class))).thenReturn(newRelation);
-        when(relationRepository.save(any(Relation.class))).thenReturn(relation);
-        //getRelations
-        */
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        ConnectionDTO connectionDTO = getIdentifiant(userDetails.getUsername());
-        ConnectionDTO newConnectionDTO = getCreditor(Long.valueOf(friendName));
-
-        RelationDTO foundRelationDTO = relationService.getRelation(newConnectionDTO, connectionDTO);
-
-        if (foundRelationDTO != null) {
-            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
-            log.error("There is already a relation with "+ newConnectionDTO.getEmail());
-
-        }else {
-            RelationDTO relationDTO = RelationDTO.builder()
-                    .user(connectionDTO)
-                    .connectionFriend(newConnectionDTO)
-                    .build();
-
-            relationService.newRelation(relationDTO);
-            log.info("Created relation with "+ newConnectionDTO.getEmail());
-        }*/
-
-        /*return relationService.getRelations(connectionDTO);*/
     }
 
-        /**
-         *
-         * Should call the save method to save a message
-         *
-         */
-        @Test
-        public void shouldAddMessageTest() {
-            //Arrange
-            /*ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                    .id(2L)
-                    .name("Gerard")
-                    .email("gerard@email.com")
-                    .password("Mo@depa2")
-                    .build();*/
-            Connection connection = new Connection();
-            connection.setId(2L);
-            connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
-            connection.setPassword("Mo@depa2");
-
-            /*ContactDTO contactDTOTest = ContactDTO.builder()
-                    .id(8L)
-                    .sender(connectionDTO)
-                    .message("Message du test unitaire")
-                    .build();*/
-            Contact contactTest = new Contact();
-            contactTest.setId(8L);
-            contactTest.setSender(connection);
-            contactTest.setMessage("Message du test unitaire");
-
-            //Contact contact = contactMapper.convertToEntity(contactDTOTest);
-
-            when(connectionsService.getIdentifiant("gerard@email.com")).thenReturn(connection);
-            //when(contactMapper.convertToEntity(any(Contact.class))).thenReturn(contact);
-            when(contactRepository.save(any(Contact.class))).thenReturn(contactTest);
-
-            //Act
-            contactService.addedMessage(contactTest);
-
-
-            //Contact contactTest = contactRepository.findTop1BySenderOrderByIdDesc(connection);
-
-            //Assert
-            Mockito.verify(contactRepository, times(1)).save(contactTest);
-        /*assertNotNull(contactTest);
-        assertEquals("Message du test unitaire",contactTest.getMessage());*/
-        }
-
-        /**
-         *
-         * Should return all the connections which are in the database
-         *
-         */
-        @Test
-        public void shouldGetAllConnectionsTest(){
-            //Arrange
-            List<Connection> connectionsList = new ArrayList<>();
-            /*List<ConnectionDTO> connectionsDTOList = new ArrayList<>();
-            ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                    .id(2L)
-                    .name("Gerard")
-                    .email("gerard@email.com")
-                    .password("Mo@depa2")
-                    .build();
-            Connection connection = connectionMapper.convertToEntity(connectionDTO);*/
-
-            Connection connection = new Connection();
-            connection.setId(2L);
-            connection.setName("Gerard");
-            connection.setEmail("gerard@email.com");
-            connection.setPassword("Mo@depa2");
-
-            connectionsList.add(connection);
-
-            /*ConnectionDTO connectionResponseDTO = ConnectionDTO.builder()
-                    .id(1L)
-                    .name("Auguste")
-                    .email("auguste@email.com")
-                    .password("Mo@depa1")
-                    .build();
-            connectionsDTOList.add(connectionResponseDTO);*/
-
-            when(connectionsRepository.findAllByOrderByEmailAsc()).thenReturn(connectionsList);
-            //when(connectionMapper.convertListToDTO(connectionsList)).thenReturn(connectionsDTOList);
-
-            //Act
-            List<Connection> connectionsResponseList = connectionsService.getAllConnections();
-
-            //Assert
-            verify(connectionsRepository, times(1)).findAllByOrderByEmailAsc();
-            assertEquals(connectionsList.size(),connectionsResponseList.size());
-        }
-
-
-       /* @Autowired
-        private ConnectionsController connectionsController;
-
-        @MockBean
-        private ConnectionsRepository connectionsRepository;
-        @MockBean
-        private RelationRepository relationRepository;
-        @Autowired
-        private WebApplicationContext webApplicationContext;
-
-        private MockMvc mockMvc;
-
-        @Before
-        public void setup() {
-            mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        }
-
-        @Test
-        public void testMyFunction() throws Exception {
-            // Arrange
-            Connection expectedUser = new Connection();
-            expectedUser.setEmail("gerard@email.com");
-            expectedUser.setPassword("Mo@depa2");
-            expectedUser.setName("Gerard");
-
-            when(connectionsRepository.findByEmail("gerard@email.com")).thenReturn(expectedUser);
-
-            Connection expectedConnection = new Connection();
-            expectedConnection.setEmail("bertrand@email.com");
-            expectedConnection.setPassword("Mo@depa0");
-            expectedConnection.setName("Bertrand");
-
-            when(connectionsRepository.findById(1L)).thenReturn(Optional.of(expectedConnection));
-
-            when(relationRepository.findByConnectionFriendAndUser(expectedConnection, expectedUser)).thenReturn(null);
-
-            List<Relation> expectedList = Arrays.asList(
-                    new Relation(),
-                    new Relation(),
-                    new Relation(),
-                    new Relation(),
-                    new Relation());
-//3,2;1,2;4,2;,2,2;5,2
-            when(relationRepository.findByUserId(expectedUser.getId())).thenReturn(expectedList);
-
-            // Act
-            MvcResult result = mockMvc.perform(post("/connection/list"))
-                    .andExpect(status().isOk())
-                    .andReturn();
-
-            // Assert
-            String viewName = result.getModelAndView().getViewName();
-            assertEquals("transferTest", viewName);
-
-            String renderedHtml = result.getResponse().getContentAsString();
-
-            for (Relation currentRelation : expectedList) {
-                assertTrue(renderedHtml.contains(String.valueOf(currentRelation.getId())));
-            }
-        }*/
-    /*
+    /**
+     *
+     * Should add a friend in the list
+     *
+     */
     @Test
-        public void addMessageTest() throws Exception {
-    // Arrange
-    ConnectionDTO connectionDTO = ConnectionDTO.builder()
-                .name("Gerard")
-                .email("gerard@email.fr")
-                .password("Mo@depa2")
-                .build();
+    @WithMockUser(username="gerard@email.fr",roles={"USER"})
+    public void shouldAddConnectionTest(){
 
-        ContactDTO contactDTO = ContactDTO.builder()
-                .sender(connectionDTO)
-                .message("Test")
-                .build();
+        //Arrange
+        List<RelationsConnection> gotRelationsConnectionList = new ArrayList<>();
 
-        contactService.addedMessage(contactDTO);
-        List<RelationsConnection> connectionsList = new ArrayList<RelationsConnection>();
+        Connection user = new Connection();
+        user.setId(2L);
+        user.setName("Gerard");
+        user.setEmail("gerard@email.fr");
+        user.setPassword("Mo@depa2");
 
-        RelationsConnection relationsConnection1 = new RelationsConnection(3L,"Amandine");
-        RelationsConnection relationsConnection2 = new RelationsConnection(1L,"Auguste");
-        RelationsConnection relationsConnection3 = new RelationsConnection(1L,"Elise");
-        RelationsConnection relationsConnection4 = new RelationsConnection(4L,"Georgette");
-        RelationsConnection relationsConnection5 = new RelationsConnection(2L,"Gerard");
-        connectionsList.add(relationsConnection1);
-        connectionsList.add(relationsConnection2);
-        connectionsList.add(relationsConnection3);
-        connectionsList.add(relationsConnection4);
-        connectionsList.add(relationsConnection5);
+        Connection friend = new Connection();
+        friend.setId(2L);
+        friend.setName("Gerard");
+        friend.setEmail("gerard@email.fr");
+        friend.setPassword("Mo@depa2");
 
-        when(contactService.addedMessage(contactDTO)).thenReturn(connectionsList);*/
+        Relation existingRelation = relationRepository.findByConnectionFriendAndUser(friend,user);
+        relationRepository.delete(existingRelation);
+
+        //Act
+        gotRelationsConnectionList = connectionsService.addConnection("2");
+
+        //Assert
+        assertEquals(4, gotRelationsConnectionList.size());
+
+    }
+
+    /**
+     *
+     * Should return all the connections which are in the database
+     *
+     */
+    @Test
+    public void shouldGetAllConnectionsTest(){
+        //Arrange
+        Iterable<Connection> connectionsList = new ArrayList<>();
+        connectionsList = connectionsRepository.findAll();
+        List<Connection> expectedConnectionsList = (List<Connection>) connectionsList;
+
+        //Act
+        List<Connection> connectionsResponseList = connectionsService.getAllConnections();
+
+        //Assert
+        assertEquals(expectedConnectionsList.size(),connectionsResponseList.size());
+    }
 }
