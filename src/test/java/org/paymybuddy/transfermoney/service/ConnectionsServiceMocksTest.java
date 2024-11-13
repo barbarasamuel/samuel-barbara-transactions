@@ -121,9 +121,10 @@ public class ConnectionsServiceMocksTest {
 
         //Assert
         verify(connectionsRepository, times(1)).findAllByOrderByEmailAsc();
-        //verify(relationRepository, times(1)).findByUserIdOrderByConnectionFriendNameAsc(user.getId());
-        //verify(transactionsRepository, times(1)).findByDebtorId(user.getId());
-        //verify(bankAccountRepository, times(1)).findAllByConnectionBankAccountId(user.getId());
+        verify(relationService, times(1)).getRelations(user);
+        verify(transactionsService, times(1)).getTransactionsFromUser(user);
+        verify(bankAccountService, times(1)).getUserAccountsList(user);
+        verify(bankAccountMapper, times(1)).convertListToDTO(bankAccountList);
 
     }
 

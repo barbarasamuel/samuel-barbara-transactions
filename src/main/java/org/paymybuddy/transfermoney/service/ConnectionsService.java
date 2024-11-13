@@ -167,8 +167,13 @@ public class ConnectionsService {
 
         }else {
 
-            if(Objects.equals(userDetails.getUsername(), newConnection.getUsername())){
-                registrationService.saveBankAccount(newConnection);
+            if(userDetails.getUsername().equals(newConnection.getUsername())){
+
+                List<BankAccount> bankAccountList = bankAccountService.getUserAccountsList(newConnection);
+                if(bankAccountList.size()<2){
+                    registrationService.saveBankAccount(newConnection);
+                }
+
             }
 
             Relation relation = new Relation();
@@ -306,12 +311,12 @@ public class ConnectionsService {
      * To save a new connection
      *
      */
-    public ConnectionDTO save(ConnectionDTO newConnectionDTO){
+    /*public ConnectionDTO save(ConnectionDTO newConnectionDTO){
 
         Connection connection = connectionMapper.convertToEntity(newConnectionDTO);
         connection = connectionsRepository.save(connection);
         return connectionMapper.convertToDTO(connection);
-    }
+    }*/
 
     /**
      *

@@ -38,7 +38,26 @@ public class ConnectionsServiceTests {
     @Autowired
     private RelationRepository relationRepository;
     @Autowired
+    private BankAccountService bankAccountService;
+    @Autowired
     private BankAccountRepository bankAccountRepository;
+
+    /**
+     *
+     * Should return a creditor bank accounts list
+     *
+     */
+    @Test
+    public void shouldReturnCreditorBankAccountList(){
+        //Arrange
+        List<BankAccount> gotCreditorBankAccountsList = new ArrayList<>();
+
+        //Act
+        gotCreditorBankAccountsList = connectionsService.fillDropdown(2L);
+
+        //Assert
+        assertEquals(2, gotCreditorBankAccountsList.size());
+    }
 
     /**
      *
@@ -68,7 +87,7 @@ public class ConnectionsServiceTests {
      *
      */
     @Test
-    public void shouldReturnNullConnection(){
+    public void shouldReturnNullConnectionNotExistingEmail(){
         //Arrange
         RegisterForm registerForm = new RegisterForm();
         registerForm.setName("Gertrude");
@@ -110,7 +129,7 @@ public class ConnectionsServiceTests {
         debtorAccount.setId(transactionForm.getIdDebtorAccount());
         debtorAccount.setConnectionBankAccount(debtor);
         debtorAccount.setBalance(50.00);
-        bankAccountRepository.save(debtorAccount);
+        BankAccount debttorBankAccount = bankAccountRepository.save(debtorAccount);
 
         Double balanceWithTransaction = debtorAccount.getBalance() - transactionForm.getAmount();
         Double expectedBalance = balanceWithTransaction - (transactionForm.getAmount()*0.5/100);
@@ -126,7 +145,7 @@ public class ConnectionsServiceTests {
         creditorAccount.setId(transactionForm.getIdCreditorAccount());
         creditorAccount.setConnectionBankAccount(creditor);
         creditorAccount.setBalance(50.00);
-        bankAccountRepository.save(creditorAccount);
+        BankAccount creditorBankAccount = bankAccountRepository.save(creditorAccount);
 
         //Act
         List <TransactionDTO> transactionsList = connectionsService.saveTransaction(transactionForm);
