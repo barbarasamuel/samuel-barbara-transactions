@@ -1,13 +1,13 @@
-package org.paymybuddy.transfermoney;
+package org.paymybuddy.transfermoney.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
-import org.paymybuddy.transfermoney.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -44,7 +44,9 @@ public class ProfileController {
             return "profile";
         }
 
-        if(Objects.equals(connectionsService.getIdentifiant(profileForm.getEmail()), "There is already an account registered with that email")) {
+        ConnectionDTO connectionDTO = connectionsService.checkEmail(profileForm.getEmail());
+        if((connectionDTO != null) && profileForm.getEmail().equals(connectionDTO.getEmail())){
+        //if(Objects.equals(connectionsService.getIdentifiant(profileForm.getEmail()), "There is already an account registered with that email")) {
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
             log.error("Error in profile: email already exists");
             return "profile";
@@ -66,8 +68,8 @@ public class ProfileController {
 
         ConnectionDTO connectionDTO = connectionsService.passwordUpdatingStart(profileForm);
 
-        if (Objects.equals(connectionDTO.getPassword(), profileForm.getOldPassword())){
-            if (Objects.equals(profileForm.getNewPassword(), profileForm.getConfirmPassword())) {
+        if (connectionDTO.getPassword().equals(profileForm.getOldPassword())){
+            if (profileForm.getNewPassword().equals(profileForm.getConfirmPassword())) {
                 if (bindingResult.hasErrors()) {
 
                     model.addAttribute("profileForm", profileForm);

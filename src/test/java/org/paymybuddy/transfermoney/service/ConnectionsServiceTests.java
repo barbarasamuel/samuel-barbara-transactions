@@ -4,13 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Relation;
+import org.paymybuddy.transfermoney.entity.Transactions;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.Connection;
+import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.RelationRepository;
+import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,11 +32,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 public class ConnectionsServiceTests {
-    @Autowired//@InjectMocks
+    @Autowired
     private ConnectionsService connectionsService;
-    @Autowired//@Mock
+    @Autowired
     private ConnectionsRepository connectionsRepository;
-    @Autowired//@Mock
+    @Autowired
     private ConnectionMapper connectionMapper;
     @Autowired
     private RelationRepository relationRepository;
@@ -41,6 +44,10 @@ public class ConnectionsServiceTests {
     private BankAccountService bankAccountService;
     @Autowired
     private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private TransactionsRepository transactionsRepository;
+    @Autowired
+    private TransactionMapper transactionMapper;
 
     /**
      *
@@ -155,6 +162,11 @@ public class ConnectionsServiceTests {
         assertEquals(64.00, gotCreditorBankAccount.get().getBalance());
         Optional<BankAccount> gotDebtorBankAccount = bankAccountRepository.findById(2L);
         assertEquals(expectedBalance, gotDebtorBankAccount.get().getBalance());
+
+        //TransactionDTO lastTransactionDTO = transactionsList.getLast();
+        TransactionDTO lastTransactionDTO = transactionsList.get(transactionsList.size()-1);
+        Transactions lastTransaction = transactionMapper.convertToEntity(lastTransactionDTO);
+        transactionsRepository.deleteById(lastTransaction.getId());
 
     }
 

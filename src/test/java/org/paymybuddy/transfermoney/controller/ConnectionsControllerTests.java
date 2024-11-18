@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
@@ -39,4 +40,36 @@ public class ConnectionsControllerTests {
                 .andReturn();
 
     }
+
+    /**
+     *
+     * Should go to redirect:/
+     *
+     */
+    @Test
+    public void shouldGoToRedirectTest() throws Exception {
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/connection/list")
+                .param("friendName","elise@monemail.fr"))
+                .andExpect(view().name("redirect:/"))
+                .andReturn();
+
+    }
+
+    /**
+     *
+     * Should return a list not null
+     *
+     */
+   /* @Test
+    public void shouldReturnListNotNullTest() throws Exception {
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/connection/list")
+                        .param("friendName","elise@monemail.fr"))
+                .andExpect(view().name("redirect:/"))
+                .andReturn();
+
+    }*/
 }

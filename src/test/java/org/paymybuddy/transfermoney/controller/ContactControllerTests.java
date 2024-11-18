@@ -30,8 +30,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
@@ -83,6 +82,7 @@ public class ContactControllerTests {
         mockMvc.perform(get("/contact"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("<!DOCTYPE html>")))
+                .andExpect(view().name("contact"))
                 .andReturn();
     }
 
