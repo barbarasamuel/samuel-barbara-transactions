@@ -81,7 +81,7 @@ public class SecurityConfiguration {
                                 .permitAll()
                 );
         return http.build();*/
-        FormLoginConfigurer configurer = http.formLogin();
+        //FormLoginConfigurer configurer = http.formLogin();
 
 
         return http
@@ -98,10 +98,10 @@ public class SecurityConfiguration {
                     auth.anyRequest().authenticated();*/
                     auth.anyRequest().permitAll();
                 })
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(formLogin-> formLogin.loginPage("/login").permitAll()
-                        .successHandler(new AuthenticationSuccessHandlerCustom())
-                        .failureHandler(new AuthenticationFailureHandlerCustom()))
+                //.httpBasic(Customizer.withDefaults())
+                .formLogin(formLogin-> formLogin.loginPage("/login").permitAll())
+                        //.successHandler(new AuthenticationSuccessHandlerCustom())
+                        //.failureHandler(new AuthenticationFailureHandlerCustom()))
                 .logout(httpSecurityLogoutConfigurer ->
                         httpSecurityLogoutConfigurer.logoutUrl("/logout"))
                 .rememberMe(rememberMe -> rememberMe.key("uniqueAndSecret").tokenValiditySeconds(86400))

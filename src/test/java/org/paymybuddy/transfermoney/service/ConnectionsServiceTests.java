@@ -163,10 +163,8 @@ public class ConnectionsServiceTests {
         Optional<BankAccount> gotDebtorBankAccount = bankAccountRepository.findById(2L);
         assertEquals(expectedBalance, gotDebtorBankAccount.get().getBalance());
 
-        //TransactionDTO lastTransactionDTO = transactionsList.getLast();
         TransactionDTO lastTransactionDTO = transactionsList.get(transactionsList.size()-1);
-        Transactions lastTransaction = transactionMapper.convertToEntity(lastTransactionDTO);
-        transactionsRepository.deleteById(lastTransaction.getId());
+        transactionsRepository.deleteById(lastTransactionDTO.getId());
 
     }
 
