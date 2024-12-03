@@ -3,9 +3,14 @@ package org.paymybuddy.transfermoney.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
+import org.paymybuddy.transfermoney.entity.BankAccount;
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ProfileForm;
 import org.paymybuddy.transfermoney.model.RegisterForm;
+import org.paymybuddy.transfermoney.model.TransactionDTO;
+import org.paymybuddy.transfermoney.repository.BankAccountRepository;
+import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.paymybuddy.transfermoney.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
@@ -28,12 +34,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class RegisterControllerTests {
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
     private ConnectionsService connectionsService;
+
+    @MockBean
+    private ConnectionsRepository connectionsRepository;
+
+    @MockBean
+    private BankAccountRepository bankAccountRepository;
 
 
     /**

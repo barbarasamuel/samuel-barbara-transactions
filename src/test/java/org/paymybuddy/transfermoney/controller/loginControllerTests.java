@@ -54,7 +54,8 @@ public class loginControllerTests {
         mockMvc.perform(post("/process-login")
                 .param("username","gerard@email.com")
                 .param("password","Modepa2"))
-                .andExpect(status().isOk())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?error"))
                 .andReturn();
     }
 

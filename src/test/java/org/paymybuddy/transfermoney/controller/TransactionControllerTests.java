@@ -38,7 +38,7 @@ public class TransactionControllerTests {
     @Test
     public void transferSecureTest() throws Exception {
         mockMvc.perform(get("/transfer"))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().is3xxRedirection())
                 .andReturn();
 
     }

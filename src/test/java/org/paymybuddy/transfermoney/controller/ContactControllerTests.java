@@ -66,7 +66,7 @@ public class ContactControllerTests {
     @Test
     public void contactSecureTest() throws Exception {
         mockMvc.perform(get("/contact"))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().is3xxRedirection())
                 .andReturn();
 
     }

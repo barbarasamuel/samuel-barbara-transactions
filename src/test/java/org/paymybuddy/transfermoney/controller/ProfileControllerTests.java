@@ -40,7 +40,7 @@ public class ProfileControllerTests {
     @Test
     public void profileSecureTest() throws Exception {
         mockMvc.perform(get("/profile"))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().is3xxRedirection())
                 .andReturn();
 
     }
