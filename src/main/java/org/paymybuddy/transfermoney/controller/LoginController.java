@@ -33,33 +33,6 @@ public class LoginController {
      * To access to the private web pages
      *
      */
-    /*@PostMapping("/process-login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, HttpServletRequest request){
-        try{
-            request.login(username,password);
-            log.info("Login successful");
-            return "redirect:/";
-        }catch(ServletException e){
-            log.error("Login failed");
-            return "login";
-        }
-    }*/
-    /*@PostMapping("/process-login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, HttpServletRequest request){
-        try{
-            request.login(username,password);
-            log.info("Login successful");
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return "redirect:/";
-        }catch(ServletException e){
-            log.error("Login failed");
-            return "login";
-        }
-    }*/
-    /**/
     @PostMapping("/process-login")
     public String handleLogin(
             @RequestParam String username,
