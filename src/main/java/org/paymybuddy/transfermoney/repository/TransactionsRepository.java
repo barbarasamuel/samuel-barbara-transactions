@@ -17,6 +17,6 @@ public interface TransactionsRepository extends CrudRepository<Transactions,Long
 
     List<Transactions> findByDebtorId(Long idDebtorAccount);
 
-    List<Transactions> findByDebtor(Connection debtor);
+    //List<Transactions> findByDebtor(Connection debtor);
     Page<Transactions> findAllByDebtor(Connection connection, Pageable pageable);
 }

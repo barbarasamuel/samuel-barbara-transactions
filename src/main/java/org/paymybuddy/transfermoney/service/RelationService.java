@@ -1,10 +1,8 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.mapper.RelationMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Relation;
-import org.paymybuddy.transfermoney.model.*;
+import org.paymybuddy.transfermoney.model.RelationsConnection;
 import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +14,10 @@ import java.util.List;
 public class RelationService {
     @Autowired
     RelationRepository relationRepository;
-    @Autowired
+    /*@Autowired
     RelationMapper relationMapper;
     @Autowired
-    ConnectionMapper connectionMapper;
+    ConnectionMapper connectionMapper;*/
 
     /**
      *
@@ -48,14 +46,13 @@ public class RelationService {
      *
      */
     public void newRelation(Relation relation){
-        //Relation relation = relationMapper.convertToEntity(relationDTO);
+
         relationRepository.save(relation);
     }
 
     public Relation getRelation(Connection connectionFriend, Connection connectionUser){
-        /*Connection connectionFriend = connectionMapper.convertToEntity(connectionFriend);
-        Connection connectionUser = connectionMapper.convertToEntity(connectionUser);*/
+
         return relationRepository.findByConnectionFriendAndUser(connectionFriend, connectionUser);
-        //return relationMapper.convertToDTO(relation);
+
     }
 }

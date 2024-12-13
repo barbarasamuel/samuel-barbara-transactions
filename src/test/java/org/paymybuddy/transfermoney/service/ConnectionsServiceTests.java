@@ -2,13 +2,10 @@ package org.paymybuddy.transfermoney.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.paymybuddy.transfermoney.entity.BankAccount;
-import org.paymybuddy.transfermoney.entity.Relation;
-import org.paymybuddy.transfermoney.entity.Transactions;
-import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
+import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.mapper.TransactionMapper;
+import org.paymybuddy.transfermoney.entity.Relation;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
@@ -36,18 +33,18 @@ public class ConnectionsServiceTests {
     private ConnectionsService connectionsService;
     @Autowired
     private ConnectionsRepository connectionsRepository;
-    @Autowired
-    private ConnectionMapper connectionMapper;
+    /*@Autowired
+    private ConnectionMapper connectionMapper;*/
     @Autowired
     private RelationRepository relationRepository;
-    @Autowired
-    private BankAccountService bankAccountService;
+    /*@Autowired
+    private BankAccountService bankAccountService;*/
     @Autowired
     private BankAccountRepository bankAccountRepository;
     @Autowired
     private TransactionsRepository transactionsRepository;
-    @Autowired
-    private TransactionMapper transactionMapper;
+    /*@Autowired
+    private TransactionMapper transactionMapper;*/
 
     /**
      *

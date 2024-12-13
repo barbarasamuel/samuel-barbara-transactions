@@ -1,23 +1,19 @@
 package org.paymybuddy.transfermoney.service;
 
-import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.entity.BankAccount;
-import org.paymybuddy.transfermoney.model.BankAccountDTO;
+import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class BankAccountService {
 
-    @Autowired
-    BankAccountMapper bankAccountMapper;
+    /*@Autowired
+    BankAccountMapper bankAccountMapper;*/
 
     @Autowired
     BankAccountRepository bankAccountRepository;
@@ -79,9 +75,8 @@ public class BankAccountService {
      */
     public List<BankAccount> getUserAccountsList(Connection connection){
 
-        //List<BankAccount> bankAccountList = bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
         return bankAccountRepository.findAllByConnectionBankAccountId(connection.getId());
-        //return bankAccountMapper.convertListToDTO(bankAccountList);
+
     }
 
 

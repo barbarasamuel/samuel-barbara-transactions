@@ -1,24 +1,18 @@
 package org.paymybuddy.transfermoney.controller;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.ProfileForm;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -46,7 +40,7 @@ public class ProfileController {
 
         ConnectionDTO connectionDTO = connectionsService.checkEmail(profileForm.getEmail());
         if((connectionDTO != null) && profileForm.getEmail().equals(connectionDTO.getEmail())){
-        //if(Objects.equals(connectionsService.getIdentifiant(profileForm.getEmail()), "There is already an account registered with that email")) {
+
             bindingResult.rejectValue("email", null, "There is already an account registered with that email");
             log.error("Error in profile: email already exists");
             return "profile";
@@ -55,7 +49,7 @@ public class ProfileController {
         connectionsService.emailUpdating(profileForm);
 
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/login?updating";
     }
 
     /**

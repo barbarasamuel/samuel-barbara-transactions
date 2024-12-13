@@ -14,8 +14,8 @@ import java.util.List;
 @Slf4j
 @Controller
 public class TransactionController {
-   /**/ @Autowired
-    TransactionsService transactionsService;
+   /*@Autowired
+    TransactionsService transactionsService;*/
 
     @Autowired
     ConnectionsService connectionsService;

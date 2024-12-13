@@ -3,7 +3,6 @@ package org.paymybuddy.transfermoney.controller;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.model.BankAccountDTO;
-import org.paymybuddy.transfermoney.service.BankAccountService;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

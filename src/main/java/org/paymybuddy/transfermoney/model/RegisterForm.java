@@ -1,6 +1,5 @@
 package org.paymybuddy.transfermoney.model;
 
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;

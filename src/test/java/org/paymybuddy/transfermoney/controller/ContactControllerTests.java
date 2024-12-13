@@ -1,35 +1,19 @@
 package org.paymybuddy.transfermoney.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
-import org.paymybuddy.transfermoney.model.ContactDTO;
-import org.paymybuddy.transfermoney.service.ConnectionsService;
-import org.paymybuddy.transfermoney.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -37,12 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class ContactControllerTests {
     @Autowired
-    private WebApplicationContext webApplicationContext;
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ContactService contactService;
 
     /**
      *

@@ -2,12 +2,8 @@ package org.paymybuddy.transfermoney.service;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
-import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
-import org.paymybuddy.transfermoney.model.BankAccountDTO;
-import org.paymybuddy.transfermoney.model.ConnectionDTO;
 import org.paymybuddy.transfermoney.model.RegisterForm;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
@@ -17,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationService {
 
-    @Autowired
+    /*@Autowired
     ConnectionMapper connectionMapper;
     @Autowired
-    BankAccountMapper bankAccountMapper;
+    BankAccountMapper bankAccountMapper;*/
     @Autowired
     ConnectionsRepository connectionsRepository;
     @Autowired
@@ -53,10 +49,7 @@ public class RegistrationService {
      */
     public Connection saveConnection(Connection connection){
 
-        //Connection connection = connectionMapper.convertToEntity(connectionDTO);
         return connectionsRepository.save(connection);
-
-        //return connectionMapper.convertToDTO(connection);
 
     }
 

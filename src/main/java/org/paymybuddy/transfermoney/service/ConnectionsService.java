@@ -14,11 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -162,7 +160,7 @@ public class ConnectionsService {
         Relation foundRelation = relationService.getRelation(newConnection, connection);
 
         if (foundRelation != null) {
-            //error..rejectValue("name", null, "There is already a relation "+connectionDTO.getEmail() +" with that email");
+
             log.error("There is already a relation with "+ newConnection.getEmail());
 
         }else {
@@ -283,7 +281,7 @@ public class ConnectionsService {
      */
     public List<Connection> getAllConnections(){
         return connectionsRepository.findAllByOrderByEmailAsc();
-        //return connectionMapper.convertListToDTO(connectionList);
+
     }
 
     /**
@@ -305,18 +303,6 @@ public class ConnectionsService {
         Optional<Connection> connection = connectionsRepository.findById(id);
         return connection.get();
     }
-
-    /**
-     *
-     * To save a new connection
-     *
-     */
-    /*public ConnectionDTO save(ConnectionDTO newConnectionDTO){
-
-        Connection connection = connectionMapper.convertToEntity(newConnectionDTO);
-        connection = connectionsRepository.save(connection);
-        return connectionMapper.convertToDTO(connection);
-    }*/
 
     /**
      *

@@ -57,19 +57,4 @@ public class ConnectionsControllerTests {
 
     }
 
-    /**
-     *
-     * Should return a list not null
-     *
-     */
-   /* @Test
-    public void shouldReturnListNotNullTest() throws Exception {
-
-        // Act
-        MvcResult result = mockMvc.perform(post("/connection/list")
-                        .param("friendName","elise@monemail.fr"))
-                .andExpect(view().name("redirect:/"))
-                .andReturn();
-
-    }*/
 }

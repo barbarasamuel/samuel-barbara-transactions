@@ -1,20 +1,13 @@
 package org.paymybuddy.transfermoney.controller;
 
 
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
-import org.paymybuddy.transfermoney.model.*;
-import org.paymybuddy.transfermoney.service.BankAccountService;
+import org.paymybuddy.transfermoney.model.RelationsConnection;
 import org.paymybuddy.transfermoney.service.ConnectionsService;
-import org.paymybuddy.transfermoney.service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,10 +16,10 @@ import java.util.List;
 public class ConnectionsController {
     @Autowired
     private ConnectionsService connectionsService;
-    @Autowired
+    /*@Autowired
     private RelationService relationService;
     @Autowired
-    private BankAccountService bankAccountService;
+    private BankAccountService bankAccountService;*/
 
 
     /**

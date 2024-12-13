@@ -9,17 +9,14 @@ import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Contact;
-import org.paymybuddy.transfermoney.entity.Relation;
 import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
 import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.mapper.ContactMapper;
-import org.paymybuddy.transfermoney.mapper.RelationMapper;
 import org.paymybuddy.transfermoney.model.*;
-import org.paymybuddy.transfermoney.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
+import org.paymybuddy.transfermoney.repository.ContactRepository;
+import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -28,9 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
@@ -49,12 +44,12 @@ public class ConnectionsServiceMocksTest {
     private RelationRepository relationRepository;
     @Mock
     private TransactionsService transactionsService;
-    @Mock
-    private TransactionsRepository transactionsRepository;
+    /*@Mock
+    private TransactionsRepository transactionsRepository;*/
     @Mock
     private BankAccountService bankAccountService;
-    @Mock
-    private BankAccountRepository bankAccountRepository;
+    /*@Mock
+    private BankAccountRepository bankAccountRepository;*/
     @Mock
     private BankAccountMapper bankAccountMapper;
     @InjectMocks

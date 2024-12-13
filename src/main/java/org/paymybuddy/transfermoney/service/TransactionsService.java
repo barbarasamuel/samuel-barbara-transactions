@@ -1,11 +1,9 @@
 package org.paymybuddy.transfermoney.service;
 
 
-import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
-import org.paymybuddy.transfermoney.model.*;
+import org.paymybuddy.transfermoney.model.TransactionsConnection;
 import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +19,10 @@ import java.util.List;
 public class TransactionsService {
     @Autowired
     TransactionsRepository transactionsRepository;
-    @Autowired
+    /*@Autowired
     TransactionMapper transactionMapper;
     @Autowired
-    ConnectionMapper connectionMapper;
+    ConnectionMapper connectionMapper;*/
 
 
     /**
