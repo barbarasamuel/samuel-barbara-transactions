@@ -48,7 +48,7 @@
                         <div class="element1">Send Money</div>
                         <!---->
                          <div class="element2">
-                            <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required><!--<select class="element_border" name="connections" id="connection-select" th:field="*{name}">-->
+                            <select id="addConnection-select" type="hidden" th:name="idAddConnection-select" required>
                             <option value="" disabled selected>Select a connection</option>
                             <option th:each="existingConnection : ${allConnectionsList}" th:attr="value=${existingConnection.id}" th:text="${existingConnection.email}"></option>
                             </select><!---->
@@ -192,56 +192,22 @@
             })
             .catch(error => console.error('Error: ', error));
 
-            /*const userAction = async () => {
-            const response = await fetch('/dropdown');
-            const myJson = await response.json();*/ //extract JSON from the http response
-            // do something with myJson
-            //}
         }
 
         function addConnectionPopup(){
             console.log("function addConnectionPopup");
-            /**/
+
             const selectedOption = document.getElementById('addConnection-select').value;
             if(selectedOption){
                 document.getElementById('friendName').value = selectedOption;
-                //document.getElementById('popup').classList.remove('active');
                 document.getElementById('newConnection').submit;
             }else{
                 alert("Select an option.");
             }
-        //});
 
 
         }
-        function addConnectionValid(){
 
-            const selectedOption = document.getElementById('addConnection-select').value;
-            if(selectedOption){
-                document.getElementById('friendName').value = selectedOption;
-                document.getElementById('popup').classList.remove('active');
-                document.getElementById('newConnection').submit;
-            }else{
-                alert("Select an option.");
-            }
-
-        }
-        /*document.getElementById('openPopup').addEventListener('click', function(){
-            console.log("test");
-            document.getElementById('popup').classList.add('active');
-        });
-
-        document.getElementById('popupForm').addEventListener('submit', function(event){
-            event.preventDefault();
-            const selectedOption = document.getElementById('addConnection-select').value;
-            if(selectedOption){
-                document.getElementById('friendName').value = selectedOption;
-                document.getElementById('popup').classList.remove('active');
-                document.getElementById('newConnection').submit;
-            }else{
-                alert("Select an option.");
-            }
-        });*/
 
         function payPopup(){
             var descriptionInput = prompt("Write the transactions description");

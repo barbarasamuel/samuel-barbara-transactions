@@ -10,24 +10,8 @@
     gap: 10px;
     align-items: center;
     color:black;
-}/*
-input[type=checkbox]{
-    display: flex;
-    flex-direction:column;
-    gap: 10px;
-    align-items: center;
-    color:black;
 }
-label{
-    display: flex;
-    flex-direction:column;
-    gap: 10px;
-    align-items: center;
-    font-weight: bold;
-    text-size:12;
-    text-align:left;
-    color:black;
-}*/
+
 input[type=email]{
     background-image: url('../img/email.PNG');
     background-repeat: no-repeat;

@@ -14,7 +14,6 @@ import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
 import org.paymybuddy.transfermoney.model.*;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
 import org.paymybuddy.transfermoney.repository.ContactRepository;
-import org.paymybuddy.transfermoney.repository.RelationRepository;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -31,7 +30,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class ConnectionsServiceMocksTest {
+public class ConnectionsServiceMocksTests {
     @InjectMocks
     private ConnectionsService connectionsService;
     @Mock
@@ -41,15 +40,9 @@ public class ConnectionsServiceMocksTest {
     @Mock
     private RelationService relationService;
     @Mock
-    private RelationRepository relationRepository;
-    @Mock
     private TransactionsService transactionsService;
-    /*@Mock
-    private TransactionsRepository transactionsRepository;*/
     @Mock
     private BankAccountService bankAccountService;
-    /*@Mock
-    private BankAccountRepository bankAccountRepository;*/
     @Mock
     private BankAccountMapper bankAccountMapper;
     @InjectMocks

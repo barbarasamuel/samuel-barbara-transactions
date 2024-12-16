@@ -9,19 +9,11 @@ import org.paymybuddy.transfermoney.TransfermoneyApplicationTests;
 import org.paymybuddy.transfermoney.entity.BankAccount;
 import org.paymybuddy.transfermoney.entity.Connection;
 import org.paymybuddy.transfermoney.entity.Transactions;
-import org.paymybuddy.transfermoney.mapper.BankAccountMapper;
-import org.paymybuddy.transfermoney.mapper.ConnectionMapper;
-import org.paymybuddy.transfermoney.mapper.ContactMapper;
-import org.paymybuddy.transfermoney.mapper.TransactionMapper;
 import org.paymybuddy.transfermoney.model.TransactionForm;
 import org.paymybuddy.transfermoney.model.TransactionsConnection;
 import org.paymybuddy.transfermoney.repository.BankAccountRepository;
 import org.paymybuddy.transfermoney.repository.ConnectionsRepository;
-import org.paymybuddy.transfermoney.repository.ContactRepository;
-import org.paymybuddy.transfermoney.repository.TransactionsRepository;
 import org.paymybuddy.transfermoney.service.BankAccountService;
-import org.paymybuddy.transfermoney.service.ConnectionsService;
-import org.paymybuddy.transfermoney.service.ContactService;
 import org.paymybuddy.transfermoney.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -42,33 +34,16 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TransfermoneyApplicationTests.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ConnectionsServiceIT {
-    @InjectMocks
-    private ConnectionsService connectionsService;
+
     @Mock
     private ConnectionsRepository connectionsRepository;
-    @Mock
-    private ConnectionMapper connectionMapper;
-    @InjectMocks
-    private ContactService contactService;
-    @Mock
-    private ContactRepository contactRepository;
-    @Mock
-    private ContactMapper contactMapper;
-
     @Autowired
-    //@InjectMocks
     private BankAccountService bankAccountService;
-    @Autowired//@Mock
+    @Autowired
     private BankAccountRepository bankAccountRepository;
-    @Autowired//@Mock
-    private BankAccountMapper bankAccountMapper;/**/
-
     @InjectMocks
     private TransactionsService transactionsService;
-    @Mock
-    private TransactionsRepository transactionsRepository;
-    @Mock
-    private TransactionMapper transactionMapper;/**/
+
 
     /**
      *

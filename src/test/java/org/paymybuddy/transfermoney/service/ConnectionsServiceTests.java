@@ -33,18 +33,13 @@ public class ConnectionsServiceTests {
     private ConnectionsService connectionsService;
     @Autowired
     private ConnectionsRepository connectionsRepository;
-    /*@Autowired
-    private ConnectionMapper connectionMapper;*/
     @Autowired
     private RelationRepository relationRepository;
-    /*@Autowired
-    private BankAccountService bankAccountService;*/
     @Autowired
     private BankAccountRepository bankAccountRepository;
     @Autowired
     private TransactionsRepository transactionsRepository;
-    /*@Autowired
-    private TransactionMapper transactionMapper;*/
+
 
     /**
      *
